@@ -1,7 +1,6 @@
 ﻿// BeomsEngine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
-
-#include "framework.h"
+#include "pch.h"
 #include "BeomsEngine.h"
 
 #define MAX_LOADSTRING 100
@@ -24,8 +23,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-
-    // TODO: 여기에 코드를 입력합니다.
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);

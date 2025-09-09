@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Read(//c/Users/Jungle/Desktop/JB/TechLab_Week02/TeckLab_Week2_Private/BeomsEngine/**)",
+      "Bash(cat:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

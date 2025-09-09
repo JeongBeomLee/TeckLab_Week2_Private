@@ -17,6 +17,27 @@
     <Filter Include="Engine\Core\Math">
       <UniqueIdentifier>{28a33cda-63da-4f2f-940f-db6ac8bf0b47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core\Utilities">
+      <UniqueIdentifier>{553ea406-498a-4416-8aec-064dab9a99e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{8014c667-ab9c-49d8-a0db-1542e49eff3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Containers">
+      <UniqueIdentifier>{3b8a83cf-8139-41b3-b21a-b18ff8afec34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Types">
+      <UniqueIdentifier>{49637153-d31b-4219-a4d0-466187373a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Object">
+      <UniqueIdentifier>{6fe56366-a8ae-4fe3-a46a-999e4a636e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Actor">
+      <UniqueIdentifier>{64443f27-c88e-4b55-a198-d8ea715c1554}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Components">
+      <UniqueIdentifier>{6b4e3eac-5a6c-45ca-9a19-a87dbfe3ef11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -31,14 +52,65 @@
     <ClInclude Include="Resource.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="FVector.h">
+    <ClInclude Include="Vector.h">
       <Filter>Engine\Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="FVector4.h">
+    <ClInclude Include="Vector4.h">
       <Filter>Engine\Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="FMatrix.h">
+    <ClInclude Include="Matrix.h">
       <Filter>Engine\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="KismetProceduralMeshLibrary.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshVertex.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshRenderData.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticArray.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedList.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Pair.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Set.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Engine\Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Containers.h">
+      <Filter>Engine\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Meshes.h">
+      <Filter>Engine\Core\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Engine\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Engine\Core\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="String.h">
+      <Filter>Engine\Core\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -58,14 +130,26 @@
     <ClCompile Include="BeomsEngine.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="FMatrix.cpp">
+    <ClCompile Include="Matrix.cpp">
       <Filter>Engine\Core\Math</Filter>
     </ClCompile>
-    <ClCompile Include="FVector.cpp">
+    <ClCompile Include="Vector.cpp">
       <Filter>Engine\Core\Math</Filter>
     </ClCompile>
-    <ClCompile Include="FVector4.cpp">
+    <ClCompile Include="Vector4.cpp">
       <Filter>Engine\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="KismetProceduralMeshLibrary.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Engine\Core\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

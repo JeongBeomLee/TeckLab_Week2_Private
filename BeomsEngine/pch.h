@@ -1,14 +1,14 @@
-// pch.h - ¹Ì¸® ÄÄÆÄÀÏµÈ Çì´õ ÆÄÀÏ
-// ¸ğµç .cpp ÆÄÀÏ¿¡¼­ #include "pch.h"°¡ Ã¹ ¹øÂ° ¶óÀÎ¿¡ ÀÖ¾î¾ß ÇÕ´Ï´Ù.
-// PCH¿¡ Æ÷ÇÔµÈ Çì´õ¸¦ ¼öÁ¤ÇÏ¸é ÀüÃ¼ ÇÁ·ÎÁ§Æ®°¡ ÀçÄÄÆÄÀÏµÊ
-// µû¶ó¼­ PCH ÆÄÀÏ¿¡´Â ÀÚÁÖ »ç¿ëÇÏ°í, ÀÚÁÖ º¯°æµÇÁö ¾Ê´Â Çì´õ¸¸ Æ÷ÇÔ½ÃÄÑ¾ß ÇÔ
+// pch.h - ë¯¸ë¦¬ ì»´íŒŒì¼ëœ í—¤ë” íŒŒì¼
+// ëª¨ë“  .cpp íŒŒì¼ì—ì„œ #include "pch.h"ê°€ ì²« ë²ˆì§¸ ë¼ì¸ì— ìˆì–´ì•¼ í•©ë‹ˆë‹¤.
+// PCHì— í¬í•¨ëœ í—¤ë”ë¥¼ ìˆ˜ì •í•˜ë©´ ì „ì²´ í”„ë¡œì íŠ¸ê°€ ì¬ì»´íŒŒì¼ë¨
+// ë”°ë¼ì„œ PCH íŒŒì¼ì—ëŠ” ìì£¼ ì‚¬ìš©í•˜ê³ , ìì£¼ ë³€ê²½ë˜ì§€ ì•ŠëŠ” í—¤ë”ë§Œ í¬í•¨ì‹œì¼œì•¼ í•¨
 #pragma once
 
 #include "targetver.h"
-#define WIN32_LEAN_AND_MEAN             // °ÅÀÇ »ç¿ëµÇÁö ¾Ê´Â ³»¿ëÀ» Windows Çì´õ¿¡¼­ Á¦¿ÜÇÕ´Ï´Ù.
+#define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
-// Windows Çì´õ ÆÄÀÏ
+// Windows í—¤ë” íŒŒì¼
 #include <windows.h>
 
 // STL
@@ -21,19 +21,19 @@
 #include <queue>
 #include <algorithm>
 
-// C ·±Å¸ÀÓ Çì´õ ÆÄÀÏ
+// C ëŸ°íƒ€ì„ í—¤ë” íŒŒì¼
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
 #include <cmath>
 
-// D3D »ç¿ë¿¡ ÇÊ¿äÇÑ ¶óÀÌºê·¯¸®µéÀ» ¸µÅ©
+// D3D ì‚¬ìš©ì— í•„ìš”í•œ ë¼ì´ë¸ŒëŸ¬ë¦¬ë“¤ì„ ë§í¬
 #pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
-// D3D »ç¿ë¿¡ ÇÊ¿äÇÑ Çì´õÆÄÀÏµéÀ» Æ÷ÇÔ
+// D3D ì‚¬ìš©ì— í•„ìš”í•œ í—¤ë”íŒŒì¼ë“¤ì„ í¬í•¨
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
@@ -42,29 +42,3 @@
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
-
-// ±âÅ¸
-#include "FVector.h"
-#include "FVector4.h"
-#include "FMatrix.h"
-
-// ±âº» Å¸ÀÔ Á¤ÀÇ
-typedef signed char         int8;
-typedef short               int16;
-typedef int                 int32;
-typedef long long           int64;
-
-typedef unsigned char       uint8;
-typedef unsigned short      uint16;
-typedef unsigned int        uint32;
-typedef unsigned long long  uint64;
-
-// STL ÄÁÅ×ÀÌ³Ê¿¡ ´ëÇÑ º°Äª Á¤ÀÇ
-template <typename T> using TArray = std::vector<T>;
-template <typename T> using TLinkedList = std::list<T>;
-template <typename T> using TSet = std::unordered_set<T>;
-template <typename K, typename V> using TMap = std::unordered_map<K, V>;
-template <typename K, typename V> using TPair = std::pair<K, V>;
-template <typename T, unsigned N> using TStaticArray = std::array<T, N>;
-template <typename T> using TQueue = std::queue<T>;
-using FString = std::string;

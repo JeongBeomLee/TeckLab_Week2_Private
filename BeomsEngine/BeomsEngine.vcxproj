@@ -113,6 +113,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -130,6 +131,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,19 +141,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="BeomsEngine.h" />
-    <ClInclude Include="FMatrix.h" />
-    <ClInclude Include="FVector.h" />
-    <ClInclude Include="FVector4.h" />
+    <ClInclude Include="Containers.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="StaticMeshRenderData.h" />
+    <ClInclude Include="StaticMeshVertex.h" />
+    <ClInclude Include="String.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Meshes.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Array.h" />
+    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Pair.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="Set.h" />
+    <ClInclude Include="StaticArray.h" />
+    <ClInclude Include="ActorComponent.h" />
+    <ClInclude Include="KismetProceduralMeshLibrary.h" />
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="Object.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="BeomsEngine.cpp" />
-    <ClCompile Include="FMatrix.cpp" />
-    <ClCompile Include="FVector.cpp" />
-    <ClCompile Include="FVector4.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="ActorComponent.cpp" />
+    <ClCompile Include="KismetProceduralMeshLibrary.cpp" />
+    <ClCompile Include="Object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc" />

@@ -1,0 +1,9 @@
+#pragma once
+#include "Array.h"
+#include "LinkedList.h"
+#include "Map.h"
+#include "Pair.h"
+#include "Queue.h"
+#include "Set.h"
+#include "StaticArray.h"
+#include "String.h"

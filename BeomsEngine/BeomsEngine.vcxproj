@@ -140,14 +140,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BeomsEngine.h" />
+    <ClInclude Include="FMatrix.h" />
     <ClInclude Include="FVector.h" />
+    <ClInclude Include="FVector4.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BeomsEngine.cpp" />
+    <ClCompile Include="FMatrix.cpp" />
     <ClCompile Include="FVector.cpp" />
+    <ClCompile Include="FVector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc" />

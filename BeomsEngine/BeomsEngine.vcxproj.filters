@@ -34,6 +34,12 @@
     <ClInclude Include="FVector.h">
       <Filter>Engine\Core\Math</Filter>
     </ClInclude>
+    <ClInclude Include="FVector4.h">
+      <Filter>Engine\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="FMatrix.h">
+      <Filter>Engine\Core\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">
@@ -52,7 +58,13 @@
     <ClCompile Include="BeomsEngine.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="FMatrix.cpp">
+      <Filter>Engine\Core\Math</Filter>
+    </ClCompile>
     <ClCompile Include="FVector.cpp">
+      <Filter>Engine\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="FVector4.cpp">
       <Filter>Engine\Core\Math</Filter>
     </ClCompile>
   </ItemGroup>

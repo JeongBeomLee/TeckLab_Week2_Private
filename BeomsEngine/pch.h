@@ -43,6 +43,11 @@
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
 
+// 기타
+#include "FVector.h"
+#include "FVector4.h"
+#include "FMatrix.h"
+
 // 기본 타입 정의
 typedef signed char         int8;
 typedef short               int16;

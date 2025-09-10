@@ -112,6 +112,15 @@
     <ClInclude Include="String.h">
       <Filter>Engine\Core\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Class.h">
+      <Filter>Engine\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectMacros.h">
+      <Filter>Engine\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="USphere.h">
+      <Filter>Engine\Core\Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">
@@ -150,6 +159,12 @@
     </ClCompile>
     <ClCompile Include="ActorComponent.cpp">
       <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Class.cpp">
+      <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="USphere.cpp">
+      <Filter>Engine\Core\Types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

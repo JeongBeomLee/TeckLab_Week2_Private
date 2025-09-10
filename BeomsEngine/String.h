@@ -2,4 +2,8 @@
 #include <string>
 using FString = std::string;
 
-#define TEXT(x) FString(x)
+#ifdef TEXT
+#undef TEXT
+#endif
+
+#define TEXT(s) FString(s)

@@ -8,7 +8,6 @@ struct FStaticMeshRenderData
     TArray<FStaticMeshVertex> Vertices;
     TArray<uint32> Indices;
     
-    // DirectX11 특화 데이터
     uint32 NumVertices;
     uint32 NumTriangles;
     

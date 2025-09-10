@@ -114,6 +114,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,6 +133,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,9 +147,12 @@
     <ClInclude Include="BeomsEngine.h" />
     <ClInclude Include="Containers.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="ObjectMacros.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
     <ClInclude Include="StaticMeshVertex.h" />
     <ClInclude Include="String.h" />
+    <ClInclude Include="Class.h" />
+    <ClInclude Include="USphere.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Meshes.h" />
@@ -170,6 +175,8 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="BeomsEngine.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Class.cpp" />
+    <ClCompile Include="USphere.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="ActorComponent.cpp" />

@@ -3,7 +3,14 @@
 #include "String.h"
 #include "Array.h"
 
-// Unreal Engine UObject 기본 클래스
+#ifdef GetClassName
+#undef GetClassName
+#endif
+
+// 전방 선언
+class UClass;
+
+// UObject 기본 클래스
 class UObject
 {
 public:
@@ -21,8 +28,19 @@ public:
     
     uint64 GetUniqueID() const { return UniqueID; }
     
-    // 클래스 정보
+    // 클래스 정보 및 RTTI
     virtual FString GetClassName() const { return TEXT("UObject"); }
+    virtual UClass* GetClass() const;
+    static UClass* GetStaticClass();
+    
+    // RTTI
+    bool IsA(const UClass* SomeClass) const;
+    bool IsA(const FString& ClassName) const;
+    
+    template<typename T>
+    bool IsA() const;
+    
+    static UObject* CreateInstance() { return new UObject(); }
     
     // 소유자 관계
     UObject* GetOuter() const { return Outer; }
@@ -36,7 +54,7 @@ public:
     // 리플렉션을 위한 기본 구조
     virtual void GetProperties(TArray<FString>& OutProperties) const {}
     
-    // 직렬화 지원
+    // 직렬화
     virtual void Serialize() {}
     virtual void Deserialize() {}
     

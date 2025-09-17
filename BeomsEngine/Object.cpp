@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Class.h"
 #include "ObjectMacros.h"
+#include "UObjectArray.h"
 
 // 정적 멤버 초기화
 uint64 UObject::NextUniqueID = 1;
@@ -13,11 +14,21 @@ UObject::UObject()
     , ObjectName(TEXT("UObject"))
     , UniqueID(GenerateUniqueID())
     , Outer(nullptr)
+    , InternalIndex(-1)
 {
+    // GUObjectArray에 등록
+    InternalIndex = GUObjectArray.AllocateUObjectIndex(this);
 }
 
 UObject::~UObject()
 {
+    // GUObjectArray에서 제거
+    if (InternalIndex != -1)
+    {
+        GUObjectArray.FreeUObjectIndex(this);
+        InternalIndex = -1;
+    }
+    
     bIsValid = false;
 }
 
@@ -65,10 +76,4 @@ bool UObject::IsA(const FString& ClassName) const
 {
     UClass* SomeClass = UClass::FindClass(ClassName);
     return IsA(SomeClass);
-}
-
-template<typename T>
-bool UObject::IsA() const
-{
-    return IsA(T::GetStaticClass());
 }

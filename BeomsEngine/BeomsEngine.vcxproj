@@ -146,10 +146,12 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="BeomsEngine.h" />
     <ClInclude Include="Containers.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="ObjectMacros.h" />
+    <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
-    <ClInclude Include="StaticMeshVertex.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="USphere.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="ActorComponent.h" />
     <ClInclude Include="KismetProceduralMeshLibrary.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="UObjectArray.h" />
     <ClInclude Include="Object.h" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +179,8 @@
     <ClCompile Include="BeomsEngine.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Class.cpp" />
+    <ClCompile Include="SceneComponent.cpp" />
+    <ClCompile Include="UObjectArray.cpp" />
     <ClCompile Include="USphere.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vector4.cpp" />

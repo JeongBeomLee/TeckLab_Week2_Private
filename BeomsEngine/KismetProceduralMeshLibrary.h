@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Containers.h"
-#include "StaticMeshVertex.h"
+#include "Vertex.h"
 #include "StaticMeshRenderData.h"
 
 // 기본 메쉬 생성기

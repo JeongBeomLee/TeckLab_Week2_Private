@@ -370,24 +370,24 @@ public:
     static FMatrix CreatePerspective(float FieldOfViewY, float AspectRatio, float NearPlane, float FarPlane)
     {
         float TanHalfFovy = std::tan(FieldOfViewY * 0.5f);
-        float Range = NearPlane - FarPlane;
+        float Range = FarPlane - NearPlane;
 
         return FMatrix(
             1.0f / (AspectRatio * TanHalfFovy), 0.0f, 0.0f, 0.0f,
             0.0f, 1.0f / TanHalfFovy, 0.0f, 0.0f,
-            0.0f, 0.0f, (NearPlane + FarPlane) / Range, (2.0f * NearPlane * FarPlane) / Range,
+            0.0f, 0.0f, (FarPlane) / Range, (NearPlane * FarPlane) / Range,
             0.0f, 0.0f, -1.0f, 0.0f
         );
     }
 
-    static FMatrix CreateOrthographic(float Width, float Height, float NearPlane, float FarPlane)
+    static FMatrix CreateOrthographic(float Width, float Height, float NearPlane, float FarPlane, float OrthographicScale)
     {
-        float Range = NearPlane - FarPlane;
+        float Range = FarPlane - NearPlane;
 
         return FMatrix(
             2.0f / Width, 0.0f, 0.0f, 0.0f,
             0.0f, 2.0f / Height, 0.0f, 0.0f,
-            0.0f, 0.0f, 2.0f / Range, (NearPlane + FarPlane) / Range,
+			0.0f, 0.0f, 1.0f / Range, NearPlane / (-1 * Range),
             0.0f, 0.0f, 0.0f, 1.0f
         );
     }

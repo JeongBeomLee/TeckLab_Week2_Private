@@ -3,7 +3,7 @@
 
 FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateBoxMesh(FVector BoxRadius)
 {
-    TArray<FStaticMeshVertex> Vertices;
+    TArray<FVertex> Vertices;
     TArray<uint32> Indices;
     
     // Unreal Engine 단위계 (cm) 사용
@@ -49,7 +49,7 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateBoxMesh(FVector BoxRad
     // 정점 생성
     for (int32 i = 0; i < 24; ++i)
     {
-        Vertices.push_back(FStaticMeshVertex(Positions[i], Normals[i], UVs[i].X, UVs[i].Y));
+        Vertices.push_back(FVertex(Positions[i], Normals[i], UVs[i].X, UVs[i].Y));
     }
 
     // 인덱스 생성 (시계방향 와인딩, 왼손 좌표계)
@@ -69,7 +69,7 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateBoxMesh(FVector BoxRad
 
 FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateSphereMesh(float SphereRadius, int32 SphereSegments, int32 SphereRings)
 {
-    TArray<FStaticMeshVertex> Vertices;
+    TArray<FVertex> Vertices;
     TArray<uint32> Indices;
 
     // UV 구 메쉬 생성 (Z-Up)
@@ -91,7 +91,7 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateSphereMesh(float Spher
             float U = static_cast<float>(Segment) / static_cast<float>(SphereSegments);
             float V = static_cast<float>(Ring) / static_cast<float>(SphereRings);
 
-            Vertices.push_back(FStaticMeshVertex(Position, Normal, U, V));
+            Vertices.push_back(FVertex(Position, Normal, U, V));
         }
     }
 
@@ -120,14 +120,14 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateSphereMesh(float Spher
 
 FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateCylinderMesh(float CylinderRadius, float CylinderHeight, int32 CylinderSegments)
 {
-    TArray<FStaticMeshVertex> Vertices;
+    TArray<FVertex> Vertices;
     TArray<uint32> Indices;
 
     float HalfHeight = CylinderHeight * 0.5f;
 
     // 중심점들
-    Vertices.push_back(FStaticMeshVertex(FVector(0.0f, 0.0f, HalfHeight), FVector::Up, 0.5f, 0.5f));  // 상단 중심
-    Vertices.push_back(FStaticMeshVertex(FVector(0.0f, 0.0f, -HalfHeight), FVector::Down, 0.5f, 0.5f)); // 하단 중심
+    Vertices.push_back(FVertex(FVector(0.0f, 0.0f, HalfHeight), FVector::Up, 0.5f, 0.5f));  // 상단 중심
+    Vertices.push_back(FVertex(FVector(0.0f, 0.0f, -HalfHeight), FVector::Down, 0.5f, 0.5f)); // 하단 중심
 
     // 측면 및 캡 정점들
     for (int32 i = 0; i <= CylinderSegments; ++i)
@@ -140,13 +140,13 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateCylinderMesh(float Cyl
         float U = static_cast<float>(i) / static_cast<float>(CylinderSegments);
 
         // 측면 정점들
-        Vertices.push_back(FStaticMeshVertex(FVector(X, Y, HalfHeight), SideNormal, U, 0.0f));   // 상단
-        Vertices.push_back(FStaticMeshVertex(FVector(X, Y, -HalfHeight), SideNormal, U, 1.0f));  // 하단
+        Vertices.push_back(FVertex(FVector(X, Y, HalfHeight), SideNormal, U, 0.0f));   // 상단
+        Vertices.push_back(FVertex(FVector(X, Y, -HalfHeight), SideNormal, U, 1.0f));  // 하단
 
         // 캡 정점들
-        Vertices.push_back(FStaticMeshVertex(FVector(X, Y, HalfHeight), FVector::Up, 
+        Vertices.push_back(FVertex(FVector(X, Y, HalfHeight), FVector::Up, 
                                            0.5f + 0.5f * X / CylinderRadius, 0.5f + 0.5f * Y / CylinderRadius));
-        Vertices.push_back(FStaticMeshVertex(FVector(X, Y, -HalfHeight), FVector::Down, 
+        Vertices.push_back(FVertex(FVector(X, Y, -HalfHeight), FVector::Down, 
                                            0.5f + 0.5f * X / CylinderRadius, 0.5f - 0.5f * Y / CylinderRadius));
     }
 
@@ -198,14 +198,14 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateCylinderMesh(float Cyl
 
 FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateConeMesh(float ConeRadius, float ConeHeight, int32 ConeSegments)
 {
-    TArray<FStaticMeshVertex> Vertices;
+    TArray<FVertex> Vertices;
     TArray<uint32> Indices;
 
     float HalfHeight = ConeHeight * 0.5f;
 
     // 꼭짓점과 하단 중심
-    Vertices.push_back(FStaticMeshVertex(FVector(0.0f, 0.0f, HalfHeight), FVector::Up, 0.5f, 0.0f));      // 꼭짓점
-    Vertices.push_back(FStaticMeshVertex(FVector(0.0f, 0.0f, -HalfHeight), FVector::Down, 0.5f, 0.5f));   // 하단 중심
+    Vertices.push_back(FVertex(FVector(0.0f, 0.0f, HalfHeight), FVector::Up, 0.5f, 0.0f));      // 꼭짓점
+    Vertices.push_back(FVertex(FVector(0.0f, 0.0f, -HalfHeight), FVector::Down, 0.5f, 0.5f));   // 하단 중심
 
     // 측면 법선 계산
     float SideLength = sqrt(ConeRadius * ConeRadius + ConeHeight * ConeHeight);
@@ -223,10 +223,10 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateConeMesh(float ConeRad
         float U = static_cast<float>(i) / static_cast<float>(ConeSegments);
 
         // 측면 정점
-        Vertices.push_back(FStaticMeshVertex(FVector(X, Y, -HalfHeight), SideNormal, U, 1.0f));
+        Vertices.push_back(FVertex(FVector(X, Y, -HalfHeight), SideNormal, U, 1.0f));
 
         // 하단 캡 정점
-        Vertices.push_back(FStaticMeshVertex(FVector(X, Y, -HalfHeight), FVector::Down, 
+        Vertices.push_back(FVertex(FVector(X, Y, -HalfHeight), FVector::Down, 
                                            0.5f + 0.5f * X / ConeRadius, 0.5f - 0.5f * Y / ConeRadius));
     }
 
@@ -258,7 +258,7 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateConeMesh(float ConeRad
 
 FStaticMeshRenderData UKismetProceduralMeshLibrary::CreatePlaneMesh(FVector PlaneSize, int32 WidthSegments, int32 HeightSegments)
 {
-    TArray<FStaticMeshVertex> Vertices;
+    TArray<FVertex> Vertices;
     TArray<uint32> Indices;
 
     float Width = PlaneSize.X;
@@ -280,7 +280,7 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreatePlaneMesh(FVector Plan
             float U = static_cast<float>(x) / static_cast<float>(WidthSegments);
             float V = 1.0f - static_cast<float>(y) / static_cast<float>(HeightSegments);
 
-            Vertices.push_back(FStaticMeshVertex(Position, Normal, U, V));
+            Vertices.push_back(FVertex(Position, Normal, U, V));
         }
     }
 

@@ -8,6 +8,6 @@
 namespace Meshes
 {
     using MeshData = FStaticMeshRenderData;
-    using Vertex = FStaticMeshVertex;
+    using Vertex = FVertex;
     using MeshLibrary = UKismetProceduralMeshLibrary;
 }

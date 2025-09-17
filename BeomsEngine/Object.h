@@ -9,6 +9,7 @@
 
 // 전방 선언
 class UClass;
+class FUObjectArray;
 
 // UObject 기본 클래스
 class UObject
@@ -51,12 +52,9 @@ public:
     void MarkPendingKill() { bPendingKill = true; }
     bool IsPendingKill() const { return bPendingKill; }
     
-    // 리플렉션을 위한 기본 구조
-    virtual void GetProperties(TArray<FString>& OutProperties) const {}
-    
-    // 직렬화
-    virtual void Serialize() {}
-    virtual void Deserialize() {}
+    // GUObjectArray 관리
+    int32 GetInternalIndex() const { return InternalIndex; }
+    void SetInternalIndex(int32 Index) { InternalIndex = Index; }
     
 protected:
     // 오브젝트 상태
@@ -69,9 +67,18 @@ protected:
     uint64 UniqueID;
     UObject* Outer;
     
+    // GUObjectArray에서의 인덱스
+    int32 InternalIndex;
+    
     // 정적 ID 생성기
     static uint64 GenerateUniqueID();
     
 private:
     static uint64 NextUniqueID;
 };
+
+template<typename T>
+bool UObject::IsA() const
+{
+    return IsA(T::GetStaticClass());
+}

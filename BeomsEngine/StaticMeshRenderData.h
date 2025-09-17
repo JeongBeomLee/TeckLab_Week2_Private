@@ -1,11 +1,11 @@
 #pragma once
 #include "Types.h"
 #include "Containers.h"
-#include "StaticMeshVertex.h"
+#include "Vertex.h"
 
 struct FStaticMeshRenderData
 {
-    TArray<FStaticMeshVertex> Vertices;
+    TArray<FVertex> Vertices;
     TArray<uint32> Indices;
     
     uint32 NumVertices;
@@ -16,7 +16,7 @@ struct FStaticMeshRenderData
         , NumTriangles(0)
     {}
     
-    FStaticMeshRenderData(const TArray<FStaticMeshVertex>& InVertices, const TArray<uint32>& InIndices)
+    FStaticMeshRenderData(const TArray<FVertex>& InVertices, const TArray<uint32>& InIndices)
         : Vertices(InVertices)
         , Indices(InIndices)
         , NumVertices(static_cast<uint32>(InVertices.size()))

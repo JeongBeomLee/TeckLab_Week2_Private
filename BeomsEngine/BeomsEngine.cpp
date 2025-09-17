@@ -1,7 +1,117 @@
-﻿// BeomsEngine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
+// BeomsEngine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 #include "pch.h"
 #include "BeomsEngine.h"
+#include "Actor.h"
+#include "ActorComponent.h"
+#include "SceneComponent.h"
+#include "UObjectArray.h"
+#include "Math.h"
+#include <iostream>
+
+void TestGUObjectArray()
+{
+    // 콘솔 창 활성화
+    AllocConsole();
+    FILE* fp;
+    freopen_s(&fp, "CONOUT$", "w", stdout);
+    freopen_s(&fp, "CONIN$", "r", stdin);
+    
+    std::cout << "=== GUObjectArray System Test ===" << std::endl;
+    
+    // 1. 초기 상태 확인
+    std::cout << "\n--- Initial State ---" << std::endl;
+    std::cout << "Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
+    std::cout << "Max objects ever: " << GUObjectArray.GetMaxObjectsEver() << std::endl;
+    
+    // 2. UObject 생성 테스트
+    std::cout << "\n--- Creating UObjects ---" << std::endl;
+    UObject* obj1 = new UObject();
+    obj1->SetName(TEXT("TestObject1"));
+    
+    UObject* obj2 = new UObject();
+    obj2->SetName(TEXT("TestObject2"));
+    
+    AActor* actor1 = new AActor();
+    actor1->SetName(TEXT("TestActor1"));
+    
+    std::cout << "Created 3 objects (2 UObjects, 1 AActor)" << std::endl;
+    std::cout << "Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
+    std::cout << "Max objects ever: " << GUObjectArray.GetMaxObjectsEver() << std::endl;
+    
+    // 3. 모든 객체 검색 테스트
+    std::cout << "\n--- Getting All Objects ---" << std::endl;
+    TArray<UObject*> allObjects;
+    GUObjectArray.GetAllObjects(allObjects);
+    
+    std::cout << "Found " << allObjects.size() << " valid objects:" << std::endl;
+    for (int32 i = 0; i < allObjects.size(); ++i)
+    {
+        UObject* obj = allObjects[i];
+        if (obj)
+        {
+            std::cout << "  [" << i << "] " << obj->GetName().c_str() 
+                     << " (Type: " << obj->GetClassName().c_str() 
+                     << ", Index: " << obj->GetInternalIndex() << ")" << std::endl;
+        }
+    }
+    
+    // 4. 클래스별 객체 검색 테스트
+    std::cout << "\n--- Getting Objects by Class ---" << std::endl;
+    TArray<UObject*> baseObjects;
+    TArray<AActor*> actorObjects;
+    
+    GUObjectArray.GetObjectsOfClass<UObject>(baseObjects);
+    GUObjectArray.GetObjectsOfClass<AActor>(actorObjects);
+    
+    std::cout << "UObject instances: " << baseObjects.size() << std::endl;
+    std::cout << "AActor instances: " << actorObjects.size() << std::endl;
+    
+    // 5. 객체 삭제 테스트
+    std::cout << "\n--- Deleting Objects ---" << std::endl;
+    std::cout << "Deleting obj1..." << std::endl;
+    delete obj1;
+    
+    std::cout << "Objects in array after deletion: " << GUObjectArray.GetObjectArrayNum() << std::endl;
+    
+    // 6. Garbage Collection 테스트
+    std::cout << "\n--- Garbage Collection Test ---" << std::endl;
+    obj2->MarkPendingKill();
+    std::cout << "Marked obj2 as PendingKill" << std::endl;
+    
+    std::cout << "Before GC - Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
+    GUObjectArray.PerformGarbageCollection();
+    std::cout << "After GC - Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
+    
+    // 7. 남은 객체 확인
+    std::cout << "\n--- Remaining Objects ---" << std::endl;
+    allObjects.clear();
+    GUObjectArray.GetAllObjects(allObjects);
+    
+    std::cout << "Remaining objects: " << allObjects.size() << std::endl;
+    for (int32 i = 0; i < allObjects.size(); ++i)
+    {
+        UObject* obj = allObjects[i];
+        if (obj)
+        {
+            std::cout << "  [" << i << "] " << obj->GetName().c_str() 
+                     << " (Type: " << obj->GetClassName().c_str() << ")" << std::endl;
+        }
+    }
+    
+    // 8. 정리
+    std::cout << "\n--- Cleanup ---" << std::endl;
+    delete actor1;
+    
+    std::cout << "Final objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
+    std::cout << "Final max objects ever: " << GUObjectArray.GetMaxObjectsEver() << std::endl;
+    
+    std::cout << "\n=== GUObjectArray System Test Complete ===" << std::endl;
+    
+    // 콘솔 창 닫기
+    if (fp != nullptr) fclose(fp);
+    FreeConsole();
+}
 
 #define MAX_LOADSTRING 100
 
@@ -21,9 +131,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
-
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_BEOMSENGINE, szWindowClass, MAX_LOADSTRING);
@@ -39,6 +146,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
+	// GUObjectArray 시스템 테스트
+	TestGUObjectArray();
+
     // 기본 메시지 루프입니다:
     while (GetMessage(&msg, nullptr, 0, 0))
     {
@@ -52,13 +162,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     return (int) msg.wParam;
 }
 
-
-
-//
-//  함수: MyRegisterClass()
-//
-//  용도: 창 클래스를 등록합니다.
-//
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -80,16 +183,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassExW(&wcex);
 }
 
-//
-//   함수: InitInstance(HINSTANCE, int)
-//
-//   용도: 인스턴스 핸들을 저장하고 주 창을 만듭니다.
-//
-//   주석:
-//
-//        이 함수를 통해 인스턴스 핸들을 전역 변수에 저장하고
-//        주 프로그램 창을 만든 다음 표시합니다.
-//
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
@@ -108,16 +201,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-//
-//  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  용도: 주 창의 메시지를 처리합니다.
-//
-//  WM_COMMAND  - 애플리케이션 메뉴를 처리합니다.
-//  WM_PAINT    - 주 창을 그립니다.
-//  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -156,7 +239,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// 정보 대화 상자의 메시지 처리기입니다.
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);

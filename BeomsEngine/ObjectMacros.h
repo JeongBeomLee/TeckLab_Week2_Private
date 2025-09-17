@@ -1,63 +1,64 @@
 #pragma once
 #include "Class.h"
+#include "Object.h"
 
 // RTTI 매크로 시스템
 
 // UCLASS 매크로 - 클래스 선언 후에 사용
-#define UCLASS() \
-    public: \
-        static UClass* GetStaticClass(); \
-        virtual UClass* GetClass() const override; \
+#define UCLASS()                                    \
+    public:                                         \
+        static UClass* GetStaticClass();            \
+        virtual UClass* GetClass() const override;  \
     private:
 
 // GENERATED_BODY 매크로 - 클래스 내부에서 사용  
-#define GENERATED_BODY(ClassName, SuperClassName) \
-    public: \
-        typedef ClassName ThisClass; \
-        typedef SuperClassName Super; \
-        static UObject* CreateInstance() { return new ClassName(); } \
+#define GENERATED_BODY(ClassName, SuperClassName)                       \
+    public:                                                             \
+        typedef ClassName ThisClass;                                    \
+        typedef SuperClassName Super;                                   \
+        static UObject* CreateInstance() { return new ClassName(); }    \
     private:
 
 // IMPLEMENT_CLASS 매크로 - cpp 파일에서 사용
-#define IMPLEMENT_CLASS(ClassName, SuperClassName) \
-    UClass* ClassName::GetStaticClass() \
-    { \
-        static UClass* StaticClass = nullptr; \
-        if (!StaticClass) \
-        { \
-            StaticClass = new UClass( \
-                TEXT(#ClassName), \
-                SuperClassName::GetStaticClass(), \
-                &ClassName::CreateInstance \
-            ); \
-            UClass::RegisterClass(StaticClass); \
-        } \
-        return StaticClass; \
-    } \
-    UClass* ClassName::GetClass() const \
-    { \
-        return ClassName::GetStaticClass(); \
+#define IMPLEMENT_CLASS(ClassName, SuperClassName)  \
+    UClass* ClassName::GetStaticClass()             \
+    {                                               \
+        static UClass* StaticClass = nullptr;       \
+        if (!StaticClass)                           \
+        {                                           \
+            StaticClass = new UClass(               \
+                TEXT(#ClassName),                   \
+                SuperClassName::GetStaticClass(),   \
+                &ClassName::CreateInstance          \
+            );                                      \
+            UClass::RegisterClass(StaticClass);     \
+        }                                           \
+        return StaticClass;                         \
+    }                                               \
+    UClass* ClassName::GetClass() const             \
+    {                                               \
+        return ClassName::GetStaticClass();         \
     }
 
 // 루트 클래스용 특별 매크로 (SuperClass가 없는 경우)
-#define IMPLEMENT_ROOT_CLASS(ClassName) \
-    UClass* ClassName::GetStaticClass() \
-    { \
-        static UClass* StaticClass = nullptr; \
-        if (!StaticClass) \
-        { \
-            StaticClass = new UClass( \
-                TEXT(#ClassName), \
-                nullptr, \
-                &ClassName::CreateInstance \
-            ); \
+#define IMPLEMENT_ROOT_CLASS(ClassName)         \
+    UClass* ClassName::GetStaticClass()         \
+    {                                           \
+        static UClass* StaticClass = nullptr;   \
+        if (!StaticClass)                       \
+        {                                       \
+            StaticClass = new UClass(           \
+                TEXT(#ClassName),               \
+                nullptr,                        \
+                &ClassName::CreateInstance      \
+            );                                  \
             UClass::RegisterClass(StaticClass); \
-        } \
-        return StaticClass; \
-    } \
-    UClass* ClassName::GetClass() const \
-    { \
-        return ClassName::GetStaticClass(); \
+        }                                       \
+        return StaticClass;                     \
+    }                                           \
+    UClass* ClassName::GetClass() const         \
+    {                                           \
+        return ClassName::GetStaticClass();     \
     }
 
 // 타입 캐스팅 매크로

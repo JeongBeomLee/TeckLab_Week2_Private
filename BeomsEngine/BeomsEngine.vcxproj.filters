@@ -23,20 +23,23 @@
     <Filter Include="Engine\Rendering">
       <UniqueIdentifier>{8014c667-ab9c-49d8-a0db-1542e49eff3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Core\Containers">
-      <UniqueIdentifier>{3b8a83cf-8139-41b3-b21a-b18ff8afec34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Core\Types">
       <UniqueIdentifier>{49637153-d31b-4219-a4d0-466187373a73}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Core\Object">
       <UniqueIdentifier>{6fe56366-a8ae-4fe3-a46a-999e4a636e59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Components">
+      <UniqueIdentifier>{6b4e3eac-5a6c-45ca-9a19-a87dbfe3ef11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Test">
+      <UniqueIdentifier>{7ddaf004-fa9e-4b5a-ab81-e2e915fb7190}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Core\Actor">
       <UniqueIdentifier>{64443f27-c88e-4b55-a198-d8ea715c1554}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Components">
-      <UniqueIdentifier>{6b4e3eac-5a6c-45ca-9a19-a87dbfe3ef11}</UniqueIdentifier>
+    <Filter Include="Engine\Core\Containers">
+      <UniqueIdentifier>{3b8a83cf-8139-41b3-b21a-b18ff8afec34}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,7 +67,7 @@
     <ClInclude Include="KismetProceduralMeshLibrary.h">
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="StaticMeshVertex.h">
+    <ClInclude Include="Vertex.h">
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="StaticMeshRenderData.h">
@@ -118,8 +121,17 @@
     <ClInclude Include="ObjectMacros.h">
       <Filter>Engine\Core\Object</Filter>
     </ClInclude>
+    <ClInclude Include="SceneComponent.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Engine\Core\Math</Filter>
+    </ClInclude>
     <ClInclude Include="USphere.h">
-      <Filter>Engine\Core\Types</Filter>
+      <Filter>Engine\Core\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="UObjectArray.h">
+      <Filter>Engine\Core\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -163,8 +175,14 @@
     <ClCompile Include="Class.cpp">
       <Filter>Engine\Core\Object</Filter>
     </ClCompile>
+    <ClCompile Include="SceneComponent.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
     <ClCompile Include="USphere.cpp">
-      <Filter>Engine\Core\Types</Filter>
+      <Filter>Engine\Core\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="UObjectArray.cpp">
+      <Filter>Engine\Core\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

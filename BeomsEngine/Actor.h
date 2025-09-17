@@ -1,8 +1,8 @@
 #pragma once
-#include "Object.h"
+#include "ObjectMacros.h"
+#include "Containers.h"
 #include "Vector.h"
 #include "Matrix.h"
-#include "Containers.h"
 
 // 전방 선언
 class UActorComponent;
@@ -11,6 +11,8 @@ class USceneComponent;
 // AActor 클래스
 class AActor : public UObject
 {
+    UCLASS()
+    GENERATED_BODY(AActor, UObject)
 public:
     AActor();
     virtual ~AActor();
@@ -21,10 +23,10 @@ public:
     virtual void Tick(float DeltaTime) override;
     virtual FString GetClassName() const override { return TEXT("AActor"); }
 
-    // Transform 관련
-    FVector GetActorLocation() const { return Location; }
-    FVector GetActorRotation() const { return Rotation; }
-    FVector GetActorScale() const { return Scale; }
+    // Transform 관련 - RootComponent에 위임
+    FVector GetActorLocation() const;
+    FVector GetActorRotation() const;
+    FVector GetActorScale() const;
 
     void SetActorLocation(const FVector& NewLocation);
     void SetActorRotation(const FVector& NewRotation);
@@ -70,11 +72,6 @@ public:
     void DetachFromActor();
 
 protected:
-    // Transform 데이터
-    FVector Location;
-    FVector Rotation;  // Pitch, Yaw, Roll (degrees)
-    FVector Scale;
-
     // 액터 상태
     bool bHidden;
     bool bCanEverTick;
@@ -97,5 +94,38 @@ protected:
     virtual void NotifyHit(AActor* OtherActor, FVector HitLocation) {}
 
 private:
-    void UpdateTransform();
+    // 내부 헬퍼 함수들
 };
+
+template<typename T>
+T* AActor::CreateComponent(const FString& ComponentName)
+{
+    static_assert(std::is_base_of<UActorComponent, T>::value, "T must derive from UActorComponent");
+
+    T* NewComponent = new T();
+    if (NewComponent)
+    {
+        if (!ComponentName.empty())
+        {
+            NewComponent->SetName(ComponentName);
+        }
+        AddComponent(NewComponent);
+    }
+    return NewComponent;
+}
+
+template<typename T>
+T* AActor::FindComponentByClass() const
+{
+    static_assert(std::is_base_of<UActorComponent, T>::value, "T must derive from UActorComponent");
+
+    for (UActorComponent* Component : Components)
+    {
+		T* TypedComponent = Cast<T>(Component);
+        if (TypedComponent)
+        {
+            return TypedComponent;
+        }
+    }
+    return nullptr;
+}

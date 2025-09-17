@@ -2,7 +2,7 @@
 #include "Vector.h"
 #include <cmath>
 
-struct FStaticMeshVertex
+struct FVertex
 {
     FVector Position;
     FVector Normal;
@@ -10,7 +10,7 @@ struct FStaticMeshVertex
     FVector Binormal;
     float U, V; // UV coordinates
 
-    FStaticMeshVertex() 
+    FVertex() 
         : Position(FVector::Zero)
         , Normal(FVector::Up)
         , Tangent(FVector::Right)
@@ -19,7 +19,7 @@ struct FStaticMeshVertex
         , V(0.0f)
     {}
 
-    FStaticMeshVertex(const FVector& InPosition, const FVector& InNormal, float InU, float InV)
+    FVertex(const FVector& InPosition, const FVector& InNormal, float InU, float InV)
         : Position(InPosition)
         , Normal(InNormal)
         , U(InU)
@@ -29,7 +29,7 @@ struct FStaticMeshVertex
         CalculateTangentSpace();
     }
 
-    FStaticMeshVertex(const FVector& InPosition, const FVector& InNormal, const FVector& InTangent, float InU, float InV)
+    FVertex(const FVector& InPosition, const FVector& InNormal, const FVector& InTangent, float InU, float InV)
         : Position(InPosition)
         , Normal(InNormal)
         , Tangent(InTangent)

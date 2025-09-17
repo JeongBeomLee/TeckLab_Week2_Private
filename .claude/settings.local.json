@@ -3,7 +3,9 @@
     "allow": [
       "Bash(dir:*)",
       "Read(//c/Users/Jungle/Desktop/JB/TechLab_Week02/TeckLab_Week2_Private/BeomsEngine/**)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(\"x64\\Debug\\BeomsEngine.exe\")",
+      "WebFetch(domain:en.wikipedia.org)"
     ],
     "deny": [],
     "ask": []

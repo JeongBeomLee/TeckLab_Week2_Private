@@ -62,6 +62,17 @@ T* NewObject(UObject* Outer, UClass* Class, const FString& Name = FString());
 template<typename T>
 T* NewObject(const FObjectInitializer& ObjectInitializer);
 
+// 전역 CreateDefaultSubobject 함수들
+template<typename T>
+T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName);
+
+template<typename T>
+T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName, UClass* ComponentClass);
+
+// 자동 이름 생성 버전
+template<typename T>
+T* CreateDefaultSubobject(UObject* Outer);
+
 // 템플릿 구현
 template<typename T>
 T* FObjectInitializer::CreateDefaultSubobject(const FString& SubobjectName) const
@@ -104,4 +115,59 @@ T* NewObject(const FObjectInitializer& ObjectInitializer)
 
     UObject* NewObj = ObjectInitializer.CreateObject();
     return static_cast<T*>(NewObj);
+}
+
+// 전역 CreateDefaultSubobject 구현들
+template<typename T>
+T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName)
+{
+    static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
+
+    if (!Outer)
+    {
+        return nullptr;
+    }
+
+    FObjectInitializer SubInitializer;
+    SubInitializer.SetOuter(Outer)
+                  .SetName(SubobjectName)
+                  .SetClass(T::GetStaticClass());
+
+    T* NewSubobject = static_cast<T*>(SubInitializer.CreateObject());
+    return NewSubobject;
+}
+
+template<typename T>
+T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName, UClass* ComponentClass)
+{
+    static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
+
+    if (!Outer || !ComponentClass)
+    {
+        return nullptr;
+    }
+
+    FObjectInitializer SubInitializer;
+    SubInitializer.SetOuter(Outer)
+                  .SetName(SubobjectName)
+                  .SetClass(ComponentClass);
+
+    T* NewSubobject = static_cast<T*>(SubInitializer.CreateObject());
+    return NewSubobject;
+}
+
+template<typename T>
+T* CreateDefaultSubobject(UObject* Outer)
+{
+    static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
+
+    if (!Outer)
+    {
+        return nullptr;
+    }
+
+    // 자동 이름 생성: 클래스명 + 고유 ID
+    FString AutoName = FString("Default") + T::GetStaticClass()->GetName();
+
+    return CreateDefaultSubobject<T>(Outer, AutoName);
 }

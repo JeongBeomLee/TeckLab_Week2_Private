@@ -209,6 +209,53 @@ void TestGarbageCollectionIntegration()
     std::cout << "GC Integration Test Completed\n";
 }
 
+void TestGlobalCreateDefaultSubobject()
+{
+    std::cout << "\n=== Testing Global CreateDefaultSubobject ===\n";
+
+    // Create parent actor
+    AActor* ParentActor = NewObject<AActor>(nullptr, TEXT("ParentActor"));
+    if (ParentActor)
+    {
+        std::cout << "Parent Actor Created: " << ParentActor->GetName().c_str() << "\n";
+
+        // Test 1: Basic CreateDefaultSubobject
+        USceneComponent* SceneComp1 = CreateDefaultSubobject<USceneComponent>(ParentActor, TEXT("GlobalSceneComponent"));
+        if (SceneComp1)
+        {
+            std::cout << "  Global CreateDefaultSubobject Success\n";
+            std::cout << "    Component Name: " << SceneComp1->GetName().c_str() << "\n";
+            std::cout << "    Component Class: " << SceneComp1->GetClassName().c_str() << "\n";
+            std::cout << "    Owner: " << (SceneComp1->GetOuter() == ParentActor ? "Correct" : "Wrong") << "\n";
+        }
+
+        // Test 2: Auto-name version
+        UActorComponent* ActorComp1 = CreateDefaultSubobject<UActorComponent>(ParentActor);
+        if (ActorComp1)
+        {
+            std::cout << "  Auto-name CreateDefaultSubobject Success\n";
+            std::cout << "    Component Name: " << ActorComp1->GetName().c_str() << "\n";
+            std::cout << "    Component Class: " << ActorComp1->GetClassName().c_str() << "\n";
+        }
+
+        // Test 3: Custom class version
+        USceneComponent* SceneComp2 = CreateDefaultSubobject<USceneComponent>(
+            ParentActor, TEXT("CustomClassComponent"), USceneComponent::GetStaticClass());
+        if (SceneComp2)
+        {
+            std::cout << "  Custom Class CreateDefaultSubobject Success\n";
+            std::cout << "    Component Name: " << SceneComp2->GetName().c_str() << "\n";
+        }
+
+        // Check component count
+        const TArray<UActorComponent*>& Components = ParentActor->GetComponents();
+        std::cout << "  Total Components in Actor: " << Components.size() << "\n";
+
+        delete ParentActor;
+        std::cout << "Global CreateDefaultSubobject Test Completed\n";
+    }
+}
+
 void TestCustomActor()
 {
     std::cout << "\n=== Testing Custom Actor ===\n";
@@ -244,6 +291,7 @@ void RunObjectInitializerTests()
     TestBasicObjectInitializer();
     TestNewObjectFunction();
     TestActorWithComponents();
+    TestGlobalCreateDefaultSubobject();
     TestGarbageCollectionIntegration();
     TestCustomActor();
 

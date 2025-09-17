@@ -183,7 +183,6 @@
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="ObjectInitializer.cpp" />
-    <ClCompile Include="ObjectInitializerTest.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="UObjectArray.cpp" />
     <ClCompile Include="USphere.cpp" />

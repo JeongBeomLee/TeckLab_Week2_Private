@@ -15,6 +15,7 @@ class AActor : public UObject
     GENERATED_BODY(AActor, UObject)
 public:
     AActor();
+    explicit AActor(const FObjectInitializer& ObjectInitializer);
     virtual ~AActor();
 
     // UObject 오버라이드

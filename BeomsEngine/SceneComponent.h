@@ -10,6 +10,7 @@ class USceneComponent : public UActorComponent
     GENERATED_BODY(USceneComponent, UActorComponent)
 public:
     USceneComponent();
+    explicit USceneComponent(const FObjectInitializer& ObjectInitializer);
     virtual ~USceneComponent();
     
     virtual FString GetClassName() const override { return TEXT("USceneComponent"); }

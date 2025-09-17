@@ -148,6 +148,8 @@
     <ClInclude Include="Containers.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Memory.h" />
+    <ClInclude Include="ObjectInitializer.h" />
     <ClInclude Include="ObjectMacros.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
@@ -179,6 +181,9 @@
     <ClCompile Include="BeomsEngine.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Class.cpp" />
+    <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="ObjectInitializer.cpp" />
+    <ClCompile Include="ObjectInitializerTest.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="UObjectArray.cpp" />
     <ClCompile Include="USphere.cpp" />

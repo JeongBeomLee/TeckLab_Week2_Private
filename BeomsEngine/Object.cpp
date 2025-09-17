@@ -3,17 +3,31 @@
 #include "Class.h"
 #include "ObjectMacros.h"
 #include "UObjectArray.h"
+#include "ObjectInitializer.h"
 
 // 정적 멤버 초기화
 uint64 UObject::NextUniqueID = 1;
 
 UObject::UObject()
     : bIsValid(true)
-    , bPendingKill(false) 
+    , bPendingKill(false)
     , bHasBegunPlay(false)
     , ObjectName(TEXT("UObject"))
     , UniqueID(GenerateUniqueID())
     , Outer(nullptr)
+    , InternalIndex(-1)
+{
+    // GUObjectArray에 등록
+    InternalIndex = GUObjectArray.AllocateUObjectIndex(this);
+}
+
+UObject::UObject(const FObjectInitializer& ObjectInitializer)
+    : bIsValid(true)
+    , bPendingKill(false)
+    , bHasBegunPlay(false)
+    , ObjectName(ObjectInitializer.GetName().empty() ? TEXT("UObject") : ObjectInitializer.GetName())
+    , UniqueID(GenerateUniqueID())
+    , Outer(ObjectInitializer.GetOuter())
     , InternalIndex(-1)
 {
     // GUObjectArray에 등록

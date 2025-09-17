@@ -10,12 +10,14 @@
 // 전방 선언
 class UClass;
 class FUObjectArray;
+class FObjectInitializer;
 
 // UObject 기본 클래스
 class UObject
 {
 public:
     UObject();
+    explicit UObject(const FObjectInitializer& ObjectInitializer);
     virtual ~UObject();
 
     // 기본 UObject 인터페이스

@@ -12,6 +12,7 @@ class UActorComponent : public UObject
     GENERATED_BODY(UActorComponent, UObject)
 public:
     UActorComponent();
+    explicit UActorComponent(const FObjectInitializer& ObjectInitializer);
     virtual ~UActorComponent();
 
     // UObject 오버라이드

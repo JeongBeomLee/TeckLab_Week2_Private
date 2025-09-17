@@ -9,9 +9,9 @@ class UObject;
 struct FUObjectItem
 {
     UObject* Object;
-    int32 Flags;
-    int32 ClusterRootIndex;
-    int32 SerialNumber;
+    int32 Flags;            // 객체 상태 관리
+    int32 ClusterRootIndex; // 객체 클러스터링 (그룹 GC)
+    int32 SerialNumber;     // 객체 버전 관리 (약한 참조?)
 
     FUObjectItem()
         : Object(nullptr)
@@ -69,7 +69,7 @@ public:
         }
     }
 
-    void PerformGarbageCollection();
+    void PerformGarbageCollector();
     void MarkAsGarbage(UObject* Object);
 
 private:
@@ -77,9 +77,9 @@ private:
     TArray<int32> ObjectAvailableList;
     
     int32 MaxObjectsEver;
-    int32 OpenForDisregardForGarbageCollaction;
+    int32 OpenForDisregardForGarbageCollection; // // GC 무시 카운터
     
-    mutable std::mutex UObjectArrayMutex;
+    //mutable std::mutex UObjectArrayMutex;
     
     int32 AllocateUObjectIndexInternal(UObject* Object, bool bMergeDuplicates);
     void FreeUObjectIndexInternal(int32 Index);

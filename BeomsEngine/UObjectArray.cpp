@@ -6,7 +6,7 @@ FUObjectArray GUObjectArray;
 
 FUObjectArray::FUObjectArray()
     : MaxObjectsEver(0)
-    , OpenForDisregardForGarbageCollaction(0)
+    , OpenForDisregardForGarbageCollection(0)
 {
     ObjectList.reserve(1024);
     ObjectAvailableList.reserve(256);
@@ -14,7 +14,7 @@ FUObjectArray::FUObjectArray()
 
 FUObjectArray::~FUObjectArray()
 {
-    std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
+    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     
     for (int32 i = 0; i < ObjectList.size(); ++i)
     {
@@ -31,7 +31,7 @@ FUObjectArray::~FUObjectArray()
 
 int32 FUObjectArray::AllocateUObjectIndex(UObject* Object, bool bMergeDuplicates)
 {
-    std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
+    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     return AllocateUObjectIndexInternal(Object, bMergeDuplicates);
 }
 
@@ -42,25 +42,28 @@ int32 FUObjectArray::AllocateUObjectIndexInternal(UObject* Object, bool bMergeDu
         
     int32 Index = -1;
     
+    // 중복 체크 옵션
     if (bMergeDuplicates)
     {
         for (int32 i = 0; i < ObjectList.size(); ++i)
         {
             if (ObjectList[i].Object == Object)
             {
-                return i;
+                return i;   // 이미 존재하면 기존 인덱스 반환
             }
         }
     }
     
+    // 재사용 가능 체크
     if (ObjectAvailableList.size() > 0)
     {
         Index = ObjectAvailableList.back();
         ObjectAvailableList.pop_back();
-        ObjectList[Index] = FUObjectItem(Object);
+        ObjectList[Index] = FUObjectItem(Object);   // 슬롯 재사용
     }
     else
     {
+        // 안되면 새 슬롯 생성
         Index = (int32)ObjectList.size();
         ObjectList.push_back(FUObjectItem(Object));
         MaxObjectsEver = std::max(MaxObjectsEver, (int32)ObjectList.size());
@@ -71,7 +74,7 @@ int32 FUObjectArray::AllocateUObjectIndexInternal(UObject* Object, bool bMergeDu
 
 void FUObjectArray::FreeUObjectIndex(UObject* Object)
 {
-    std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
+    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     
     for (int32 i = 0; i < ObjectList.size(); ++i)
     {
@@ -99,7 +102,7 @@ void FUObjectArray::FreeUObjectIndexInternal(int32 Index)
 
 UObject* FUObjectArray::GetObjectPtr(int32 Index) const
 {
-    std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
+    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     
     if (Index >= 0 && Index < ObjectList.size())
     {
@@ -111,7 +114,7 @@ UObject* FUObjectArray::GetObjectPtr(int32 Index) const
 
 FUObjectItem* FUObjectArray::GetObjectItemPtr(int32 Index) const
 {
-    std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
+    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     
     if (Index >= 0 && Index < ObjectList.size())
     {
@@ -122,7 +125,7 @@ FUObjectItem* FUObjectArray::GetObjectItemPtr(int32 Index) const
 
 void FUObjectArray::GetAllObjects(TArray<UObject*>& OutObjects) const
 {
-    std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
+    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     
     OutObjects.clear();
     OutObjects.reserve(ObjectList.size());
@@ -137,10 +140,14 @@ void FUObjectArray::GetAllObjects(TArray<UObject*>& OutObjects) const
     }
 }
 
-void FUObjectArray::PerformGarbageCollection()
+void FUObjectArray::PerformGarbageCollector()
 {
-    std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
-    
+    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
+    // GC 비활성화 상태 체크
+    if (OpenForDisregardForGarbageCollection > 0) {
+        return;  // GC 실행하지 않고 종료
+    }
+
     TArray<int32> ObjectsToDelete;
     
     for (int32 i = 0; i < ObjectList.size(); ++i)

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SceneComponent.h"
+#include "ObjectInitializer.h"
 #include <algorithm>
 
 // RTTI 매크로 구현
@@ -21,6 +22,27 @@ USceneComponent::USceneComponent()
     , bAbsoluteScale(false)
 {
     SetName(TEXT("SceneComponent"));
+    bCanEverTick = true;
+}
+
+USceneComponent::USceneComponent(const FObjectInitializer& ObjectInitializer)
+    : UActorComponent(ObjectInitializer)
+    , WorldLocation(FVector::Zero)
+    , WorldRotation(FVector::Zero)
+    , WorldScale(FVector::One)
+    , RelativeLocation(FVector::Zero)
+    , RelativeRotation(FVector::Zero)
+    , RelativeScale(FVector::One)
+    , AttachParent(nullptr)
+    , bVisible(true)
+    , bAbsoluteLocation(false)
+    , bAbsoluteRotation(false)
+    , bAbsoluteScale(false)
+{
+    if (GetName().empty())
+    {
+        SetName(TEXT("SceneComponent"));
+    }
     bCanEverTick = true;
 }
 

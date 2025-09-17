@@ -6,111 +6,250 @@
 #include "ActorComponent.h"
 #include "SceneComponent.h"
 #include "UObjectArray.h"
+#include "ObjectInitializer.h"
 #include "Math.h"
 #include <iostream>
 
-void TestGUObjectArray()
+// 테스트용 커스텀 액터 클래스
+class ATestActor : public AActor
 {
-    // 콘솔 창 활성화
+public:
+    ATestActor() : AActor()
+    {
+        SetName(TEXT("TestActor"));
+    }
+
+    explicit ATestActor(const FObjectInitializer& ObjectInitializer)
+        : AActor(ObjectInitializer)
+    {
+        if (GetName().empty())
+        {
+            SetName(TEXT("TestActor"));
+        }
+    }
+
+    virtual FString GetClassName() const override { return TEXT("ATestActor"); }
+
+    static UClass* GetStaticClass()
+    {
+        static UClass* StaticClass = nullptr;
+        if (!StaticClass)
+        {
+            StaticClass = new UClass(TEXT("ATestActor"), AActor::GetStaticClass(), &ATestActor::CreateInstance);
+            UClass::RegisterClass(StaticClass);
+        }
+        return StaticClass;
+    }
+
+    virtual UClass* GetClass() const override
+    {
+        return ATestActor::GetStaticClass();
+    }
+
+    static UObject* CreateInstance()
+    {
+        return new ATestActor();
+    }
+};
+
+// 테스트 함수들
+void TestBasicObjectInitializer()
+{
+    std::cout << "\n=== Testing Basic FObjectInitializer ===\n";
+
+    // Create basic FObjectInitializer
+    FObjectInitializer ObjectInit;
+    ObjectInit.SetName(TEXT("TestObject"))
+        .SetOuter(nullptr)
+        .SetClass(UObject::GetStaticClass());
+
+    // Create object
+    UObject* TestObj = ObjectInit.CreateObject();
+    if (TestObj)
+    {
+        std::cout << "FObjectInitializer::CreateObject() Success\n";
+        std::cout << "  Object Name: " << TestObj->GetName().c_str() << "\n";
+        std::cout << "  UniqueID: " << TestObj->GetUniqueID() << "\n";
+        std::cout << "  InternalIndex: " << TestObj->GetInternalIndex() << "\n";
+
+        delete TestObj;
+        std::cout << "Object deletion completed\n";
+    }
+    else
+    {
+        std::cout << "FObjectInitializer::CreateObject() Failed\n";
+    }
+}
+
+void TestNewObjectFunction()
+{
+    std::cout << "\n=== Testing NewObject Function ===\n";
+
+    // NewObject<T> test
+    UObject* TestObj1 = NewObject<UObject>(nullptr, TEXT("NewObjectTest1"));
+    if (TestObj1)
+    {
+        std::cout << "NewObject<UObject>() Success\n";
+        std::cout << "  Object Name: " << TestObj1->GetName().c_str() << "\n";
+        std::cout << "  Class Name: " << TestObj1->GetClassName().c_str() << "\n";
+
+        delete TestObj1;
+    }
+
+    // NewObject<AActor> test
+    AActor* TestActor = NewObject<AActor>(nullptr, TEXT("NewActorTest"));
+    if (TestActor)
+    {
+        std::cout << "NewObject<AActor>() Success\n";
+        std::cout << "  Object Name: " << TestActor->GetName().c_str() << "\n";
+        std::cout << "  Class Name: " << TestActor->GetClassName().c_str() << "\n";
+        std::cout << "  RootComponent: " << (TestActor->GetRootComponent() ? "Exists" : "None") << "\n";
+
+        delete TestActor;
+    }
+
+    // NewObject<UActorComponent> test
+    UActorComponent* TestComponent = NewObject<UActorComponent>(nullptr, TEXT("NewComponentTest"));
+    if (TestComponent)
+    {
+        std::cout << "NewObject<UActorComponent>() Success\n";
+        std::cout << "  Object Name: " << TestComponent->GetName().c_str() << "\n";
+        std::cout << "  Class Name: " << TestComponent->GetClassName().c_str() << "\n";
+
+        if (TestComponent->IsActive())
+        {
+            std::cout << "  Active State: Active\n";
+        }
+        else
+        {
+            std::cout << "  Active State: Inactive\n";
+        }
+
+        delete TestComponent;
+    }
+}
+
+void TestActorWithComponents()
+{
+    std::cout << "\n=== Testing Actor with Components Creation ===\n";
+
+    // Create actor with FObjectInitializer
+    FObjectInitializer ActorInit(nullptr, TEXT("ComplexActor"), AActor::GetStaticClass());
+    AActor* TestActor = static_cast< AActor* >(ActorInit.CreateObject());
+
+    if (TestActor)
+    {
+        std::cout << "Complex Actor Creation Success\n";
+        std::cout << "  Actor Name: " << TestActor->GetName().c_str() << "\n";
+
+        // Component creation test
+        USceneComponent* NewSceneComponent = TestActor->CreateComponent<USceneComponent>(TEXT("CustomSceneComponent"));
+        UActorComponent* NewActorComponent = TestActor->CreateComponent<UActorComponent>(TEXT("CustomActorComponent"));
+
+        if (NewSceneComponent && NewActorComponent)
+        {
+            std::cout << "Component Creation Success\n";
+            std::cout << "  SceneComponent: " << NewSceneComponent->GetName().c_str() << "\n";
+            std::cout << "  ActorComponent: " << NewActorComponent->GetName().c_str() << "\n";
+
+            // Check component count
+            const TArray<UActorComponent*>& Components = TestActor->GetComponents();
+            std::cout << "  Total Components: " << Components.size() << "\n";
+
+            // Transform test
+            TestActor->SetActorLocation(FVector(100.0f, 200.0f, 300.0f));
+            FVector ActorLocation = TestActor->GetActorLocation();
+            std::cout << "  Actor Location: (" << ActorLocation.X << ", " << ActorLocation.Y << ", " << ActorLocation.Z << ")\n";
+        }
+
+        delete TestActor;
+        std::cout << "Complex Actor Deletion Completed\n";
+    }
+}
+
+void TestGarbageCollectionIntegration()
+{
+    std::cout << "\n=== Testing GC Integration ===\n";
+
+    int32 InitialObjectCount = GUObjectArray.GetObjectArrayNum();
+    std::cout << "Initial Object Count: " << InitialObjectCount << "\n";
+
+    // Create multiple objects
+    TArray<UObject*> TestObjects;
+    for (int32 i = 0; i < 10; ++i)
+    {
+        FString ObjectName = FString("TestObject_") + std::to_string(i).c_str();
+        UObject* TestObj = NewObject<UObject>(nullptr, ObjectName);
+        TestObjects.push_back(TestObj);
+    }
+
+    int32 AfterCreationCount = GUObjectArray.GetObjectArrayNum();
+    std::cout << "After Creation Count: " << AfterCreationCount << "\n";
+    std::cout << "Created Objects: " << (AfterCreationCount - InitialObjectCount) << "\n";
+
+    // Mark some objects as garbage
+    for (int32 i = 0; i < 5; ++i)
+    {
+        GUObjectArray.MarkAsGarbage(TestObjects[ i ]);
+    }
+
+    // Execute garbage collection
+    GUObjectArray.PerformGarbageCollector();
+
+    int32 AfterGCCount = GUObjectArray.GetObjectArrayNum();
+    std::cout << "After GC Count: " << AfterGCCount << "\n";
+    std::cout << "Collected Objects: " << (AfterCreationCount - AfterGCCount) << "\n";
+
+    // Clean up remaining objects
+    for (int32 i = 5; i < TestObjects.size(); ++i)
+    {
+        delete TestObjects[ i ];
+    }
+
+    std::cout << "GC Integration Test Completed\n";
+}
+
+void TestCustomActor()
+{
+    std::cout << "\n=== Testing Custom Actor ===\n";
+
+    // Create custom actor
+    ATestActor* TestActor = NewObject<ATestActor>(nullptr, TEXT("MyCustomActor"));
+    if (TestActor)
+    {
+        std::cout << "Custom Actor Creation Success\n";
+        std::cout << "  Actor Name: " << TestActor->GetName().c_str() << "\n";
+        std::cout << "  Class Name: " << TestActor->GetClassName().c_str() << "\n";
+        std::cout << "  RTTI Test: " << (TestActor->IsA<AActor>() ? "AActor inheritance confirmed" : "Inheritance failed") << "\n";
+        std::cout << "  RTTI Test: " << (TestActor->IsA<ATestActor>() ? "ATestActor type confirmed" : "Type failed") << "\n";
+
+        delete TestActor;
+        std::cout << "Custom Actor Deletion Completed\n";
+    }
+}
+
+// Main test function
+void RunObjectInitializerTests()
+{
+    // Enable console window
     AllocConsole();
     FILE* fp;
     freopen_s(&fp, "CONOUT$", "w", stdout);
     freopen_s(&fp, "CONIN$", "r", stdin);
-    
-    std::cout << "=== GUObjectArray System Test ===" << std::endl;
-    
-    // 1. 초기 상태 확인
-    std::cout << "\n--- Initial State ---" << std::endl;
-    std::cout << "Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
-    std::cout << "Max objects ever: " << GUObjectArray.GetMaxObjectsEver() << std::endl;
-    
-    // 2. UObject 생성 테스트
-    std::cout << "\n--- Creating UObjects ---" << std::endl;
-    UObject* obj1 = new UObject();
-    obj1->SetName(TEXT("TestObject1"));
-    
-    UObject* obj2 = new UObject();
-    obj2->SetName(TEXT("TestObject2"));
-    
-    AActor* actor1 = new AActor();
-    actor1->SetName(TEXT("TestActor1"));
-    
-    std::cout << "Created 3 objects (2 UObjects, 1 AActor)" << std::endl;
-    std::cout << "Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
-    std::cout << "Max objects ever: " << GUObjectArray.GetMaxObjectsEver() << std::endl;
-    
-    // 3. 모든 객체 검색 테스트
-    std::cout << "\n--- Getting All Objects ---" << std::endl;
-    TArray<UObject*> allObjects;
-    GUObjectArray.GetAllObjects(allObjects);
-    
-    std::cout << "Found " << allObjects.size() << " valid objects:" << std::endl;
-    for (int32 i = 0; i < allObjects.size(); ++i)
-    {
-        UObject* obj = allObjects[i];
-        if (obj)
-        {
-            std::cout << "  [" << i << "] " << obj->GetName().c_str() 
-                     << " (Type: " << obj->GetClassName().c_str() 
-                     << ", Index: " << obj->GetInternalIndex() << ")" << std::endl;
-        }
-    }
-    
-    // 4. 클래스별 객체 검색 테스트
-    std::cout << "\n--- Getting Objects by Class ---" << std::endl;
-    TArray<UObject*> baseObjects;
-    TArray<AActor*> actorObjects;
-    
-    GUObjectArray.GetObjectsOfClass<UObject>(baseObjects);
-    GUObjectArray.GetObjectsOfClass<AActor>(actorObjects);
-    
-    std::cout << "UObject instances: " << baseObjects.size() << std::endl;
-    std::cout << "AActor instances: " << actorObjects.size() << std::endl;
-    
-    // 5. 객체 삭제 테스트
-    std::cout << "\n--- Deleting Objects ---" << std::endl;
-    std::cout << "Deleting obj1..." << std::endl;
-    delete obj1;
-    
-    std::cout << "Objects in array after deletion: " << GUObjectArray.GetObjectArrayNum() << std::endl;
-    
-    // 6. Garbage Collection 테스트
-    std::cout << "\n--- Garbage Collection Test ---" << std::endl;
-    obj2->MarkPendingKill();
-    std::cout << "Marked obj2 as PendingKill" << std::endl;
-    
-    std::cout << "Before GC - Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
-    GUObjectArray.PerformGarbageCollection();
-    std::cout << "After GC - Objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
-    
-    // 7. 남은 객체 확인
-    std::cout << "\n--- Remaining Objects ---" << std::endl;
-    allObjects.clear();
-    GUObjectArray.GetAllObjects(allObjects);
-    
-    std::cout << "Remaining objects: " << allObjects.size() << std::endl;
-    for (int32 i = 0; i < allObjects.size(); ++i)
-    {
-        UObject* obj = allObjects[i];
-        if (obj)
-        {
-            std::cout << "  [" << i << "] " << obj->GetName().c_str() 
-                     << " (Type: " << obj->GetClassName().c_str() << ")" << std::endl;
-        }
-    }
-    
-    // 8. 정리
-    std::cout << "\n--- Cleanup ---" << std::endl;
-    delete actor1;
-    
-    std::cout << "Final objects in array: " << GUObjectArray.GetObjectArrayNum() << std::endl;
-    std::cout << "Final max objects ever: " << GUObjectArray.GetMaxObjectsEver() << std::endl;
-    
-    std::cout << "\n=== GUObjectArray System Test Complete ===" << std::endl;
-    
-    // 콘솔 창 닫기
-    if (fp != nullptr) fclose(fp);
-    FreeConsole();
+
+    std::cout << "========================================\n";
+    std::cout << "  FObjectInitializer & NewObject Tests\n";
+    std::cout << "========================================\n";
+
+    TestBasicObjectInitializer();
+    TestNewObjectFunction();
+    TestActorWithComponents();
+    TestGarbageCollectionIntegration();
+    TestCustomActor();
+
+    std::cout << "\n========================================\n";
+    std::cout << "       All Tests Completed\n";
+    std::cout << "========================================\n";
 }
 
 #define MAX_LOADSTRING 100
@@ -146,8 +285,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-	// GUObjectArray 시스템 테스트
-	TestGUObjectArray();
+    RunObjectInitializerTests();
 
     // 기본 메시지 루프입니다:
     while (GetMessage(&msg, nullptr, 0, 0))

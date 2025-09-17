@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ActorComponent.h"
 #include "Actor.h"
+#include "ObjectInitializer.h"
 
 IMPLEMENT_CLASS(UActorComponent, UObject)
 
@@ -14,6 +15,21 @@ UActorComponent::UActorComponent()
     , bAutoActivate(true)
 {
     SetName(TEXT("ActorComponent"));
+}
+
+UActorComponent::UActorComponent(const FObjectInitializer& ObjectInitializer)
+    : UObject(ObjectInitializer)
+    , bIsActive(true)
+    , bCanEverTick(false)
+    , bWantsInitializeComponent(true)
+    , bHasBeenInitialized(false)
+    , bRegistered(false)
+    , bAutoActivate(true)
+{
+    if (GetName().empty())
+    {
+        SetName(TEXT("ActorComponent"));
+    }
 }
 
 UActorComponent::~UActorComponent()

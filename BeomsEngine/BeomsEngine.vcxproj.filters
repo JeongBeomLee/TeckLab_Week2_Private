@@ -41,6 +41,9 @@
     <Filter Include="Engine\Core\Containers">
       <UniqueIdentifier>{3b8a83cf-8139-41b3-b21a-b18ff8afec34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core\Memory">
+      <UniqueIdentifier>{5ad3f1c5-969c-495f-bcad-8528ee570860}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -133,6 +136,9 @@
     <ClInclude Include="UObjectArray.h">
       <Filter>Engine\Core\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Engine\Core\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">
@@ -183,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="UObjectArray.cpp">
       <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory.cpp">
+      <Filter>Engine\Core\Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

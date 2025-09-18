@@ -25,27 +25,6 @@ USceneComponent::USceneComponent()
     bCanEverTick = true;
 }
 
-USceneComponent::USceneComponent(const FObjectInitializer& ObjectInitializer)
-    : UActorComponent(ObjectInitializer)
-    , WorldLocation(FVector::Zero)
-    , WorldRotation(FVector::Zero)
-    , WorldScale(FVector::One)
-    , RelativeLocation(FVector::Zero)
-    , RelativeRotation(FVector::Zero)
-    , RelativeScale(FVector::One)
-    , AttachParent(nullptr)
-    , bVisible(true)
-    , bAbsoluteLocation(false)
-    , bAbsoluteRotation(false)
-    , bAbsoluteScale(false)
-{
-    if (GetName().empty())
-    {
-        SetName(TEXT("SceneComponent"));
-    }
-    bCanEverTick = true;
-}
-
 USceneComponent::~USceneComponent()
 {
     // 부모에서 분리

@@ -21,19 +21,6 @@ UObject::UObject()
     InternalIndex = GUObjectArray.AllocateUObjectIndex(this);
 }
 
-UObject::UObject(const FObjectInitializer& ObjectInitializer)
-    : bIsValid(true)
-    , bPendingKill(false)
-    , bHasBegunPlay(false)
-    , ObjectName(ObjectInitializer.GetName().empty() ? TEXT("UObject") : ObjectInitializer.GetName())
-    , UniqueID(GenerateUniqueID())
-    , Outer(ObjectInitializer.GetOuter())
-    , InternalIndex(-1)
-{
-    // GUObjectArray에 등록
-    InternalIndex = GUObjectArray.AllocateUObjectIndex(this);
-}
-
 UObject::~UObject()
 {
     // GUObjectArray에서 제거

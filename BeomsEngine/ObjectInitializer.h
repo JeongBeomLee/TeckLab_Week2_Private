@@ -32,10 +32,6 @@ public:
     FObjectInitializer& SetName(const FString& InName);
     FObjectInitializer& SetClass(UClass* InClass);
 
-    // 컴포넌트 생성 헬퍼
-    template<typename T>
-    T* CreateDefaultSubobject(const FString& SubobjectName) const;
-
     // UObject 생성 및 초기화
     UObject* CreateObject() const;
 
@@ -56,6 +52,9 @@ template<typename T>
 T* NewObject(UObject* Outer = nullptr, const FString& Name = FString());
 
 template<typename T>
+T* NewObject();
+
+template<typename T>
 T* NewObject(UObject* Outer, UClass* Class, const FString& Name = FString());
 
 // 특화된 생성 함수들
@@ -72,21 +71,6 @@ T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName, UClass* 
 // 자동 이름 생성 버전
 template<typename T>
 T* CreateDefaultSubobject(UObject* Outer);
-
-// 템플릿 구현
-template<typename T>
-T* FObjectInitializer::CreateDefaultSubobject(const FString& SubobjectName) const
-{
-    static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
-
-    FObjectInitializer SubInitializer;
-    SubInitializer.SetOuter(const_cast<UObject*>(GetOuter()))
-                  .SetName(SubobjectName)
-                  .SetClass(T::GetStaticClass());
-
-    T* NewSubobject = static_cast<T*>(SubInitializer.CreateObject());
-    return NewSubobject;
-}
 
 template<typename T>
 T* NewObject(UObject* Outer, const FString& Name)

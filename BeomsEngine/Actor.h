@@ -15,7 +15,6 @@ class AActor : public UObject
     GENERATED_BODY(AActor, UObject)
 public:
     AActor();
-    explicit AActor(const FObjectInitializer& ObjectInitializer);
     virtual ~AActor();
 
     // UObject 오버라이드
@@ -103,13 +102,12 @@ T* AActor::CreateComponent(const FString& ComponentName)
 {
     static_assert(std::is_base_of<UActorComponent, T>::value, "T must derive from UActorComponent");
 
-    T* NewComponent = new T();
+    FString ActualComponentName = ComponentName.empty() ?
+        (FString("Default") + T::GetStaticClass()->GetName()) : ComponentName;
+
+    T* NewComponent = NewObject<T>(this, ActualComponentName);
     if (NewComponent)
     {
-        if (!ComponentName.empty())
-        {
-            NewComponent->SetName(ComponentName);
-        }
         AddComponent(NewComponent);
     }
     return NewComponent;

@@ -19,15 +19,6 @@ public:
         SetName(TEXT("TestActor"));
     }
 
-    explicit ATestActor(const FObjectInitializer& ObjectInitializer)
-        : AActor(ObjectInitializer)
-    {
-        if (GetName().empty())
-        {
-            SetName(TEXT("TestActor"));
-        }
-    }
-
     virtual FString GetClassName() const override { return TEXT("ATestActor"); }
 
     static UClass* GetStaticClass()

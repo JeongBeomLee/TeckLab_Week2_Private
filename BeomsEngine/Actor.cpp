@@ -18,32 +18,7 @@ AActor::AActor()
 {
     SetName(TEXT("Actor"));
 
-    // 기본 RootComponent 생성
-    RootComponent = new USceneComponent();
-    if (RootComponent)
-    {
-        RootComponent->SetName(TEXT("DefaultSceneRoot"));
-        AddComponent(RootComponent);
-    }
-}
-
-AActor::AActor(const FObjectInitializer& ObjectInitializer)
-    : UObject(ObjectInitializer)
-    , bHidden(false)
-    , bCanEverTick(true)
-    , bActorEnableCollision(true)
-    , bBlockInput(false)
-    , RootComponent(nullptr)
-    , World(nullptr)
-    , Owner(nullptr)
-{
-    if (GetName().empty())
-    {
-        SetName(TEXT("Actor"));
-    }
-
-    // 기본 RootComponent 생성
-    RootComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
+    RootComponent = CreateDefaultSubobject<USceneComponent>(this, TEXT("DefaultSceneRoot"));
     if (RootComponent)
     {
         AddComponent(RootComponent);

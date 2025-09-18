@@ -17,7 +17,6 @@ class UObject
 {
 public:
     UObject();
-    explicit UObject(const FObjectInitializer& ObjectInitializer);
     virtual ~UObject();
 
     // 기본 UObject 인터페이스

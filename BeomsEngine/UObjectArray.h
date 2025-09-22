@@ -69,6 +69,7 @@ public:
         }
     }
 
+    // Mark-and-Sweep
     void PerformGarbageCollector();
     void MarkAsGarbage(UObject* Object);
 
@@ -77,7 +78,7 @@ private:
     TArray<int32> ObjectAvailableList;
     
     int32 MaxObjectsEver;
-    int32 OpenForDisregardForGarbageCollection; // // GC 무시 카운터
+    int32 OpenForDisregardForGarbageCollection; // GC 무시 카운터
     
     //mutable std::mutex UObjectArrayMutex;
     

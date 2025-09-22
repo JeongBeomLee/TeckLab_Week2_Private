@@ -1,6 +1,7 @@
 #pragma once
-#include "Vector.h"
 #include <cmath>
+#include "Vector.h"
+#include "Vector2.h"
 
 struct FVertex
 {
@@ -8,24 +9,22 @@ struct FVertex
     FVector Normal;
     FVector Tangent;
     FVector Binormal;
-    float U, V; // UV coordinates
+    FVector2 UV; // UV coordinates
 
-    FVertex() 
+    FVertex()
         : Position(FVector::Zero)
         , Normal(FVector::Up)
         , Tangent(FVector::Right)
         , Binormal(FVector::Forward)
-        , U(0.0f)
-        , V(0.0f)
+        , UV(FVector2::Zero())
     {}
 
     FVertex(const FVector& InPosition, const FVector& InNormal, float InU, float InV)
         : Position(InPosition)
         , Normal(InNormal)
-        , U(InU)
-        , V(InV)
+        , UV(FVector2(InU, InV))
     {
-        // Z-Up 왼손 좌표계에서 접선 벡터 계산
+        // 접선 벡터 계산
         CalculateTangentSpace();
     }
 
@@ -33,8 +32,7 @@ struct FVertex
         : Position(InPosition)
         , Normal(InNormal)
         , Tangent(InTangent)
-        , U(InU)
-        , V(InV)
+        , UV(FVector2(InU, InV))
     {
         // 법선과 접선으로부터 종법선 계산 (왼손 좌표계)
         Binormal = Normal.Cross(Tangent);
@@ -43,7 +41,7 @@ struct FVertex
 private:
     void CalculateTangentSpace()
     {
-        // Z-Up 왼손 좌표계에서 기본 접선 벡터 생성
+        // 기본 접선 벡터 생성
         FVector UpVector = FVector::Up;
         if (std::abs(Normal.Dot(UpVector)) > 0.9f)
         {

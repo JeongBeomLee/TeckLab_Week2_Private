@@ -103,9 +103,6 @@
     <ClInclude Include="Containers.h">
       <Filter>Engine\Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Meshes.h">
-      <Filter>Engine\Core\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Engine\Core\Object</Filter>
     </ClInclude>
@@ -138,6 +135,12 @@
     </ClInclude>
     <ClInclude Include="Memory.h">
       <Filter>Engine\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectInitializer.h">
+      <Filter>Engine\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Engine\Core\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +195,9 @@
     </ClCompile>
     <ClCompile Include="Memory.cpp">
       <Filter>Engine\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectInitializer.cpp">
+      <Filter>Engine\Core\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

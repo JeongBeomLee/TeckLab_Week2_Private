@@ -153,13 +153,13 @@
     <ClInclude Include="ObjectMacros.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
+    <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="USphere.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector4.h" />
-    <ClInclude Include="Meshes.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />

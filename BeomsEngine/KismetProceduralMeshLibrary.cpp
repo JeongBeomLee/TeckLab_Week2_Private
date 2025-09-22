@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "KismetProceduralMeshLibrary.h"
 
-FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateBoxMesh(FVector BoxRadius)
+FStaticMesh UKismetProceduralMeshLibrary::CreateCubeMesh(FVector BoxRadius)
 {
     TArray<FVertex> Vertices;
     TArray<uint32> Indices;
@@ -64,10 +64,10 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateBoxMesh(FVector BoxRad
     
     Indices = FaceIndices;
     
-    return FStaticMeshRenderData(Vertices, Indices);
+    return FStaticMesh("BasicShapes/DefaultCube", Vertices, Indices);
 }
 
-FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateSphereMesh(float SphereRadius, int32 SphereSegments, int32 SphereRings)
+FStaticMesh UKismetProceduralMeshLibrary::CreateSphereMesh(float SphereRadius, int32 SphereSegments, int32 SphereRings)
 {
     TArray<FVertex> Vertices;
     TArray<uint32> Indices;
@@ -115,10 +115,10 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateSphereMesh(float Spher
         }
     }
 
-    return FStaticMeshRenderData(Vertices, Indices);
+    return FStaticMesh("BasicShapes/DefaultSphere", Vertices, Indices);
 }
 
-FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateCylinderMesh(float CylinderRadius, float CylinderHeight, int32 CylinderSegments)
+FStaticMesh UKismetProceduralMeshLibrary::CreateCylinderMesh(float CylinderRadius, float CylinderHeight, int32 CylinderSegments)
 {
     TArray<FVertex> Vertices;
     TArray<uint32> Indices;
@@ -193,10 +193,10 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateCylinderMesh(float Cyl
         Indices.push_back(CapNext);
     }
 
-    return FStaticMeshRenderData(Vertices, Indices);
+    return FStaticMesh("BasicShapes/DefaultCylinder", Vertices, Indices);
 }
 
-FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateConeMesh(float ConeRadius, float ConeHeight, int32 ConeSegments)
+FStaticMesh UKismetProceduralMeshLibrary::CreateConeMesh(float ConeRadius, float ConeHeight, int32 ConeSegments)
 {
     TArray<FVertex> Vertices;
     TArray<uint32> Indices;
@@ -253,10 +253,10 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateConeMesh(float ConeRad
         Indices.push_back(CapNext);
     }
 
-    return FStaticMeshRenderData(Vertices, Indices);
+    return FStaticMesh("BasicShapes/DefaultCone", Vertices, Indices);
 }
 
-FStaticMeshRenderData UKismetProceduralMeshLibrary::CreatePlaneMesh(FVector PlaneSize, int32 WidthSegments, int32 HeightSegments)
+FStaticMesh UKismetProceduralMeshLibrary::CreatePlaneMesh(FVector PlaneSize, int32 WidthSegments, int32 HeightSegments)
 {
     TArray<FVertex> Vertices;
     TArray<uint32> Indices;
@@ -306,5 +306,5 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreatePlaneMesh(FVector Plan
         }
     }
 
-    return FStaticMeshRenderData(Vertices, Indices);
+    return FStaticMesh("BasicShapes/DefaultPlane", Vertices, Indices);
 }

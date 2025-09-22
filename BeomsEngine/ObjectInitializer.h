@@ -112,6 +112,7 @@ T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName)
         return nullptr;
     }
 
+    // 클래스, 이름, Outer 설정
     FObjectInitializer SubInitializer;
     SubInitializer.SetOuter(Outer)
                   .SetName(SubobjectName)

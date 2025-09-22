@@ -32,9 +32,6 @@
     <Filter Include="Engine\Components">
       <UniqueIdentifier>{6b4e3eac-5a6c-45ca-9a19-a87dbfe3ef11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Core\Test">
-      <UniqueIdentifier>{7ddaf004-fa9e-4b5a-ab81-e2e915fb7190}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Core\Actor">
       <UniqueIdentifier>{64443f27-c88e-4b55-a198-d8ea715c1554}</UniqueIdentifier>
     </Filter>
@@ -127,9 +124,6 @@
     <ClInclude Include="Math.h">
       <Filter>Engine\Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="USphere.h">
-      <Filter>Engine\Core\Test</Filter>
-    </ClInclude>
     <ClInclude Include="UObjectArray.h">
       <Filter>Engine\Core\Object</Filter>
     </ClInclude>
@@ -198,9 +192,6 @@
     </ClCompile>
     <ClCompile Include="SceneComponent.cpp">
       <Filter>Engine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="USphere.cpp">
-      <Filter>Engine\Core\Test</Filter>
     </ClCompile>
     <ClCompile Include="UObjectArray.cpp">
       <Filter>Engine\Core\Object</Filter>

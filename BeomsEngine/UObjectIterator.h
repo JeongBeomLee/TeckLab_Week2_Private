@@ -1,5 +1,4 @@
 #pragma once
-#include "Object.h"
 
 template <typename T>
 class TObjectIterator
@@ -9,7 +8,7 @@ public:
 
 	TObjectIterator()
 		: Index(0)
-		, EndIndex(GUObjectArray.size())
+		, EndIndex(GUObjectArray.GetObjectArrayNum())
 	{
 		Advance();
 	}
@@ -45,8 +44,8 @@ private:
 		CurrentObject = nullptr;
 		for (size_t i = Index; i < EndIndex; ++i)
 		{
-			UObject* Object = GUObjectArray[i];
-			if (Object && IsValidObject(Object)))
+			UObject* Object = GUObjectArray.GetObjectPtr(static_cast<int32>(i));
+			if (Object && IsValidObject(Object))
 			{
 				auto* CastedObject = Cast<T>(Object);
 				if (CastedObject)
@@ -86,3 +85,9 @@ struct TObjectRange
 	TObjectIterator<T> begin() const { return TObjectIterator<T>(); }
 	TObjectIterator<T> end() const { return TObjectIterator<T>::End(); }
 };
+
+template <typename T>
+inline TObjectRange<T> MakeObjectRange()
+{
+	return TObjectRange<T>();
+}

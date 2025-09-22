@@ -14,8 +14,6 @@ FUObjectArray::FUObjectArray()
 
 FUObjectArray::~FUObjectArray()
 {
-    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
-    
     for (int32 i = 0; i < ObjectList.size(); ++i)
     {
         FUObjectItem& Item = ObjectList[i];
@@ -31,7 +29,6 @@ FUObjectArray::~FUObjectArray()
 
 int32 FUObjectArray::AllocateUObjectIndex(UObject* Object, bool bMergeDuplicates)
 {
-    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     return AllocateUObjectIndexInternal(Object, bMergeDuplicates);
 }
 
@@ -74,8 +71,6 @@ int32 FUObjectArray::AllocateUObjectIndexInternal(UObject* Object, bool bMergeDu
 
 void FUObjectArray::FreeUObjectIndex(UObject* Object)
 {
-    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
-    
     for (int32 i = 0; i < ObjectList.size(); ++i)
     {
         if (ObjectList[i].Object == Object)
@@ -102,8 +97,6 @@ void FUObjectArray::FreeUObjectIndexInternal(int32 Index)
 
 UObject* FUObjectArray::GetObjectPtr(int32 Index) const
 {
-    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
-    
     if (Index >= 0 && Index < ObjectList.size())
     {
         const FUObjectItem& Item = ObjectList[Index];
@@ -114,8 +107,6 @@ UObject* FUObjectArray::GetObjectPtr(int32 Index) const
 
 FUObjectItem* FUObjectArray::GetObjectItemPtr(int32 Index) const
 {
-    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
-    
     if (Index >= 0 && Index < ObjectList.size())
     {
         return const_cast<FUObjectItem*>(&ObjectList[Index]);
@@ -125,8 +116,6 @@ FUObjectItem* FUObjectArray::GetObjectItemPtr(int32 Index) const
 
 void FUObjectArray::GetAllObjects(TArray<UObject*>& OutObjects) const
 {
-    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
-    
     OutObjects.clear();
     OutObjects.reserve(ObjectList.size());
     
@@ -142,7 +131,6 @@ void FUObjectArray::GetAllObjects(TArray<UObject*>& OutObjects) const
 
 void FUObjectArray::PerformGarbageCollector()
 {
-    //std::lock_guard<std::mutex> Lock(UObjectArrayMutex);
     // GC 비활성화 상태 체크
     if (OpenForDisregardForGarbageCollection > 0) {
         return;  // GC 실행하지 않고 종료

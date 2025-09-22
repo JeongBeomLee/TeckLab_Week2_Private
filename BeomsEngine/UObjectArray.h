@@ -80,8 +80,6 @@ private:
     int32 MaxObjectsEver;
     int32 OpenForDisregardForGarbageCollection; // GC 무시 카운터
     
-    //mutable std::mutex UObjectArrayMutex;
-    
     int32 AllocateUObjectIndexInternal(UObject* Object, bool bMergeDuplicates);
     void FreeUObjectIndexInternal(int32 Index);
 };

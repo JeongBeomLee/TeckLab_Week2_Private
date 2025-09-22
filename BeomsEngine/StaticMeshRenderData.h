@@ -1,8 +1,5 @@
 #pragma once
-#include "Types.h"
-#include "Containers.h"
 #include "Vertex.h"
-#include "Name.h"
 
 struct FObjMaterialInfo
 {

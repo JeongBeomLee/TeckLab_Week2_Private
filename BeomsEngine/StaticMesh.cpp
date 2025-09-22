@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "StaticMesh.h"
 #include "MaterialInterface.h"
-#include <algorithm>
 
 IMPLEMENT_CLASS(UStaticMesh, UObject);
 

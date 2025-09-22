@@ -1,5 +1,4 @@
 #pragma once
-#include "ObjectMacros.h"
 #include "StaticMeshRenderData.h"
 
 // UStaticMesh - 정적 메시 에셋 클래스

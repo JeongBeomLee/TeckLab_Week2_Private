@@ -1,8 +1,4 @@
 #pragma once
-#include "Containers.h"
-#include "Types.h"
-#include "Vector.h"
-#include "Name.h"
 
 enum class EBlendMode : uint8
 {

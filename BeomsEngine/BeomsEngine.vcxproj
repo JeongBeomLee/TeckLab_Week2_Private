@@ -161,7 +161,6 @@
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Class.h" />
-    <ClInclude Include="USphere.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="pch.h" />
@@ -191,7 +190,6 @@
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="UObjectArray.cpp" />
-    <ClCompile Include="USphere.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="ActorComponent.cpp" />

@@ -36,6 +36,24 @@
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
 
-// 기본 컨테이너 및 타입
-#include "Containers.h"
+// === Core Types ===
 #include "Types.h"
+#include "String.h"
+#include "Containers.h"
+#include "Name.h"
+
+// === Object System ===
+#include "Object.h"
+#include "ObjectMacros.h"
+#include "Class.h"
+#include "UObjectArray.h"
+#include "UObjectIterator.h"
+
+// === Math ===
+#include "Vector.h"
+#include "Vector2.h"
+#include "Matrix.h"
+
+// === Standard Library ===
+#include <memory>
+#include <unordered_map>

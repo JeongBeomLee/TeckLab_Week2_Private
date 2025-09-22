@@ -1,8 +1,4 @@
 #pragma once
-#include "ObjectMacros.h"
-#include "Containers.h"
-#include "Vector.h"
-#include "Matrix.h"
 
 // 전방 선언
 class UActorComponent;

@@ -9,10 +9,6 @@ using FNameDisplayIndex = uint32;
 // 유효하지 않은 FName을 나타내는 상수
 constexpr FNameEntryId NAME_None = 0;
 
-/**
- * FName 시스템의 핵심: 전역 문자열 테이블
- * 모든 FName 문자열을 단 한 번만 저장하는 싱글톤
- */
 class FNamePool
 {
 private:
@@ -38,7 +34,7 @@ private:
 
 public:
     // 싱글톤 인스턴스 얻기
-    static FNamePool& Get()
+    static FNamePool& GetInstance()
     {
         if (!Instance)
         {
@@ -140,7 +136,7 @@ public:
         else
         {
             // 전역 풀에 저장하고 ID 받기
-            ComparisonIndex = FNamePool::Get().Store(InName);
+            ComparisonIndex = FNamePool::GetInstance().Store(InName);
         }
     }
 
@@ -197,7 +193,7 @@ public:
     // 문자열 변환
     FString ToString() const
     {
-        return FNamePool::Get().Resolve(ComparisonIndex);
+        return FNamePool::GetInstance().Resolve(ComparisonIndex);
     }
 
     const char* GetPlainNameString() const
@@ -297,58 +293,6 @@ namespace EName
     extern const FName Action;
     extern const FName Axis;
 }
-
-// 사용 예시 및 테스트 함수들
-//namespace FNameTest
-//{
-//    void RunTests()
-//    {
-//        printf("=== FName System Tests ===\n");
-//
-//        // 1. 기본 생성 및 비교 테스트
-//        FName Name1("TestName");
-//        FName Name2("TestName");
-//        FName Name3("DifferentName");
-//
-//        printf("Same string comparison: %s\n", (Name1 == Name2) ? "PASS" : "FAIL");
-//        printf("Different string comparison: %s\n", (Name1 != Name3) ? "PASS" : "FAIL");
-//
-//        // 2. 메모리 효율성 테스트
-//        TArray<FName> Names;
-//        for (int i = 0; i < 1000; ++i)
-//        {
-//            Names.push_back(FName("RepeatedName")); // 같은 문자열 1000번
-//        }
-//
-//        printf("Created 1000 FNames with same string\n");
-//        printf("Total unique entries in pool: %zu\n", FNamePool::Get().GetNumEntries());
-//        printf("Memory usage: %zu bytes\n", FNamePool::Get().GetMemoryUsage());
-//
-//        // 3. 성능 테스트
-//        auto Start = std::chrono::high_resolution_clock::now();
-//
-//        for (int i = 0; i < 100000; ++i)
-//        {
-//            bool Result = Name1 == Name2; // FName 비교
-//            (void)Result;
-//        }
-//
-//        auto End = std::chrono::high_resolution_clock::now();
-//        auto Duration = std::chrono::duration_cast<std::chrono::microseconds>(End - Start);
-//
-//        printf("100,000 FName comparisons took: %lld microseconds\n", Duration.count());
-//
-//        // 4. 문자열 변환 테스트
-//        printf("Name1 toString: '%s'\n", Name1.ToString().c_str());
-//        printf("Name3 toString: '%s'\n", Name3.ToString().c_str());
-//
-//        // 5. 미리 정의된 이름들 테스트
-//        printf("EName::Material: '%s'\n", EName::Material.ToString().c_str());
-//        printf("EName::BeginPlay: '%s'\n", EName::BeginPlay.ToString().c_str());
-//
-//        printf("=== FName Tests Complete ===\n\n");
-//    }
-//}
 
 /**
  * 실제 사용 예시:

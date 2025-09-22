@@ -33,7 +33,7 @@ public:
     uint64 GetUniqueID() const { return UniqueID; }
     
     // 클래스 정보 및 RTTI
-    virtual FString GetClassName() const { return TEXT("UObject"); }
+    virtual FString GetClassName() const { return "UObject"; }
     virtual UClass* GetClass() const;
     static UClass* GetStaticClass();
     

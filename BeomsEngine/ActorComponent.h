@@ -18,7 +18,7 @@ public:
     virtual void BeginPlay() override;
     virtual void EndPlay() override; 
     virtual void Tick(float DeltaTime) override;
-    virtual FString GetClassName() const override { return TEXT("UActorComponent"); }
+    virtual FString GetClassName() const override { return "UActorComponent"; }
 
     // 컴포넌트 상태
     bool IsActive() const { return bIsActive; }

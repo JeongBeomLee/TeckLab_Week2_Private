@@ -12,7 +12,7 @@ public:
     USceneComponent();
     virtual ~USceneComponent();
     
-    virtual FString GetClassName() const override { return TEXT("USceneComponent"); }
+    virtual FString GetClassName() const override { return "USceneComponent"; }
     
     // Transform 관련
     FVector GetComponentLocation() const { return WorldLocation; }

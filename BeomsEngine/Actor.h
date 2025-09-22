@@ -21,7 +21,7 @@ public:
     virtual void BeginPlay() override;
     virtual void EndPlay() override;
     virtual void Tick(float DeltaTime) override;
-    virtual FString GetClassName() const override { return TEXT("AActor"); }
+    virtual FString GetClassName() const override { return "AActor"; }
 
     // Transform 관련 - RootComponent에 위임
     FVector GetActorLocation() const;

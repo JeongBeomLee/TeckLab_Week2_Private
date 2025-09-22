@@ -53,9 +53,6 @@ template<typename T>
 T* NewObject(UObject* Outer = nullptr, const FName& Name = FName());
 
 template<typename T>
-T* NewObject();
-
-template<typename T>
 T* NewObject(UObject* Outer, UClass* Class, const FName& Name = FName());
 
 // 특화된 생성 함수들

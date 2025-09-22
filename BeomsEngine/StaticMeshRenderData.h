@@ -90,65 +90,36 @@ struct FStaticMeshSection
     {}
 };
 
-struct FStaticMesh
+struct FStaticMeshRenderData
 {
-    FString PathFileName;
+    FString SourceFilePath;
 
     TArray<FVertex> Vertices;
     TArray<uint32> Indices;
 
-    TArray<FStaticMaterial> StaticMaterials;
-    TArray<FStaticMeshSection> Sections;
-
     uint32 NumVertices;
     uint32 NumTriangles;
-    
-    FStaticMesh()
+
+    //struct FBoxSphereBounds Bounds;
+
+    FStaticMeshRenderData()
         : NumVertices(0)
         , NumTriangles(0)
     {}
-    
-    FStaticMesh(const FString& InPathFileName, const TArray<FVertex>& InVertices, const TArray<uint32>& InIndices)
-        : PathFileName(InPathFileName)
+
+    FStaticMeshRenderData(const FString& InPathFileName, const TArray<FVertex>& InVertices, const TArray<uint32>& InIndices)
+        : SourceFilePath(InPathFileName)
         , Vertices(InVertices)
         , Indices(InIndices)
         , NumVertices(static_cast<uint32>(InVertices.size()))
         , NumTriangles(static_cast<uint32>(InIndices.size() / 3))
     {
-        // 기본 머티리얼 슬롯과 섹션 생성
-        if (Indices.size() > 0)
-        {
-            StaticMaterials.push_back(FStaticMaterial(FName("DefaultMaterial")));
-            Sections.push_back(FStaticMeshSection(0, 0, NumTriangles, 0, NumVertices > 0 ? NumVertices - 1 : 0));
-        }
     }
-    
+
     void UpdateCounts()
     {
         NumVertices = static_cast<uint32>(Vertices.size());
         NumTriangles = static_cast<uint32>(Indices.size() / 3);
-    }
-
-    void AddMaterialSlot(const FName& SlotName, class UMaterialInterface* Material = nullptr)
-    {
-        StaticMaterials.push_back(FStaticMaterial(SlotName, Material));
-    }
-
-    void AddSection(uint32 MaterialIndex, uint32 FirstIndex, uint32 NumTriangles, uint32 MinVertexIndex, uint32 MaxVertexIndex)
-    {
-        Sections.push_back(FStaticMeshSection(MaterialIndex, FirstIndex, NumTriangles, MinVertexIndex, MaxVertexIndex));
-    }
-
-    int32 GetMaterialIndex(const FName& MaterialSlotName) const
-    {
-        for (size_t i = 0; i < StaticMaterials.size(); ++i)
-        {
-            if (StaticMaterials[i].MaterialSlotName == MaterialSlotName)
-            {
-                return static_cast<int32>(i);
-            }
-        }
-        return -1;
     }
 };
 

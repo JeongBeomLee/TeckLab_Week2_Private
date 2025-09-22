@@ -148,6 +148,9 @@
     <ClInclude Include="Name.h">
       <Filter>Engine\Core\Object</Filter>
     </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">
@@ -207,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="Name.cpp">
       <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

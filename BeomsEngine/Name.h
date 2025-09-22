@@ -295,7 +295,7 @@ public:
         return static_cast<size_t>(ComparisonIndex);
     }
 
-    // 정적 상수들
+    // 정적 상수
     static const FName None;
 };
 
@@ -312,7 +312,7 @@ namespace std
     };
 }
 
-// 자주 사용되는 FName들을 미리 정의
+// 자주 사용될 것 같은 FName들을 미리 정의
 namespace EName
 {
     // 게임 오브젝트 관련
@@ -351,25 +351,3 @@ namespace EName
     extern const FName Action;
     extern const FName Axis;
 }
-
-/**
- * 실제 사용 예시:
- *
- * // 1. 기본 사용
- * FName ComponentName("MeshComponent");
- * FName MaterialSlot("DefaultMaterial");
- *
- * // 2. 빠른 비교
- * if (ComponentName == EName::Mesh)
- * {
- *     // 매우 빠른 정수 비교
- * }
- *
- * // 3. 컨테이너의 키로 사용
- * std::unordered_map<FName, UComponent*> ComponentMap;
- * ComponentMap[EName::Transform] = TransformComponent;
- *
- * // 4. 문자열 변환
- * FString DisplayName = ComponentName.ToString();
- * printf("Component: %s\n", ComponentName.GetPlainNameString());
- */

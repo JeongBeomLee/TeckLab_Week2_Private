@@ -12,13 +12,6 @@
 #include <windows.h>
 
 // STL
-//#include <string>
-//#include <vector>
-//#include <list>
-//#include <unordered_map>
-//#include <unordered_set>
-//#include <array>
-//#include <queue>
 #include <algorithm>
 
 // C 런타임 헤더 파일

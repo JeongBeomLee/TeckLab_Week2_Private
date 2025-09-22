@@ -154,6 +154,7 @@
     <ClInclude Include="ObjectInitializer.h" />
     <ClInclude Include="ObjectMacros.h" />
     <ClInclude Include="SceneComponent.h" />
+    <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vertex.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Name.cpp" />
     <ClCompile Include="ObjectInitializer.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="UObjectArray.cpp" />
     <ClCompile Include="USphere.cpp" />
     <ClCompile Include="Vector.cpp" />

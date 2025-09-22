@@ -75,13 +75,13 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateSphereMesh(float Spher
     // UV 구 메쉬 생성 (Z-Up)
     for (int32 Ring = 0; Ring <= SphereRings; ++Ring)
     {
-        float Phi = static_cast<float>(Ring) * PI / static_cast<float>(SphereRings);
+        float Phi = static_cast<float>(Ring) * FMath::PI / static_cast<float>(SphereRings);
         float Z = SphereRadius * cos(Phi);
         float RingRadius = SphereRadius * sin(Phi);
 
         for (int32 Segment = 0; Segment <= SphereSegments; ++Segment)
         {
-            float Theta = static_cast<float>(Segment) * 2.0f * PI / static_cast<float>(SphereSegments);
+            float Theta = static_cast<float>(Segment) * 2.0f * FMath::PI / static_cast<float>(SphereSegments);
             float X = RingRadius * cos(Theta);
             float Y = RingRadius * sin(Theta);
 
@@ -132,7 +132,7 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateCylinderMesh(float Cyl
     // 측면 및 캡 정점들
     for (int32 i = 0; i <= CylinderSegments; ++i)
     {
-        float Theta = static_cast<float>(i) * 2.0f * PI / static_cast<float>(CylinderSegments);
+        float Theta = static_cast<float>(i) * 2.0f * FMath::PI / static_cast<float>(CylinderSegments);
         float X = CylinderRadius * cos(Theta);
         float Y = CylinderRadius * sin(Theta);
 
@@ -215,7 +215,7 @@ FStaticMeshRenderData UKismetProceduralMeshLibrary::CreateConeMesh(float ConeRad
     // 하단 링과 측면 정점들
     for (int32 i = 0; i <= ConeSegments; ++i)
     {
-        float Theta = static_cast<float>(i) * 2.0f * PI / static_cast<float>(ConeSegments);
+        float Theta = static_cast<float>(i) * 2.0f * FMath::PI / static_cast<float>(ConeSegments);
         float X = ConeRadius * cos(Theta);
         float Y = ConeRadius * sin(Theta);
 

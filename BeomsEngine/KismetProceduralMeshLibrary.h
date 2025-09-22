@@ -3,6 +3,7 @@
 #include "Containers.h"
 #include "Vertex.h"
 #include "StaticMeshRenderData.h"
+#include "Math.h"
 
 // 기본 메쉬 생성기
 class UKismetProceduralMeshLibrary
@@ -19,6 +20,5 @@ public:
     static FStaticMeshRenderData CreatePlaneMesh(FVector PlaneSize = FVector(100.0f, 100.0f, 0.0f), int32 WidthSegments = 1, int32 HeightSegments = 1);
 
 private:
-    static constexpr float PI = 3.14159265359f;
     static constexpr int32 DefaultSegments = 32;
 };

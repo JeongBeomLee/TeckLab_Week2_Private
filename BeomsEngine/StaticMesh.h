@@ -57,15 +57,3 @@ private:
     // 렌더링 섹션들 (머티리얼별 그리기 단위)
     TArray<FStaticMeshSection> Sections;
 };
-
-// 편의 함수들
-namespace StaticMeshUtils
-{
-    // OBJ 데이터로부터 UStaticMesh 생성
-    UStaticMesh* CreateStaticMeshFromObj(const FObjInfo& ObjData, const FString& MeshName = "");
-
-    // 기본 프리미티브 메시들 생성
-    UStaticMesh* CreateCubeMesh();
-    UStaticMesh* CreateSphereMesh(int32 Segments = 16);
-    UStaticMesh* CreatePlaneMesh(float Width = 100.0f, float Height = 100.0f);
-}

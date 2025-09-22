@@ -39,6 +39,24 @@ void RunTests()
     printf("Same String Equality: %s\n", (Name1 == Name2) ? "PASS" : "FAIL");
     printf("Different String Inequality: %s\n", (Name1 != Name3) ? "PASS" : "FAIL");
     printf("Comparison Operators: %s\n", (Name1 < Name3 || Name1 > Name3) ? "PASS" : "FAIL");
+
+    // 대소문자 무시 테스트
+    FName NameA("MyObject");
+    FName NameB("myobject");
+    FName NameC("MYOBJECT");
+    FName NameD("MyObJeCt");
+
+    printf("Case Insensitive Tests:\n");
+    printf("  'MyObject' == 'myobject': %s\n", (NameA == NameB) ? "PASS" : "FAIL");
+    printf("  'MyObject' == 'MYOBJECT': %s\n", (NameA == NameC) ? "PASS" : "FAIL");
+    printf("  'MyObject' == 'MyObJeCt': %s\n", (NameA == NameD) ? "PASS" : "FAIL");
+
+    printf("  'NameA': %s\n", NameA.ToString().c_str());
+    printf("  'NameB': %s\n", NameB.ToString().c_str());
+    printf("  'NameC': %s\n", NameC.ToString().c_str());
+    printf("  'NameD': %s\n", NameD.ToString().c_str());
+
+    printf("  All should be PASS for case-insensitive comparison\n");
     printf("\n");
 
     // Test 2: FName Pool 메모리 효율성 테스트
@@ -81,6 +99,22 @@ void RunTests()
 
     printf("Memory Efficiency: %s\n",
            (AfterRepeatedEntries - InitialEntries == 1) ? "PASS - Only 1 entry added for 1000 identical names" : "FAIL");
+
+    // 대소문자 다른 버전들로 메모리 효율성 추가 테스트
+    TArray<FName> CaseVariations;
+    for (int i = 0; i < 100; ++i)
+    {
+        CaseVariations.push_back(FName("TestCaseName"));
+        CaseVariations.push_back(FName("TESTCASENAME"));
+        CaseVariations.push_back(FName("testcasename"));
+        CaseVariations.push_back(FName("TestCAsEnAmE"));
+    }
+
+    size_t AfterCaseTestEntries = FNamePool::GetInstance().GetNumEntries();
+    printf("After 400 case variations of same name: %zu entries (+%zu)\n",
+           AfterCaseTestEntries, AfterCaseTestEntries - AfterUniqueEntries);
+    printf("Case Insensitive Memory Efficiency: %s\n",
+           (AfterCaseTestEntries - AfterUniqueEntries == 1) ? "PASS - Only 1 entry for all case variations" : "FAIL");
     printf("\n");
 
     // Test 3: FName 성능 테스트
@@ -306,6 +340,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             DispatchMessage(&msg);
         }
     }
+
+	FNamePool::DistroyInstance();
 
     return (int) msg.wParam;
 }

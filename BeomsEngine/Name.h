@@ -1,6 +1,8 @@
 #pragma once
 #include "Types.h"
 #include "Containers.h"
+#include <algorithm>
+#include <cctype>
 
 // FName의 내부 표현을 위한 타입들
 using FNameEntryId = uint32;
@@ -9,13 +11,26 @@ using FNameDisplayIndex = uint32;
 // 유효하지 않은 FName을 나타내는 상수
 constexpr FNameEntryId NAME_None = 0;
 
+struct FNameEntry
+{
+    FString ComparisonString;  // 소문자로 저장된 비교용 문자열
+    TArray<FString> DisplayVariations;  // 원본 대소문자 변형들
+
+    FNameEntry() = default;
+    FNameEntry(const FString& InComparison, const FString& InDisplay)
+        : ComparisonString(InComparison)
+    {
+        DisplayVariations.push_back(InDisplay);
+    }
+};
+
 class FNamePool
 {
 private:
-    // 문자열 데이터를 저장하는 배열 (인덱스 = FNameEntryId)
-    TArray<FString> NameEntries;
+    // FName 엔트리들 (인덱스 = FNameEntryId)
+    TArray<FNameEntry> NameEntries;
 
-    // 문자열 -> 인덱스 매핑을 위한 해시맵 (빠른 검색)
+    // 소문자 문자열 -> 인덱스 매핑을 위한 해시맵
     std::unordered_map<FString, FNameEntryId> StringToIdMap;
 
     // 다음 할당할 ID
@@ -28,8 +43,16 @@ private:
         : NextId(1) // 0은 NAME_None으로 예약
     {
         // NAME_None (빈 문자열) 추가
-        NameEntries.push_back("");
+        NameEntries.push_back(FNameEntry("", ""));
         StringToIdMap[""] = NAME_None;
+    }
+
+    // 문자열을 소문자로 변환하는 헬퍼 함수
+    static FString ToLowerCase(const FString& InString)
+    {
+        FString Result = InString;
+        std::transform(Result.begin(), Result.end(), Result.begin(), ::tolower);
+        return Result;
     }
 
 public:
@@ -43,33 +66,81 @@ public:
         return *Instance;
     }
 
-    // 문자열을 FName ID로 변환 (없으면 새로 생성)
-    FNameEntryId Store(const FString& InString)
+    // 싱글톤 인스턴스 해제
+	static void DistroyInstance()
+	{
+		if (Instance)
+		{
+			delete Instance;
+			Instance = nullptr;
+		}
+	}
+
+    // 문자열을 FName ID와 DisplayIndex로 변환 (없으면 새로 생성)
+    std::pair<FNameEntryId, FNameDisplayIndex> Store(const FString& InString)
     {
-        // 이미 존재하는지 확인
-        auto It = StringToIdMap.find(InString);
+        // 대소문자 무시를 위해 소문자로 변환하여 검색
+        FString LowerCaseString = ToLowerCase(InString);
+
+        // 이미 존재하는지 확인 (소문자로)
+        auto It = StringToIdMap.find(LowerCaseString);
         if (It != StringToIdMap.end())
         {
-            return It->second; // 기존 ID 반환
+            FNameEntryId ExistingId = It->second;
+            FNameEntry& Entry = NameEntries[ExistingId];
+
+            // 기존 Display 변형들에서 정확히 일치하는 것 찾기
+            for (size_t i = 0; i < Entry.DisplayVariations.size(); ++i)
+            {
+                if (Entry.DisplayVariations[i] == InString)
+                {
+                    return std::make_pair(ExistingId, static_cast<FNameDisplayIndex>(i));
+                }
+            }
+
+            // 새로운 Display 변형 추가
+            Entry.DisplayVariations.push_back(InString);
+            return std::make_pair(ExistingId, static_cast<FNameDisplayIndex>(Entry.DisplayVariations.size() - 1));
         }
 
-        // 새로운 엔트리 생성
+        // 완전히 새로운 엔트리 생성
         FNameEntryId NewId = NextId++;
-        NameEntries.push_back(InString);
-        StringToIdMap[InString] = NewId;
+        NameEntries.push_back(FNameEntry(LowerCaseString, InString));
+        StringToIdMap[LowerCaseString] = NewId;
 
-        return NewId;
+        return std::make_pair(NewId, 0); // 첫 번째 변형이므로 DisplayIndex = 0
     }
 
-    // FName ID를 문자열로 변환
-    const FString& Resolve(FNameEntryId Id) const
+    // FName ID와 DisplayIndex를 문자열로 변환
+    const FString& Resolve(FNameEntryId Id, FNameDisplayIndex DisplayIndex = 0) const
     {
         if (Id < NameEntries.size())
         {
-            return NameEntries[Id];
+            const FNameEntry& Entry = NameEntries[Id];
+            if (DisplayIndex < Entry.DisplayVariations.size())
+            {
+                return Entry.DisplayVariations[DisplayIndex];
+            }
+            // DisplayIndex가 범위를 벗어나면 첫 번째 변형 반환
+            if (!Entry.DisplayVariations.empty())
+            {
+                return Entry.DisplayVariations[0];
+            }
         }
 
         // 잘못된 ID인 경우 빈 문자열 반환
+        static const FString EmptyString = "";
+        return EmptyString;
+    }
+
+    // 비교용 문자열 반환 (소문자)
+    const FString& ResolveComparison(FNameEntryId Id) const
+    {
+        if (Id < NameEntries.size())
+        {
+            return NameEntries[Id].ComparisonString;
+        }
+
         static const FString EmptyString = "";
         return EmptyString;
     }
@@ -85,30 +156,16 @@ public:
         size_t TotalSize = 0;
         for (const auto& Entry : NameEntries)
         {
-            TotalSize += Entry.size();
+            TotalSize += Entry.ComparisonString.size();
+            for (const auto& DisplayVar : Entry.DisplayVariations)
+            {
+                TotalSize += DisplayVar.size();
+            }
         }
         return TotalSize;
     }
-
-    // 디버깅용: 모든 이름 출력
-    void DumpAllNames() const
-    {
-        for (size_t i = 0; i < NameEntries.size(); ++i)
-        {
-            printf("ID %zu: '%s'\n", i, NameEntries[i].c_str());
-        }
-    }
 };
 
-/**
- * FName: 고성능 불변 문자열 식별자
- *
- * 핵심 특징:
- * - 메모리 효율적: 동일한 문자열은 전역에서 단 한 번만 저장
- * - 빠른 비교: 정수 비교와 동일한 성능
- * - 불변성: 한번 생성되면 내용 변경 불가
- * - 스레드 안전: 멀티스레드 환경에서 안전하게 사용 가능
- */
 class FName
 {
 private:
@@ -127,16 +184,18 @@ public:
 
     // 문자열로부터 생성
     explicit FName(const FString& InName)
-        : DisplayIndex(0)
     {
         if (InName.empty())
         {
             ComparisonIndex = NAME_None;
+            DisplayIndex = 0;
         }
         else
         {
-            // 전역 풀에 저장하고 ID 받기
-            ComparisonIndex = FNamePool::GetInstance().Store(InName);
+            // 전역 풀에 저장하고 ID와 DisplayIndex 받기
+            auto Result = FNamePool::GetInstance().Store(InName);
+            ComparisonIndex = Result.first;
+            DisplayIndex = Result.second;
         }
     }
 
@@ -190,16 +249,22 @@ public:
         return ComparisonIndex >= Other.ComparisonIndex;
     }
 
-    // 문자열 변환
+    // 문자열 변환 (원본 대소문자 보존)
     FString ToString() const
     {
-        return FNamePool::GetInstance().Resolve(ComparisonIndex);
+        return FNamePool::GetInstance().Resolve(ComparisonIndex, DisplayIndex);
     }
 
-    const char* GetPlainNameString() const
+    const char* ToConstCharPointer() const
     {
         static FString CachedString = ToString();
         return CachedString.c_str();
+    }
+
+    // 비교용 문자열 반환 (소문자)
+    FString ToComparisonString() const
+    {
+        return FNamePool::GetInstance().ResolveComparison(ComparisonIndex);
     }
 
     // 유효성 검사
@@ -234,10 +299,6 @@ public:
     static const FName None;
 };
 
-// FNamePool 싱글톤 인스턴스는 cpp 파일에서 정의해야 함
-
-// 상수 정의는 cpp 파일에서 처리
-
 // 해시 함수 특수화 (std::unordered_map 등에서 사용)
 namespace std
 {
@@ -250,9 +311,6 @@ namespace std
         }
     };
 }
-
-// 유용한 매크로들
-#define NAME_None FName()
 
 // 자주 사용되는 FName들을 미리 정의
 namespace EName

@@ -57,9 +57,6 @@ private:
 
     // 렌더링 섹션들 (머티리얼별 그리기 단위)
     TArray<FStaticMeshSection> Sections;
-
-    // 내부 헬퍼 함수들
-    void UpdateRenderDataCounts();
 };
 
 // 편의 함수들

@@ -156,6 +156,7 @@
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
+    <ClInclude Include="UObjectIterator.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="String.h" />

@@ -151,6 +151,9 @@
     <ClInclude Include="StaticMesh.h">
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="UObjectIterator.h">
+      <Filter>Engine\Core\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">

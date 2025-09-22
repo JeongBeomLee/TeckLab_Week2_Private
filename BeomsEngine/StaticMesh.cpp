@@ -149,11 +149,6 @@ void UStaticMesh::BuildDefaultMaterialsAndSections()
     }
 }
 
-void UStaticMesh::UpdateRenderDataCounts()
-{
-    RenderData.UpdateCounts();
-}
-
 // 편의 함수들 구현
 //namespace StaticMeshUtils
 //{

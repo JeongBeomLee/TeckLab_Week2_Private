@@ -1,8 +1,7 @@
 #pragma once
+#include "Containers.h"
 #include "Types.h"
-#include "FString.h"
-#include "Array.h"
-#include "Map.h"
+#include "Name.h"
 
 #ifdef RegisterClass
 #undef RegisterClass
@@ -19,23 +18,24 @@ typedef UObject* (*ClassConstructorType)();
 class UClass
 {
 public:
-    UClass(const FString& InClassName, UClass* InSuperClass, ClassConstructorType InConstructor);
+    UClass(const FName& InClassName, UClass* InSuperClass, ClassConstructorType InConstructor);
     ~UClass();
 
     // 클래스 정보
-    const FString& GetName() const { return ClassName; }
+    const FName& GetName() const { return ClassName; }
+    FString GetNameString() const { return ClassName.ToString(); }
     UClass* GetSuperClass() const { return SuperClass; }
     
     // 상속 관계 확인
     bool IsChildOf(const UClass* SomeBase) const;
-    bool IsChildOf(const FString& BaseClassName) const;
-    
+    bool IsChildOf(const FName& BaseClassName) const;
+
     // 오브젝트 생성
     UObject* CreateDefaultObject() const;
-    
+
     // 클래스 등록 시스템
     static void RegisterClass(UClass* NewClass);
-    static UClass* FindClass(const FString& ClassName);
+    static UClass* FindClass(const FName& ClassName);
     static const TArray<UClass*>& GetAllClasses() { return RegisteredClasses; }
     
     // 클래스 계층구조 정보
@@ -43,13 +43,13 @@ public:
     bool HasChildren() const;
     
 private:
-    FString ClassName;
+    FName ClassName;
     UClass* SuperClass;
     ClassConstructorType Constructor;
-    
+
     // 전역 클래스 레지스트리
     static TArray<UClass*> RegisteredClasses;
-    static TMap<FString, UClass*> ClassMap;
+    static TMap<FName, UClass*> ClassMap;
     
     // 자식 클래스들 (캐시)
     mutable TArray<UClass*> ChildClasses;

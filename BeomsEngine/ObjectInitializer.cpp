@@ -3,7 +3,7 @@
 #include "Object.h"
 #include "Class.h"
 
-FObjectInitializer::FObjectInitializer(UObject* InOuter, const FString& InName, UClass* InClass)
+FObjectInitializer::FObjectInitializer(UObject* InOuter, const FName& InName, UClass* InClass)
     : Outer(InOuter)
     , ObjectName(InName)
     , ObjectClass(InClass)
@@ -38,7 +38,7 @@ FObjectInitializer& FObjectInitializer::SetOuter(UObject* InOuter)
     return *this;
 }
 
-FObjectInitializer& FObjectInitializer::SetName(const FString& InName)
+FObjectInitializer& FObjectInitializer::SetName(const FName& InName)
 {
     ObjectName = InName;
     return *this;
@@ -69,7 +69,7 @@ UObject* FObjectInitializer::CreateObject() const
     }
 
     // 기본 속성 설정
-    if (!ObjectName.empty())
+    if (!ObjectName.IsNone())
     {
         NewObject->SetName(ObjectName);
     }

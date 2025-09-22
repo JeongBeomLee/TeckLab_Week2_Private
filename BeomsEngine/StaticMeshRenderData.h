@@ -2,6 +2,7 @@
 #include "Types.h"
 #include "Containers.h"
 #include "Vertex.h"
+#include "Name.h"
 
 struct FObjMaterialInfo
 {
@@ -49,15 +50,15 @@ struct FObjInfo
 
 struct FStaticMaterial
 {
-    FString MaterialSlotName;
+    FName MaterialSlotName;
     class UMaterialInterface* Material;
-    FString ImportedMaterialSlotName;
+    FName ImportedMaterialSlotName;
 
     FStaticMaterial()
         : Material(nullptr)
     {}
 
-    FStaticMaterial(const FString& InSlotName, class UMaterialInterface* InMaterial = nullptr)
+    FStaticMaterial(const FName& InSlotName, class UMaterialInterface* InMaterial = nullptr)
         : MaterialSlotName(InSlotName)
         , Material(InMaterial)
         , ImportedMaterialSlotName(InSlotName)
@@ -117,7 +118,7 @@ struct FStaticMesh
         // 기본 머티리얼 슬롯과 섹션 생성
         if (Indices.size() > 0)
         {
-            StaticMaterials.push_back(FStaticMaterial("DefaultMaterial"));
+            StaticMaterials.push_back(FStaticMaterial(FName("DefaultMaterial")));
             Sections.push_back(FStaticMeshSection(0, 0, NumTriangles, 0, NumVertices > 0 ? NumVertices - 1 : 0));
         }
     }
@@ -128,7 +129,7 @@ struct FStaticMesh
         NumTriangles = static_cast<uint32>(Indices.size() / 3);
     }
 
-    void AddMaterialSlot(const FString& SlotName, class UMaterialInterface* Material = nullptr)
+    void AddMaterialSlot(const FName& SlotName, class UMaterialInterface* Material = nullptr)
     {
         StaticMaterials.push_back(FStaticMaterial(SlotName, Material));
     }
@@ -138,7 +139,7 @@ struct FStaticMesh
         Sections.push_back(FStaticMeshSection(MaterialIndex, FirstIndex, NumTriangles, MinVertexIndex, MaxVertexIndex));
     }
 
-    int32 GetMaterialIndex(const FString& MaterialSlotName) const
+    int32 GetMaterialIndex(const FName& MaterialSlotName) const
     {
         for (size_t i = 0; i < StaticMaterials.size(); ++i)
         {

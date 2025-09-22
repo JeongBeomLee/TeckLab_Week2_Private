@@ -12,7 +12,7 @@ UObject::UObject()
     : bIsValid(true)
     , bPendingKill(false)
     , bHasBegunPlay(false)
-    , ObjectName(TEXT("UObject"))
+    , ObjectName(FName("UObject"))
     , UniqueID(GenerateUniqueID())
     , Outer(nullptr)
     , InternalIndex(-1)
@@ -49,8 +49,8 @@ UClass* UObject::GetStaticClass()
     if (!StaticClass)
     {
         StaticClass = new UClass(
-            TEXT("UObject"), 
-            nullptr, 
+            FName("UObject"),
+            nullptr,
             &UObject::CreateInstance
         );
         UClass::RegisterClass(StaticClass);
@@ -75,6 +75,6 @@ bool UObject::IsA(const UClass* SomeClass) const
 
 bool UObject::IsA(const FString& ClassName) const
 {
-    UClass* SomeClass = UClass::FindClass(ClassName);
+    UClass* SomeClass = UClass::FindClass(FName(ClassName));
     return IsA(SomeClass);
 }

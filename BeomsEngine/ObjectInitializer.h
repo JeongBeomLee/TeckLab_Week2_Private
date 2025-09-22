@@ -1,6 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "String.h"
+#include "Name.h"
 
 // 전방 선언
 class UObject;
@@ -11,7 +12,7 @@ class FObjectInitializer
 {
 public:
     // 생성자
-    explicit FObjectInitializer(UObject* InOuter = nullptr, const FString& InName = FString(), UClass* InClass = nullptr);
+    explicit FObjectInitializer(UObject* InOuter = nullptr, const FName& InName = FName(), UClass* InClass = nullptr);
 
     // 복사 생성자
     FObjectInitializer(const FObjectInitializer& Other);
@@ -24,12 +25,12 @@ public:
 
     // 초기화 정보 접근자
     UObject* GetOuter() const { return Outer; }
-    const FString& GetName() const { return ObjectName; }
+    const FName& GetName() const { return ObjectName; }
     UClass* GetClass() const { return ObjectClass; }
 
     // 초기화 정보 설정자
     FObjectInitializer& SetOuter(UObject* InOuter);
-    FObjectInitializer& SetName(const FString& InName);
+    FObjectInitializer& SetName(const FName& InName);
     FObjectInitializer& SetClass(UClass* InClass);
 
     // UObject 생성 및 초기화
@@ -40,7 +41,7 @@ public:
 
 private:
     UObject* Outer;          // 소유자 객체
-    FString ObjectName;      // 객체 이름
+    FName ObjectName;        // 객체 이름
     UClass* ObjectClass;     // 객체 클래스 타입
 
     // 내부 헬퍼 함수들
@@ -49,13 +50,13 @@ private:
 
 // NewObject 전역 함수들
 template<typename T>
-T* NewObject(UObject* Outer = nullptr, const FString& Name = FString());
+T* NewObject(UObject* Outer = nullptr, const FName& Name = FName());
 
 template<typename T>
 T* NewObject();
 
 template<typename T>
-T* NewObject(UObject* Outer, UClass* Class, const FString& Name = FString());
+T* NewObject(UObject* Outer, UClass* Class, const FName& Name = FName());
 
 // 특화된 생성 함수들
 template<typename T>
@@ -63,17 +64,17 @@ T* NewObject(const FObjectInitializer& ObjectInitializer);
 
 // 전역 CreateDefaultSubobject 함수들
 template<typename T>
-T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName);
+T* CreateDefaultSubobject(UObject* Outer, const FName& SubobjectName);
 
 template<typename T>
-T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName, UClass* ComponentClass);
+T* CreateDefaultSubobject(UObject* Outer, const FName& SubobjectName, UClass* ComponentClass);
 
 // 자동 이름 생성 버전
 template<typename T>
 T* CreateDefaultSubobject(UObject* Outer);
 
 template<typename T>
-T* NewObject(UObject* Outer, const FString& Name)
+T* NewObject(UObject* Outer, const FName& Name)
 {
     static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
 
@@ -83,7 +84,7 @@ T* NewObject(UObject* Outer, const FString& Name)
 }
 
 template<typename T>
-T* NewObject(UObject* Outer, UClass* Class, const FString& Name)
+T* NewObject(UObject* Outer, UClass* Class, const FName& Name)
 {
     static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
 
@@ -103,7 +104,7 @@ T* NewObject(const FObjectInitializer& ObjectInitializer)
 
 // 전역 CreateDefaultSubobject 구현들
 template<typename T>
-T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName)
+T* CreateDefaultSubobject(UObject* Outer, const FName& SubobjectName)
 {
     static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
 
@@ -123,7 +124,7 @@ T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName)
 }
 
 template<typename T>
-T* CreateDefaultSubobject(UObject* Outer, const FString& SubobjectName, UClass* ComponentClass)
+T* CreateDefaultSubobject(UObject* Outer, const FName& SubobjectName, UClass* ComponentClass)
 {
     static_assert(std::is_base_of<UObject, T>::value, "T must derive from UObject");
 
@@ -152,7 +153,7 @@ T* CreateDefaultSubobject(UObject* Outer)
     }
 
     // 자동 이름 생성: 클래스명 + 고유 ID
-    FString AutoName = FString("Default") + T::GetStaticClass()->GetName();
+    FName AutoName = FName(FString("Default") + T::GetStaticClass()->GetNameString());
 
     return CreateDefaultSubobject<T>(Outer, AutoName);
 }

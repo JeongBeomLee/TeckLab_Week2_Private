@@ -27,7 +27,7 @@
         if (!StaticClass)                           \
         {                                           \
             StaticClass = new UClass(               \
-                TEXT(#ClassName),                   \
+                FName(#ClassName),                  \
                 SuperClassName::GetStaticClass(),   \
                 &ClassName::CreateInstance          \
             );                                      \
@@ -48,7 +48,7 @@
         if (!StaticClass)                       \
         {                                       \
             StaticClass = new UClass(           \
-                TEXT(#ClassName),               \
+                FName(#ClassName),              \
                 nullptr,                        \
                 &ClassName::CreateInstance      \
             );                                  \

@@ -146,9 +146,11 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="BeomsEngine.h" />
     <ClInclude Include="Containers.h" />
+    <ClInclude Include="MaterialInterface.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="Name.h" />
     <ClInclude Include="ObjectInitializer.h" />
     <ClInclude Include="ObjectMacros.h" />
     <ClInclude Include="SceneComponent.h" />
@@ -182,6 +184,7 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="Name.cpp" />
     <ClCompile Include="ObjectInitializer.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="UObjectArray.cpp" />

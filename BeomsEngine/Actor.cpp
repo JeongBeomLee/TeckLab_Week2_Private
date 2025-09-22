@@ -16,9 +16,9 @@ AActor::AActor()
     , World(nullptr)
     , Owner(nullptr)
 {
-    SetName(TEXT("Actor"));
+    SetName(FName("Actor"));
 
-    RootComponent = CreateDefaultSubobject<USceneComponent>(this, TEXT("DefaultSceneRoot"));
+    RootComponent = CreateDefaultSubobject<USceneComponent>(this, FName("DefaultSceneRoot"));
     if (RootComponent)
     {
         AddComponent(RootComponent);
@@ -245,7 +245,7 @@ void AActor::SetActorTransform(const FMatrix& NewTransform)
     RootComponent->SetWorldScale(Scale);
 }
 
-UActorComponent* AActor::FindComponentByName(const FString& ComponentName) const
+UActorComponent* AActor::FindComponentByName(const FName& ComponentName) const
 {
     for (UActorComponent* Component : Components)
     {

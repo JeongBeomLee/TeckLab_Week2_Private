@@ -21,7 +21,7 @@ USceneComponent::USceneComponent()
     , bAbsoluteRotation(false)
     , bAbsoluteScale(false)
 {
-    SetName(TEXT("SceneComponent"));
+    SetName(FName("SceneComponent"));
     bCanEverTick = true;
 }
 

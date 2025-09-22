@@ -14,7 +14,7 @@ UActorComponent::UActorComponent()
     , bRegistered(false)
     , bAutoActivate(true)
 {
-    SetName(TEXT("ActorComponent"));
+    SetName(FName("ActorComponent"));
 }
 
 UActorComponent::~UActorComponent()

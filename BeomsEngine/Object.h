@@ -2,6 +2,7 @@
 #include "Types.h"
 #include "String.h"
 #include "Array.h"
+#include "Name.h"
 
 #ifdef GetClassName
 #undef GetClassName
@@ -25,8 +26,9 @@ public:
     virtual void Tick(float DeltaTime) {}
 
     // 오브젝트 정보
-    FString GetName() const { return ObjectName; }
-    void SetName(const FString& InName) { ObjectName = InName; }
+    FName GetName() const { return ObjectName; }
+    void SetName(const FName& InName) { ObjectName = InName; }
+    FString GetNameString() const { return ObjectName.ToString(); }
     
     uint64 GetUniqueID() const { return UniqueID; }
     
@@ -64,7 +66,7 @@ protected:
     bool bHasBegunPlay;
     
     // 오브젝트 정보
-    FString ObjectName;
+    FName ObjectName;
     uint64 UniqueID;
     UObject* Outer;
     

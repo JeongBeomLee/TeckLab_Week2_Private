@@ -142,6 +142,12 @@
     <ClInclude Include="Vector2.h">
       <Filter>Engine\Core\Math</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialInterface.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Name.h">
+      <Filter>Engine\Core\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">
@@ -197,6 +203,9 @@
       <Filter>Engine\Core\Memory</Filter>
     </ClCompile>
     <ClCompile Include="ObjectInitializer.cpp">
+      <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Name.cpp">
       <Filter>Engine\Core\Object</Filter>
     </ClCompile>
   </ItemGroup>

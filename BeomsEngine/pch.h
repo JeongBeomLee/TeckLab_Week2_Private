@@ -1,4 +1,4 @@
-﻿// pch.h - 미리 컴파일된 헤더 파일
+// pch.h - 미리 컴파일된 헤더 파일
 // 모든 .cpp 파일에서 #include "pch.h"가 첫 번째 라인에 있어야 합니다.
 // PCH에 포함된 헤더를 수정하면 전체 프로젝트가 재컴파일됨
 // 따라서 PCH 파일에는 자주 사용하고, 자주 변경되지 않는 헤더만 포함시켜야 함
@@ -12,13 +12,13 @@
 #include <windows.h>
 
 // STL
-#include <string>
-#include <vector>
-#include <list>
-#include <unordered_map>
-#include <unordered_set>
-#include <array>
-#include <queue>
+//#include <string>
+//#include <vector>
+//#include <list>
+//#include <unordered_map>
+//#include <unordered_set>
+//#include <array>
+//#include <queue>
 #include <algorithm>
 
 // C 런타임 헤더 파일
@@ -42,3 +42,7 @@
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
+
+// 기본 컨테이너 및 타입
+#include "Containers.h"
+#include "Types.h"

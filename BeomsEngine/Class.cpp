@@ -4,9 +4,9 @@
 
 // 정적 멤버 정의
 TArray<UClass*> UClass::RegisteredClasses;
-TMap<FString, UClass*> UClass::ClassMap;
+TMap<FName, UClass*> UClass::ClassMap;
 
-UClass::UClass(const FString& InClassName, UClass* InSuperClass, ClassConstructorType InConstructor)
+UClass::UClass(const FName& InClassName, UClass* InSuperClass, ClassConstructorType InConstructor)
     : ClassName(InClassName)
     , SuperClass(InSuperClass)
     , Constructor(InConstructor)
@@ -37,7 +37,7 @@ bool UClass::IsChildOf(const UClass* SomeBase) const
     return false;
 }
 
-bool UClass::IsChildOf(const FString& BaseClassName) const
+bool UClass::IsChildOf(const FName& BaseClassName) const
 {
     UClass* BaseClass = FindClass(BaseClassName);
     return IsChildOf(BaseClass);
@@ -61,7 +61,7 @@ void UClass::RegisterClass(UClass* NewClass)
     }
 }
 
-UClass* UClass::FindClass(const FString& ClassName)
+UClass* UClass::FindClass(const FName& ClassName)
 {
     auto it = ClassMap.find(ClassName);
     if (it != ClassMap.end())

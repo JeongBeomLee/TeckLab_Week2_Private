@@ -44,12 +44,12 @@ public:
 
     // 컴포넌트 관리
     template<typename T>
-    T* CreateComponent(const FString& ComponentName = TEXT(""));
+    T* CreateComponent(const FName& ComponentName = FName());
 
     template<typename T>
     T* FindComponentByClass() const;
 
-    UActorComponent* FindComponentByName(const FString& ComponentName) const;
+    UActorComponent* FindComponentByName(const FName& ComponentName) const;
     void AddComponent(UActorComponent* Component);
     void RemoveComponent(UActorComponent* Component);
 
@@ -98,12 +98,12 @@ private:
 };
 
 template<typename T>
-T* AActor::CreateComponent(const FString& ComponentName)
+T* AActor::CreateComponent(const FName& ComponentName)
 {
     static_assert(std::is_base_of<UActorComponent, T>::value, "T must derive from UActorComponent");
 
-    FString ActualComponentName = ComponentName.empty() ?
-        (FString("Default") + T::GetStaticClass()->GetName()) : ComponentName;
+    FName ActualComponentName = ComponentName.IsNone() ?
+        FName(FString("Default") + T::GetStaticClass()->GetNameString()) : ComponentName;
 
     T* NewComponent = NewObject<T>(this, ActualComponentName);
     if (NewComponent)

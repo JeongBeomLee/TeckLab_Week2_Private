@@ -9,7 +9,7 @@ USphere::USphere()
     : Super()
     , Radius(1.0f)
 {
-    SetName(TEXT("USphere"));
+    SetName(FName("USphere"));
 }
 
 USphere::~USphere()

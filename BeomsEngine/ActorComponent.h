@@ -24,7 +24,7 @@ public:
     bool IsActive() const { return bIsActive; }
     void SetActive(bool bNewActive);
     
-    bool CanTick() const { return bCanEverTick; }
+    bool CanEverTick() const { return bCanEverTick; }
     void SetCanEverTick(bool bNewCanTick) { bCanEverTick = bNewCanTick; }
     
     bool IsRegistered() const { return bRegistered; }

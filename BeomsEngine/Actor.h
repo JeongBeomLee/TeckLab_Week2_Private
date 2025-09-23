@@ -35,7 +35,7 @@ public:
     bool IsHidden() const { return bHidden; }
     void SetHidden(bool bNewHidden) { bHidden = bNewHidden; }
 
-    bool CanTick() const { return bCanEverTick; }
+    bool CanEverTick() const { return bCanEverTick; }
     void SetCanEverTick(bool bNewCanTick) { bCanEverTick = bNewCanTick; }
 
     // 컴포넌트 관리
@@ -59,6 +59,10 @@ public:
     class UWorld* GetWorld() const { return World; }
     void SetWorld(class UWorld* NewWorld) { World = NewWorld; }
 
+    // 레벨 상호작용
+    class ULevel* GetLevel() const { return Level; }
+    void SetLevel(class ULevel* NewLevel) { Level = NewLevel; }
+
     // 액터 관계
     AActor* GetOwner() const { return Owner; }
     void SetOwner(AActor* NewOwner) { Owner = NewOwner; }
@@ -80,6 +84,9 @@ protected:
 
     // 월드 참조
     class UWorld* World;
+
+    // 레벨 참조
+    class ULevel* Level;
 
     // 소유권 관계
     AActor* Owner;

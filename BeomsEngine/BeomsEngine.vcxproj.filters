@@ -193,8 +193,14 @@
     <ClCompile Include="KismetProceduralMeshLibrary.cpp">
       <Filter>Engine\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>Engine\Core\Actor</Filter>

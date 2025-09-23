@@ -14,6 +14,7 @@ AActor::AActor()
     , bBlockInput(false)
     , RootComponent(nullptr)
     , World(nullptr)
+    , Level(nullptr)
     , Owner(nullptr)
 {
     SetName(FName("Actor"));
@@ -87,7 +88,7 @@ void AActor::Tick(float DeltaTime)
     // 모든 컴포넌트의 Tick 호출
     for (UActorComponent* Component : Components)
     {
-        if (Component && Component->IsValid() && Component->CanTick())
+        if (Component && Component->IsValid() && Component->CanEverTick())
         {
             Component->Tick(DeltaTime);
         }

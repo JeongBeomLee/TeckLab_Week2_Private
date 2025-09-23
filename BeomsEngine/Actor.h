@@ -99,7 +99,7 @@ T* AActor::CreateComponent(const FName& ComponentName)
     static_assert(std::is_base_of<UActorComponent, T>::value, "T must derive from UActorComponent");
 
     FName ActualComponentName = ComponentName.IsNone() ?
-        FName(FString("Default") + T::GetStaticClass()->GetNameString()) : ComponentName;
+        FName(FString("DefaultComponent")) : ComponentName;
 
     T* NewComponent = NewObject<T>(this, ActualComponentName);
     if (NewComponent)

@@ -8,7 +8,7 @@ public:
 
 	TObjectIterator()
 		: Index(0)
-		, EndIndex(GUObjectArray.GetObjectArrayNum())
+		, EndIndex(GUObjectArray.GetObjectArraySize())
 	{
 		Advance();
 	}

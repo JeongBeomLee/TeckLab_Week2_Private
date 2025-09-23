@@ -145,16 +145,24 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="BeomsEngine.h" />
+    <ClInclude Include="BoxSphereBounds.h" />
     <ClInclude Include="Containers.h" />
     <ClInclude Include="MaterialInterface.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="Name.h" />
     <ClInclude Include="ObjectInitializer.h" />
     <ClInclude Include="ObjectMacros.h" />
+    <ClInclude Include="PrimitiveComponent.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="StaticMeshActor.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="StaticMeshComponent.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
     <ClInclude Include="UObjectIterator.h" />
     <ClInclude Include="Vector2.h" />
@@ -185,10 +193,17 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="Name.cpp" />
     <ClCompile Include="ObjectInitializer.cpp" />
+    <ClCompile Include="PrimitiveComponent.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="StaticMeshActor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="StaticMeshComponent.cpp" />
     <ClCompile Include="UObjectArray.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vector4.cpp" />

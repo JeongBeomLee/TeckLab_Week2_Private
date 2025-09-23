@@ -2,7 +2,7 @@
 #include "StaticMesh.h"
 #include "MaterialInterface.h"
 
-IMPLEMENT_CLASS(UStaticMesh, UObject);
+IMPLEMENT_CLASS(UStaticMesh, UObject)
 
 UStaticMesh::UStaticMesh()
 {
@@ -84,6 +84,36 @@ bool UStaticMesh::HasValidRenderData() const
 {
     return RenderData.NumVertices > 0 && RenderData.NumTriangles > 0 &&
            !RenderData.Vertices.empty() && !RenderData.Indices.empty();
+}
+
+FVector UStaticMesh::GetBoundingBoxMin() const
+{
+    return RenderData.GetBoundingBoxMin();
+}
+
+FVector UStaticMesh::GetBoundingBoxMax() const
+{
+    return RenderData.GetBoundingBoxMax();
+}
+
+FVector UStaticMesh::GetBoundingBoxCenter() const
+{
+    return RenderData.GetBoundingBoxCenter();
+}
+
+FVector UStaticMesh::GetBoundingBoxExtent() const
+{
+    return RenderData.GetBoundingBoxExtent();
+}
+
+float UStaticMesh::GetBoundingSphereRadius() const
+{
+    return RenderData.GetBoundingSphereRadius();
+}
+
+const FBoxSphereBounds& UStaticMesh::GetBounds() const
+{
+    return RenderData.Bounds;
 }
 
 void UStaticMesh::BuildFromObjData(const FObjInfo& ObjData)

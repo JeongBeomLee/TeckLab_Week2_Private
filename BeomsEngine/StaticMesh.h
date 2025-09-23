@@ -43,6 +43,14 @@ public:
     // 메시 정보
     bool HasValidRenderData() const;
 
+    // 바운딩 정보 접근
+    FVector GetBoundingBoxMin() const;
+    FVector GetBoundingBoxMax() const;
+    FVector GetBoundingBoxCenter() const;
+    FVector GetBoundingBoxExtent() const;
+    float GetBoundingSphereRadius() const;
+    const FBoxSphereBounds& GetBounds() const;
+
     // 메시 데이터 빌드 (OBJ 등에서 로드 후 호출)
     void BuildFromObjData(const FObjInfo& ObjData);
     void BuildDefaultMaterialsAndSections();

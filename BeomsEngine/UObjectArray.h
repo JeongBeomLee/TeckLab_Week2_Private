@@ -46,7 +46,7 @@ public:
     FUObjectItem* GetObjectItemPtr(int32 Index) const;
     
     int32 GetMaxObjectsEver() const { return MaxObjectsEver; }
-    int32 GetObjectArrayNum() const { return (int32)ObjectList.size(); }
+    int32 GetObjectArraySize() const { return (int32)ObjectList.size(); }
     int32 GetObjectArrayMax() const { return MaxObjectsEver; }
     
     void GetAllObjects(TArray<UObject*>& OutObjects) const;

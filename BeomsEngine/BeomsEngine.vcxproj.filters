@@ -148,6 +148,21 @@
     <ClInclude Include="UObjectIterator.h">
       <Filter>Engine\Core\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="PrimitiveComponent.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshComponent.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxSphereBounds.h">
+      <Filter>Engine\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMeshActor.h">
+      <Filter>Engine\Core\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">
@@ -207,6 +222,18 @@
     </ClCompile>
     <ClCompile Include="StaticMesh.cpp">
       <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveComponent.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshComponent.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshActor.cpp">
+      <Filter>Engine\Core\Actor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

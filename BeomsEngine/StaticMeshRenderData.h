@@ -1,5 +1,6 @@
 #pragma once
 #include "Vertex.h"
+#include "BoxSphereBounds.h"
 
 struct FObjMaterialInfo
 {
@@ -97,11 +98,12 @@ struct FStaticMeshRenderData
     uint32 NumVertices;
     uint32 NumTriangles;
 
-    //struct FBoxSphereBounds Bounds;
+    FBoxSphereBounds Bounds;
 
     FStaticMeshRenderData()
         : NumVertices(0)
         , NumTriangles(0)
+        , Bounds()
     {}
 
     FStaticMeshRenderData(const FString& InPathFileName, const TArray<FVertex>& InVertices, const TArray<uint32>& InIndices)
@@ -110,6 +112,7 @@ struct FStaticMeshRenderData
         , Indices(InIndices)
         , NumVertices(static_cast<uint32>(InVertices.size()))
         , NumTriangles(static_cast<uint32>(InIndices.size() / 3))
+        , Bounds(InVertices)  // 정점 배열로부터 바운딩 계산
     {
     }
 
@@ -117,6 +120,42 @@ struct FStaticMeshRenderData
     {
         NumVertices = static_cast<uint32>(Vertices.size());
         NumTriangles = static_cast<uint32>(Indices.size() / 3);
+    }
+
+    void UpdateBounds()
+    {
+        Bounds = FBoxSphereBounds(Vertices);
+    }
+
+    // 바운딩 관련 함수들
+    FVector GetBoundingBoxMin() const
+    {
+        return Bounds.GetBoxMin();
+    }
+
+    FVector GetBoundingBoxMax() const
+    {
+        return Bounds.GetBoxMax();
+    }
+
+    FVector GetBoundingBoxCenter() const
+    {
+        return Bounds.Origin;
+    }
+
+    FVector GetBoundingBoxExtent() const
+    {
+        return Bounds.BoxExtent;
+    }
+
+    float GetBoundingSphereRadius() const
+    {
+        return Bounds.SphereRadius;
+    }
+
+    bool HasValidBounds() const
+    {
+        return Bounds.IsValid();
     }
 };
 

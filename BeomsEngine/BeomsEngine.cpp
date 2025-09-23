@@ -17,6 +17,8 @@
 #include "ObjectInitializer.h"
 #include "Math.h"
 #include "Name.h"
+#include "World.h"
+#include "Level.h"
 
 void RunTests()
 {
@@ -30,390 +32,190 @@ void RunTests()
     printf("              BEOMS ENGINE COMPREHENSIVE TEST SUITE               \n");
     printf("===================================================================\n\n");
 
-    // Test 1: BoxSphereBounds 테스트
-    printf("TEST 1: BoxSphereBounds Functionality\n");
-    printf("--------------------------------------\n");
-
-    // 기본 생성자 테스트
-    FBoxSphereBounds DefaultBounds;
-    printf("Default Constructor: Origin(%.1f,%.1f,%.1f), Extent(%.1f,%.1f,%.1f), Radius(%.1f)\n",
-           DefaultBounds.Origin.X, DefaultBounds.Origin.Y, DefaultBounds.Origin.Z,
-           DefaultBounds.BoxExtent.X, DefaultBounds.BoxExtent.Y, DefaultBounds.BoxExtent.Z,
-           DefaultBounds.SphereRadius);
-    printf("Default Constructor: %s\n",
-           (DefaultBounds.Origin == FVector::Zero && DefaultBounds.BoxExtent == FVector::Zero && DefaultBounds.SphereRadius == 0.0f) ? "PASS" : "FAIL");
-
-    // 매개변수 생성자 테스트
-    FVector TestOrigin(10.0f, 20.0f, 30.0f);
-    FVector TestExtent(50.0f, 60.0f, 70.0f);
-    float TestRadius = 100.0f;
-    FBoxSphereBounds CustomBounds(TestOrigin, TestExtent, TestRadius);
-    printf("Custom Constructor: %s\n",
-           (CustomBounds.Origin == TestOrigin && CustomBounds.BoxExtent == TestExtent && CustomBounds.SphereRadius == TestRadius) ? "PASS" : "FAIL");
-
-    // 정점 배열로부터 바운딩 계산 테스트
-    TArray<FVertex> TestVertices;
-    TestVertices.push_back(FVertex(FVector(-10.0f, -20.0f, -30.0f), FVector::Up, 0.0f, 0.0f));
-    TestVertices.push_back(FVertex(FVector(10.0f, 20.0f, 30.0f), FVector::Up, 1.0f, 1.0f));
-    TestVertices.push_back(FVertex(FVector(0.0f, 0.0f, 0.0f), FVector::Up, 0.5f, 0.5f));
-
-    FBoxSphereBounds VertexBounds(TestVertices);
-    printf("Vertex-based Bounds: Origin(%.1f,%.1f,%.1f), Extent(%.1f,%.1f,%.1f)\n",
-           VertexBounds.Origin.X, VertexBounds.Origin.Y, VertexBounds.Origin.Z,
-           VertexBounds.BoxExtent.X, VertexBounds.BoxExtent.Y, VertexBounds.BoxExtent.Z);
-    printf("Vertex-based Constructor: %s\n",
-           (abs(VertexBounds.Origin.X) < 0.1f && abs(VertexBounds.Origin.Y) < 0.1f && abs(VertexBounds.Origin.Z) < 0.1f) ? "PASS" : "FAIL");
-    printf("\n");
-
-    // Test 2: PrimitiveComponent 테스트
-    printf("TEST 2: PrimitiveComponent Functionality\n");
-    printf("-----------------------------------------\n");
-
-    AActor* TestActor = NewObject<AActor>(nullptr, FName("TestActor"));
-    if (TestActor)
-    {
-        UPrimitiveComponent* PrimComp = TestActor->CreateComponent<UPrimitiveComponent>(FName("PrimitiveComponent"));
-        if (PrimComp)
-        {
-            printf("PrimitiveComponent Creation: PASS\n");
-            printf("Component Class: %s\n", PrimComp->GetClassName().c_str());
-
-            // 가시성 테스트
-            PrimComp->SetVisibility(true);
-            printf("Set Visibility True: %s\n", PrimComp->IsVisible() ? "PASS" : "FAIL");
-
-            PrimComp->SetVisibility(false);
-            printf("Set Visibility False: %s\n", !PrimComp->IsVisible() ? "PASS" : "FAIL");
-
-            // Hidden 상태 테스트
-            PrimComp->SetHidden(true);
-            printf("Set Hidden True: %s\n", PrimComp->IsHidden() ? "PASS" : "FAIL");
-
-            PrimComp->SetHidden(false);
-            printf("Set Hidden False: %s\n", !PrimComp->IsHidden() ? "PASS" : "FAIL");
-
-            // 렌더링 조건 테스트
-            PrimComp->SetVisibility(true);
-            PrimComp->SetHidden(false);
-            printf("Should Render (Visible + Not Hidden): %s\n", PrimComp->ShouldRender() ? "PASS" : "FAIL");
-
-            // 바운딩 정보 테스트
-            FBoxSphereBounds PrimBounds = PrimComp->GetBounds();
-            printf("Bounds Access: PASS (No crash)\n");
-        }
-        else
-        {
-            printf("PrimitiveComponent Creation: FAIL\n");
-        }
-    }
-    printf("\n");
-
-    // Test 3: MeshComponent 테스트
-    printf("TEST 3: MeshComponent Functionality\n");
-    printf("------------------------------------\n");
-
-    UMeshComponent* MeshComp = TestActor->CreateComponent<UMeshComponent>(FName("MeshComponent"));
-    if (MeshComp)
-    {
-        printf("MeshComponent Creation: PASS\n");
-        printf("Component Class: %s\n", MeshComp->GetClassName().c_str());
-
-        // 상속 관계 확인
-        UPrimitiveComponent* AsPrimitive = Cast<UPrimitiveComponent>(MeshComp);
-        printf("Inheritance (PrimitiveComponent): %s\n", AsPrimitive ? "PASS" : "FAIL");
-
-        // 와이어프레임 모드 테스트
-        MeshComp->SetWireframeMode(true);
-        printf("Set Wireframe Mode True: %s\n", MeshComp->IsWireframeMode() ? "PASS" : "FAIL");
-
-        MeshComp->SetWireframeMode(false);
-        printf("Set Wireframe Mode False: %s\n", !MeshComp->IsWireframeMode() ? "PASS" : "FAIL");
-
-        // 머티리얼 관련 기본값 테스트
-        printf("Default Num Materials: %d\n", MeshComp->GetNumMaterials());
-        printf("Material System: PASS (No crash)\n");
-
-        // 메시 데이터 기본값 테스트
-        printf("Default Num Vertices: %d\n", MeshComp->GetNumVertices());
-        printf("Default Num Triangles: %d\n", MeshComp->GetNumTriangles());
-        printf("Has Valid Mesh Data: %s\n", MeshComp->HasValidMeshData() ? "true" : "false");
-    }
-    else
-    {
-        printf("MeshComponent Creation: FAIL\n");
-    }
-    printf("\n");
-
-    // Test 4: StaticMeshComponent 테스트
-    printf("TEST 4: StaticMeshComponent Functionality\n");
-    printf("------------------------------------------\n");
-
-    UStaticMeshComponent* StaticMeshComp = TestActor->CreateComponent<UStaticMeshComponent>(FName("StaticMeshComponent"));
-    if (StaticMeshComp)
-    {
-        printf("StaticMeshComponent Creation: PASS\n");
-        printf("Component Class: %s\n", StaticMeshComp->GetClassName().c_str());
-
-        // 상속 관계 확인
-        UMeshComponent* AsMesh = Cast<UMeshComponent>(StaticMeshComp);
-        printf("Inheritance (MeshComponent): %s\n", AsMesh ? "PASS" : "FAIL");
-
-        // 정적 메시 설정 없이 기본 상태 테스트
-        printf("Initial Static Mesh: %s\n", StaticMeshComp->GetStaticMesh() ? "Set" : "None");
-
-        // 바운딩 정보 테스트
-        FBoxSphereBounds SMBounds = StaticMeshComp->GetBounds();
-        printf("Bounds Access: PASS (No crash)\n");
-
-        // 렌더링 상태 테스트
-        printf("Should Render: %s\n", StaticMeshComp->ShouldRender() ? "true" : "false");
-    }
-    else
-    {
-        printf("StaticMeshComponent Creation: FAIL\n");
-    }
-    printf("\n");
-
-    // Test 5: StaticMeshActor 테스트
-    printf("TEST 5: StaticMeshActor Functionality\n");
-    printf("--------------------------------------\n");
-
-    // 기본 생성자 테스트
-    AStaticMeshActor* StaticMeshActor = NewObject<AStaticMeshActor>(nullptr, FName("StaticMeshActor"));
-    if (StaticMeshActor)
-    {
-        printf("StaticMeshActor Creation: PASS\n");
-        printf("Actor Class: %s\n", StaticMeshActor->GetClassName().c_str());
-
-        // StaticMeshComponent 자동 생성 확인
-        UStaticMeshComponent* AutoCreatedComp = StaticMeshActor->GetStaticMeshComponent();
-        printf("Auto-created StaticMeshComponent: %s\n", AutoCreatedComp ? "PASS" : "FAIL");
-
-        if (AutoCreatedComp)
-        {
-            // 루트 컴포넌트 확인
-            printf("Root Component Set: %s\n",
-                   (StaticMeshActor->GetRootComponent() == AutoCreatedComp) ? "PASS" : "FAIL");
-        }
-
-        // 팩토리 함수 테스트
-        AStaticMeshActor* CubeActor = AStaticMeshActor::CreateWithCubeMesh(FVector(100.0f, 0.0f, 0.0f));
-        if (CubeActor)
-        {
-            printf("CreateWithCubeMesh: PASS\n");
-            printf("Cube Actor Location: (%.1f, %.1f, %.1f)\n",
-                   CubeActor->GetActorLocation().X, CubeActor->GetActorLocation().Y, CubeActor->GetActorLocation().Z);
-
-            UStaticMesh* CubeMesh = CubeActor->GetStaticMesh();
-            printf("Cube Mesh Created: %s\n", CubeMesh ? "PASS" : "FAIL");
-
-            if (CubeMesh)
-            {
-                FBoxSphereBounds CubeBounds = CubeActor->GetBounds();
-                printf("  Cube Bounds - Origin: (%.1f, %.1f, %.1f)\n",
-                       CubeBounds.Origin.X, CubeBounds.Origin.Y, CubeBounds.Origin.Z);
-                printf("  Cube Bounds - Extent: (%.1f, %.1f, %.1f)\n",
-                       CubeBounds.BoxExtent.X, CubeBounds.BoxExtent.Y, CubeBounds.BoxExtent.Z);
-                printf("  Cube Bounds - Sphere Radius: %.1f\n", CubeBounds.SphereRadius);
-                printf("  Cube Bounding Box: %s\n",
-                       (CubeBounds.BoxExtent.X > 0 && CubeBounds.BoxExtent.Y > 0 && CubeBounds.BoxExtent.Z > 0) ? "PASS" : "FAIL");
-            }
-        }
-        else
-        {
-            printf("CreateWithCubeMesh: FAIL\n");
-        }
-
-        AStaticMeshActor* SphereActor = AStaticMeshActor::CreateWithSphereMesh(FVector(0.0f, 100.0f, 0.0f));
-        if (SphereActor)
-        {
-            printf("CreateWithSphereMesh: PASS\n");
-            UStaticMesh* SphereMesh = SphereActor->GetStaticMesh();
-            printf("Sphere Mesh Created: %s\n", SphereMesh ? "PASS" : "FAIL");
-
-            if (SphereMesh)
-            {
-                FBoxSphereBounds SphereBounds = SphereActor->GetBounds();
-                printf("  Sphere Bounds - Origin: (%.1f, %.1f, %.1f)\n",
-                       SphereBounds.Origin.X, SphereBounds.Origin.Y, SphereBounds.Origin.Z);
-                printf("  Sphere Bounds - Extent: (%.1f, %.1f, %.1f)\n",
-                       SphereBounds.BoxExtent.X, SphereBounds.BoxExtent.Y, SphereBounds.BoxExtent.Z);
-                printf("  Sphere Bounds - Sphere Radius: %.1f\n", SphereBounds.SphereRadius);
-                printf("  Sphere Bounding Box: %s\n",
-                       (SphereBounds.SphereRadius > 0 && SphereBounds.BoxExtent.X > 0) ? "PASS" : "FAIL");
-            }
-        }
-        else
-        {
-            printf("CreateWithSphereMesh: FAIL\n");
-        }
-
-        AStaticMeshActor* CylinderActor = AStaticMeshActor::CreateWithCylinderMesh(FVector(0.0f, 0.0f, 100.0f));
-        if (CylinderActor)
-        {
-            printf("CreateWithCylinderMesh: PASS\n");
-            UStaticMesh* CylinderMesh = CylinderActor->GetStaticMesh();
-            printf("Cylinder Mesh Created: %s\n", CylinderMesh ? "PASS" : "FAIL");
-
-            if (CylinderMesh)
-            {
-                FBoxSphereBounds CylinderBounds = CylinderActor->GetBounds();
-                printf("  Cylinder Bounds - Origin: (%.1f, %.1f, %.1f)\n",
-                       CylinderBounds.Origin.X, CylinderBounds.Origin.Y, CylinderBounds.Origin.Z);
-                printf("  Cylinder Bounds - Extent: (%.1f, %.1f, %.1f)\n",
-                       CylinderBounds.BoxExtent.X, CylinderBounds.BoxExtent.Y, CylinderBounds.BoxExtent.Z);
-                printf("  Cylinder Bounds - Sphere Radius: %.1f\n", CylinderBounds.SphereRadius);
-                printf("  Cylinder Bounding Box: %s\n",
-                       (CylinderBounds.BoxExtent.X > 0 && CylinderBounds.BoxExtent.Y > 0 && CylinderBounds.BoxExtent.Z > 0) ? "PASS" : "FAIL");
-            }
-        }
-        else
-        {
-            printf("CreateWithCylinderMesh: FAIL\n");
-        }
-
-        AStaticMeshActor* ConeActor = AStaticMeshActor::CreateWithConeMesh(FVector(-100.0f, 0.0f, 0.0f));
-        if (ConeActor)
-        {
-            printf("CreateWithConeMesh: PASS\n");
-            UStaticMesh* ConeMesh = ConeActor->GetStaticMesh();
-            printf("Cone Mesh Created: %s\n", ConeMesh ? "PASS" : "FAIL");
-
-            if (ConeMesh)
-            {
-                FBoxSphereBounds ConeBounds = ConeActor->GetBounds();
-                printf("  Cone Bounds - Origin: (%.1f, %.1f, %.1f)\n",
-                       ConeBounds.Origin.X, ConeBounds.Origin.Y, ConeBounds.Origin.Z);
-                printf("  Cone Bounds - Extent: (%.1f, %.1f, %.1f)\n",
-                       ConeBounds.BoxExtent.X, ConeBounds.BoxExtent.Y, ConeBounds.BoxExtent.Z);
-                printf("  Cone Bounds - Sphere Radius: %.1f\n", ConeBounds.SphereRadius);
-                printf("  Cone Bounding Box: %s\n",
-                       (ConeBounds.BoxExtent.X > 0 && ConeBounds.BoxExtent.Y > 0 && ConeBounds.BoxExtent.Z > 0) ? "PASS" : "FAIL");
-            }
-        }
-        else
-        {
-            printf("CreateWithConeMesh: FAIL\n");
-        }
-
-        // 추가적인 바운딩 박스 정확성 테스트
-        printf("\n  --- Bounding Box Accuracy Tests ---\n");
-
-        // 큐브 바운딩 박스 정확성 (기본 50x50x50 크기)
-        AStaticMeshActor* TestCube = AStaticMeshActor::CreateWithCubeMesh(FVector::Zero, FVector(25.0f, 25.0f, 25.0f));
-        if (TestCube)
-        {
-            FBoxSphereBounds TestCubeBounds = TestCube->GetBounds();
-            printf("  Test Cube (25x25x25) Extent: (%.1f, %.1f, %.1f)\n",
-                   TestCubeBounds.BoxExtent.X, TestCubeBounds.BoxExtent.Y, TestCubeBounds.BoxExtent.Z);
-            printf("  Cube Size Accuracy: %s\n",
-                   (abs(TestCubeBounds.BoxExtent.X - 25.0f) < 1.0f &&
-                    abs(TestCubeBounds.BoxExtent.Y - 25.0f) < 1.0f &&
-                    abs(TestCubeBounds.BoxExtent.Z - 25.0f) < 1.0f) ? "PASS" : "FAIL");
-        }
-
-        // 구 바운딩 박스 정확성 (기본 50 반지름)
-        AStaticMeshActor* TestSphere = AStaticMeshActor::CreateWithSphereMesh(FVector::Zero, 30.0f);
-        if (TestSphere)
-        {
-            FBoxSphereBounds TestSphereBounds = TestSphere->GetBounds();
-            printf("  Test Sphere (r=30) Sphere Radius: %.1f\n", TestSphereBounds.SphereRadius);
-            printf("  Sphere Size Accuracy: %s\n",
-                   (abs(TestSphereBounds.SphereRadius - 30.0f) < 5.0f) ? "PASS" : "FAIL");
-        }
-
-        // 실린더 바운딩 박스 정확성 (기본 50 반지름, 100 높이)
-        AStaticMeshActor* TestCylinder = AStaticMeshActor::CreateWithCylinderMesh(FVector::Zero, 20.0f, 60.0f);
-        if (TestCylinder)
-        {
-            FBoxSphereBounds TestCylinderBounds = TestCylinder->GetBounds();
-            printf("  Test Cylinder (r=20, h=60) Extent: (%.1f, %.1f, %.1f)\n",
-                   TestCylinderBounds.BoxExtent.X, TestCylinderBounds.BoxExtent.Y, TestCylinderBounds.BoxExtent.Z);
-            printf("  Cylinder Size Accuracy: %s\n",
-                   (abs(TestCylinderBounds.BoxExtent.X - 20.0f) < 5.0f &&
-                    abs(TestCylinderBounds.BoxExtent.Y - 20.0f) < 5.0f &&
-                    abs(TestCylinderBounds.BoxExtent.Z - 30.0f) < 5.0f) ? "PASS" : "FAIL");
-        }
-    }
-    else
-    {
-        printf("StaticMeshActor Creation: FAIL\n");
-    }
-    printf("\n");
-
-    // Test 6: ObjectIterator 테스트
-    printf("TEST 6: ObjectIterator Functionality\n");
+    // World와 Level 시스템 테스트
+    printf(">> WORLD & LEVEL SYSTEM TESTS\n");
     printf("-------------------------------------\n");
 
-    // 전체 오브젝트 반복자 테스트
-    int32 TotalObjectCount = 0;
-    for (TObjectIterator<UObject> It; It; ++It)
+    // 1. 월드 생성 테스트
+    printf("1. Creating World...\n");
+    UWorld* TestWorld = UWorld::CreateWorld(FName("TestWorld"));
+    if (TestWorld)
     {
-        UObject* Obj = *It;
-        if (Obj)
+        printf("   ✓ World created successfully: %s\n", TestWorld->GetWorldName().ToString().c_str());
+        printf("   - IsInitialized: %s\n", TestWorld->IsInitialized() ? "true" : "false");
+        printf("   - IsPlaying: %s\n", TestWorld->IsPlaying() ? "true" : "false");
+        printf("   - IsPaused: %s\n", TestWorld->IsPaused() ? "true" : "false");
+    }
+    else
+    {
+        printf("   ✗ Failed to create world\n");
+    }
+
+    // 2. 월드 초기화 테스트
+    printf("\n2. Initializing World...\n");
+    if (TestWorld)
+    {
+        TestWorld->InitializeWorld();
+        printf("   ✓ World initialized\n");
+        printf("   - IsInitialized: %s\n", TestWorld->IsInitialized() ? "true" : "false");
+    }
+
+    // 3. 레벨 생성 테스트
+    printf("\n3. Creating Level...\n");
+    ULevel* TestLevel = nullptr;
+    if (TestWorld)
+    {
+        TestLevel = TestWorld->CreateLevel(FName("TestLevel"));
+        if (TestLevel)
         {
-            TotalObjectCount++;
+            printf("   ✓ Level created successfully: %s\n", TestLevel->GetLevelName().ToString().c_str());
+            printf("   - IsLoaded: %s\n", TestLevel->IsLoaded() ? "true" : "false");
+            printf("   - IsVisible: %s\n", TestLevel->IsVisible() ? "true" : "false");
+            printf("   - IsCurrent: %s\n", TestLevel->IsCurrent() ? "true" : "false");
+            printf("   - Actor Count: %d\n", TestLevel->GetNumActors());
+        }
+        else
+        {
+            printf("   ✗ Failed to create level\n");
         }
     }
-    printf("Total UObject Count: %d\n", TotalObjectCount);
-    printf("ObjectIterator Basic: %s\n", TotalObjectCount > 0 ? "PASS" : "FAIL");
 
-    // 특정 타입 반복자 테스트
-    int32 ActorCount = 0;
-    for (TObjectIterator<AActor> It; It; ++It)
+    // 4. 레벨을 월드의 현재 레벨로 설정
+    printf("\n4. Setting Current Level...\n");
+    if (TestWorld && TestLevel)
     {
-        AActor* Actor = *It;
-        if (Actor)
+        TestWorld->SetCurrentLevel(TestLevel);
+        ULevel* CurrentLevel = TestWorld->GetCurrentLevel();
+        if (CurrentLevel == TestLevel)
         {
-            ActorCount++;
+            printf("   ✓ Current level set successfully\n");
+            printf("   - Current Level: %s\n", CurrentLevel->GetLevelName().ToString().c_str());
+        }
+        else
+        {
+            printf("   ✗ Failed to set current level\n");
         }
     }
-    printf("AActor Count: %d\n", ActorCount);
-    printf("Type-specific Iterator: %s\n", ActorCount > 0 ? "PASS" : "FAIL");
 
-    // 컴포넌트 반복자 테스트
-    int32 ComponentCount = 0;
-    for (TObjectIterator<UActorComponent> It; It; ++It)
+    // 5. 액터 스폰 테스트
+    printf("\n5. Spawning Actors in Level...\n");
+    if (TestLevel)
     {
-        UActorComponent* Component = *It;
-        if (Component)
+        // StaticMeshActor 스폰
+        AActor* TestActor1 = TestLevel->SpawnActor<AStaticMeshActor>(FVector(100.0f, 200.0f, 50.0f), FVector::Zero, FName("TestMeshActor"));
+        if (TestActor1)
         {
-            ComponentCount++;
+            printf("   ✓ StaticMeshActor spawned: %s at (%.1f, %.1f, %.1f)\n",
+                TestActor1->GetName().ToString().c_str(),
+                TestActor1->GetActorLocation().X,
+                TestActor1->GetActorLocation().Y,
+                TestActor1->GetActorLocation().Z);
+        }
+
+        // 일반 Actor 스폰
+        AActor* TestActor2 = TestLevel->SpawnActor<AActor>(FVector(-50.0f, 0.0f, 100.0f), FVector::Zero, FName("TestActor"));
+        if (TestActor2)
+        {
+            printf("   ✓ Actor spawned: %s at (%.1f, %.1f, %.1f)\n",
+                TestActor2->GetName().ToString().c_str(),
+                TestActor2->GetActorLocation().X,
+                TestActor2->GetActorLocation().Y,
+                TestActor2->GetActorLocation().Z);
+        }
+
+        printf("   - Total actors in level: %d\n", TestLevel->GetNumActors());
+    }
+
+    // 6. 액터 검색 테스트
+    printf("\n6. Finding Actors...\n");
+    if (TestLevel)
+    {
+        AActor* FoundActor = TestLevel->FindActor(FName("TestMeshActor"));
+        if (FoundActor)
+        {
+            printf("   ✓ Found actor by name: %s\n", FoundActor->GetName().ToString().c_str());
+        }
+
+        // 클래스별 액터 검색
+        TArray<AStaticMeshActor*> MeshActors = TestLevel->GetActorsOfClass<AStaticMeshActor>();
+        printf("   - StaticMeshActors found: %zu\n", MeshActors.size());
+
+        TArray<AActor*> AllActors = TestLevel->GetActorsOfClass<AActor>();
+        printf("   - Total Actors found: %zu\n", AllActors.size());
+    }
+
+    // 7. 월드 통계 테스트
+    printf("\n7. World Statistics...\n");
+    if (TestWorld)
+    {
+        printf("   - World Name: %s\n", TestWorld->GetWorldName().ToString().c_str());
+        printf("   - Total Actor Count: %d\n", TestWorld->GetTotalActorCount());
+        printf("   - Time Seconds: %.2f\n", TestWorld->GetTimeSeconds());
+        printf("   - Delta Time: %.4f\n", TestWorld->GetDeltaTimeSeconds());
+
+        // 월드 경계 정보
+        const UWorld::FWorldBounds& Bounds = TestWorld->GetWorldBounds();
+        printf("   - World Bounds: Min(%.1f, %.1f, %.1f) Max(%.1f, %.1f, %.1f)\n",
+            Bounds.Min.X, Bounds.Min.Y, Bounds.Min.Z,
+            Bounds.Max.X, Bounds.Max.Y, Bounds.Max.Z);
+    }
+
+    // 8. 레벨 통계 테스트
+    printf("\n8. Level Statistics...\n");
+    if (TestLevel)
+    {
+        ULevel::FLevelStats Stats = TestLevel->GetLevelStats();
+        printf("   - Total Actors: %d\n", Stats.TotalActors);
+        printf("   - StaticMesh Actors: %d\n", Stats.StaticMeshActors);
+        printf("   - Light Actors: %d\n", Stats.LightActors);
+        printf("   - Other Actors: %d\n", Stats.OtherActors);
+        printf("   - Memory Usage: %zu bytes\n", Stats.MemoryUsage);
+    }
+
+    // 9. 시간 시뮬레이션 테스트
+    printf("\n9. Time Simulation Test...\n");
+    if (TestWorld)
+    {
+        TestWorld->SetPlaying(true);
+        printf("   - World playing state: %s\n", TestWorld->IsPlaying() ? "true" : "false");
+
+        // 몇 프레임 시뮬레이션
+        for (int32 Frame = 0; Frame < 3; ++Frame)
+        {
+            float DeltaTime = 0.016f; // 60 FPS
+            TestWorld->AddDeltaTime(DeltaTime);
+            TestWorld->Tick(DeltaTime);
+
+            printf("   Frame %d: Time=%.3f, DeltaTime=%.3f\n",
+                Frame + 1, TestWorld->GetTimeSeconds(), TestWorld->GetDeltaTimeSeconds());
         }
     }
-    printf("UActorComponent Count: %d\n", ComponentCount);
-    printf("Component Iterator: %s\n", ComponentCount > 0 ? "PASS" : "FAIL");
 
-    // StaticMeshActor 반복자 테스트
-    int32 StaticMeshActorCount = 0;
-    for (TObjectIterator<AStaticMeshActor> It; It; ++It)
+    // 10. 정리 및 제거 테스트
+    printf("\n10. Cleanup Test...\n");
+    if (TestLevel)
     {
-        AStaticMeshActor* SMActor = *It;
-        if (SMActor)
-        {
-            StaticMeshActorCount++;
-            printf("  Found StaticMeshActor: %s at (%.1f, %.1f, %.1f)\n",
-                   SMActor->GetName().ToString().c_str(),
-                   SMActor->GetActorLocation().X, SMActor->GetActorLocation().Y, SMActor->GetActorLocation().Z);
-        }
-    }
-    printf("StaticMeshActor Count: %d\n", StaticMeshActorCount);
-    printf("StaticMeshActor Iterator: %s\n", StaticMeshActorCount > 0 ? "PASS" : "FAIL");
-    printf("\n");
+        printf("   - Removing all actors from level...\n");
+        TestLevel->RemoveAllActors();
+        printf("   - Actors remaining: %d\n", TestLevel->GetNumActors());
 
-    // 최종 결과
-    printf("===================================================================\n");
-    printf("                        TEST SUMMARY                              \n");
-    printf("===================================================================\n");
-    printf("BoxSphereBounds: Operational\n");
-    printf("PrimitiveComponent: Operational\n");
-    printf("MeshComponent: Operational\n");
-    printf("StaticMeshComponent: Operational\n");
-    printf("StaticMeshActor: Operational (with procedural meshes)\n");
-    printf("ObjectIterator: Operational\n");
-    printf("Total Objects in System: %d\n", TotalObjectCount);
-    printf("Component System: Fully Functional\n");
-    printf("===================================================================\n\n");
+        TestLevel->CleanupLevel();
+        printf("   ✓ Level cleaned up\n");
+    }
+
+    if (TestWorld)
+    {
+        TestWorld->CleanupWorld();
+        printf("   ✓ World cleaned up\n");
+
+        UWorld::DestroyWorld(TestWorld);
+        printf("   ✓ World destroyed\n");
+    }
+
+    printf("\n>> WORLD & LEVEL SYSTEM TESTS COMPLETED\n");
+    printf("=====================================\n\n");
+
+    GUObjectArray.PerformGarbageCollector();
 
     printf("Press any key to continue...\n");
     getchar();

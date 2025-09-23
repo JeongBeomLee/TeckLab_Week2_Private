@@ -34,7 +34,6 @@ AActor::~AActor()
         if (Component && !Component->IsPendingKill())
         {
             Component->MarkPendingKill();
-            delete Component;
         }
     }
     Components.clear();
@@ -276,6 +275,7 @@ void AActor::RemoveComponent(UActorComponent* Component)
         {
             Components.erase(it);
             Component->SetOuter(nullptr);
+            Component->MarkPendingKill();
         }
     }
 }

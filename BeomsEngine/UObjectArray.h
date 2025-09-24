@@ -43,7 +43,10 @@ public:
     void FreeUObjectIndex(UObject* Object);
     
     UObject* GetObjectPtr(int32 Index) const;
+	UObject* operator[](int32 Index) const { return GetObjectPtr(Index); }
+
     FUObjectItem* GetObjectItemPtr(int32 Index) const;
+	FUObjectItem& GetObjectItem(int32 Index) { return ObjectList[ Index ]; }
     
     int32 GetMaxObjectsEver() const { return MaxObjectsEver; }
     int32 GetObjectArraySize() const { return (int32)ObjectList.size(); }

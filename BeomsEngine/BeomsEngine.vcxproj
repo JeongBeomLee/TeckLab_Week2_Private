@@ -148,6 +148,7 @@
     <ClInclude Include="BoxSphereBounds.h" />
     <ClInclude Include="Containers.h" />
     <ClInclude Include="D3D11GraphicsDevice.h" />
+    <ClInclude Include="EditorViewportClient.h" />
     <ClInclude Include="MaterialInterface.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="SceneComponent.h" />
+    <ClInclude Include="SceneView.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="StaticMeshActor.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -190,12 +192,14 @@
     <ClInclude Include="Types.h" />
     <ClInclude Include="UObjectArray.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ViewportClient.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="BeomsEngine.cpp" />
     <ClCompile Include="D3D11GraphicsDevice.cpp" />
+    <ClCompile Include="EditorViewportClient.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="Memory.cpp" />
@@ -206,6 +210,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
+    <ClCompile Include="SceneView.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="StaticMeshActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -219,6 +224,7 @@
     <ClCompile Include="KismetProceduralMeshLibrary.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ViewportClient.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -227,12 +233,6 @@
   <ItemGroup>
     <Image Include="BeomsEngine.ico" />
     <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="DefaultStaticMeshShader.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

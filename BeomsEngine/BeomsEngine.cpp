@@ -22,6 +22,9 @@
 #include "D3D11GraphicsDevice.h"
 #include "Renderer.h"
 #include "RenderPass.h"
+#include "SceneView.h"
+#include "ViewportClient.h"
+#include "EditorViewportClient.h"
 
 #define MAX_LOADSTRING 100
 
@@ -331,22 +334,185 @@ void RunTests()
         printf("   - Render pass management functionality available\n");
     }
 
-    // 6. 리소스 정리 테스트
-    printf("\n6. Resource Cleanup Test...\n");
-    if (FrameRenderer)
-    {
-        FrameRenderer->Shutdown();
-        printf("   ✓ URenderer shutdown completed\n");
-    }
-
-    if (bGraphicsDeviceInit)
-    {
-        GraphicsDevice.Shutdown();
-        printf("   ✓ GraphicsDevice shutdown completed\n");
-    }
-
     printf("\n>> GRAPHICS DEVICE & RENDERER SYSTEM TESTS COMPLETED\n");
     printf("======================================================\n\n");
+
+    // CAMERA & VIEWPORT SYSTEM TESTS
+    printf(">> CAMERA & VIEWPORT SYSTEM TESTS\n");
+    printf("=====================================\n");
+
+    // 1. FSceneView 생성 및 테스트
+    printf("\n1. Creating and Testing FSceneView...\n");
+    FSceneViewInitOptions ViewOptions;
+    ViewOptions.ViewLocation = FVector(100.0f, -300.0f, 200.0f);
+    ViewOptions.ViewRotation = FVector(-20.0f, 45.0f, 0.0f);
+    ViewOptions.FOV = 75.0f;
+    ViewOptions.AspectRatio = 16.0f / 9.0f;
+    ViewOptions.ViewportWidth = 1920;
+    ViewOptions.ViewportHeight = 1080;
+
+    FSceneView* TestSceneView = new FSceneView(ViewOptions);
+    if (TestSceneView)
+    {
+        printf("    SceneView created successfully\n");
+        printf("   - Location: (%.1f, %.1f, %.1f)\n",
+            TestSceneView->ViewLocation.X, TestSceneView->ViewLocation.Y, TestSceneView->ViewLocation.Z);
+        printf("   - Rotation: (%.1f, %.1f, %.1f)\n",
+            TestSceneView->ViewRotation.X, TestSceneView->ViewRotation.Y, TestSceneView->ViewRotation.Z);
+        printf("   - FOV: %.1f degrees\n", TestSceneView->FOV);
+        printf("   - AspectRatio: %.2f\n", TestSceneView->AspectRatio);
+        printf("   - Viewport: %dx%d\n", TestSceneView->ViewportWidth, TestSceneView->ViewportHeight);
+
+        // 뷰 방향 벡터들 테스트
+        FVector ViewDir = TestSceneView->GetViewDirection();
+        FVector RightDir = TestSceneView->GetRightVector();
+        FVector UpDir = TestSceneView->GetUpVector();
+
+        printf("   - ViewDirection: (%.3f, %.3f, %.3f)\n", ViewDir.X, ViewDir.Y, ViewDir.Z);
+        printf("   - RightVector: (%.3f, %.3f, %.3f)\n", RightDir.X, RightDir.Y, RightDir.Z);
+        printf("   - UpVector: (%.3f, %.3f, %.3f)\n", UpDir.X, UpDir.Y, UpDir.Z);
+    }
+
+    // 2. FViewportClient 생성 및 테스트
+    printf("\n2. Creating and Testing FViewportClient...\n");
+    FViewportClient* GameViewport = new FViewportClient(EViewportType::Game);
+    if (GameViewport)
+    {
+        GameViewport->Initialize(1920, 1080);
+        printf("    Game ViewportClient created and initialized\n");
+        printf("   - Type: %s\n", GameViewport->GetViewportType() == EViewportType::Game ? "Game" : "Editor");
+        printf("   - Size: %dx%d\n", GameViewport->GetViewportWidth(), GameViewport->GetViewportHeight());
+        printf("   - IsActive: %s\n", GameViewport->IsActive() ? "true" : "false");
+
+        // 카메라 이동 테스트
+        GameViewport->SetViewLocation(FVector(0.0f, -200.0f, 150.0f));
+        GameViewport->SetViewRotation(FVector(-10.0f, 0.0f, 0.0f));
+        GameViewport->SetFOV(60.0f);
+        printf("   - Camera position and settings updated\n");
+    }
+
+    // 3. FEditorViewportClient 생성 및 테스트
+    printf("\n3. Creating and Testing FEditorViewportClient...\n");
+    FEditorViewportClient* EditorViewport = new FEditorViewportClient();
+    if (EditorViewport)
+    {
+        EditorViewport->Initialize(1920, 1080);
+        printf("    Editor ViewportClient created and initialized\n");
+        printf("   - Type: %s\n", EditorViewport->GetViewportType() == EViewportType::Editor ? "Editor" : "Game");
+        printf("   - CameraMode: Orbit\n");
+        printf("   - OrbitTarget: (%.1f, %.1f, %.1f)\n",
+            EditorViewport->GetOrbitTarget().X, EditorViewport->GetOrbitTarget().Y, EditorViewport->GetOrbitTarget().Z);
+        printf("   - OrbitDistance: %.1f\n", EditorViewport->GetOrbitDistance());
+
+        // 에디터 카메라 기능 테스트
+        EditorViewport->SetOrbitTarget(FVector(100.0f, 100.0f, 0.0f));
+        EditorViewport->SetOrbitDistance(400.0f);
+        printf("   - Orbit target and distance updated\n");
+
+        EditorViewport->FocusOnPoint(FVector(200.0f, 0.0f, 50.0f));
+        printf("   - Focused on specific point\n");
+
+        EditorViewport->ResetCamera();
+        printf("   - Camera reset to default\n");
+
+        // 뷰 모드 테스트
+        EditorViewport->SetViewMode(EEditorViewMode::Wireframe);
+        EditorViewport->SetViewMode(EEditorViewMode::Lit);
+        printf("   - ViewMode switching tested\n");
+    }
+
+    // 4. 뷰포트와 렌더러 통합 테스트
+    printf("\n4. Viewport-Renderer Integration Test...\n");
+    if (FrameRenderer && GameViewport && EditorViewport && bGraphicsDeviceInit)
+    {
+        printf("   Testing viewport rendering with camera views...\n");
+
+        // Game Viewport 렌더링
+        printf("   - Rendering Game Viewport:\n");
+        GameViewport->Draw(&GraphicsDevice, FrameRenderer);
+
+        // Editor Viewport 렌더링
+        printf("   - Rendering Editor Viewport:\n");
+        EditorViewport->Draw(&GraphicsDevice, FrameRenderer);
+
+        GraphicsDevice.SwapBuffer();
+        printf("   - Viewport integration test completed\n");
+    }
+    else
+    {
+        printf("   - Viewport-Renderer integration test skipped (missing components)\n");
+    }
+
+    // 5. 카메라 애니메이션 시뮬레이션 테스트
+    printf("\n5. Camera Animation Simulation...\n");
+    if (EditorViewport)
+    {
+        printf("   Simulating camera movement over time...\n");
+
+        for (int32 Frame = 0; Frame < 5; ++Frame)
+        {
+            float Time = Frame * 0.5f;
+            float DeltaTime = 0.016f;
+
+            // 궤도 회전 시뮬레이션
+            FVector AnimatedTarget = FVector(
+                100.0f * FMath::Cos(Time),
+                100.0f * FMath::Sin(Time),
+                50.0f
+            );
+
+            EditorViewport->SetOrbitTarget(AnimatedTarget);
+            EditorViewport->Tick(DeltaTime);
+
+            if (EditorViewport->GetSceneView())
+            {
+                FVector CamPos = EditorViewport->GetSceneView()->ViewLocation;
+                printf("   Frame %d: Camera at (%.1f, %.1f, %.1f)\n",
+                    Frame + 1, CamPos.X, CamPos.Y, CamPos.Z);
+            }
+        }
+
+        printf("   - Camera animation simulation completed\n");
+    }
+
+    // 6. 리소스 정리
+    printf("\n6. Camera System Cleanup...\n");
+    if (TestSceneView)
+    {
+        delete TestSceneView;
+        printf("   - SceneView destroyed\n");
+    }
+
+    if (GameViewport)
+    {
+        GameViewport->Shutdown();
+        delete GameViewport;
+        printf("   - Game ViewportClient destroyed\n");
+    }
+
+    if (EditorViewport)
+    {
+        EditorViewport->Shutdown();
+        delete EditorViewport;
+        printf("   - Editor ViewportClient destroyed\n");
+    }
+
+    // 6. 리소스 정리 테스트
+	printf("\n6. Resource Cleanup Test...\n");
+	if (FrameRenderer)
+	{
+		FrameRenderer->Shutdown();
+		printf("   ✓ URenderer shutdown completed\n");
+	}
+
+	if (bGraphicsDeviceInit)
+	{
+		GraphicsDevice.Shutdown();
+		printf("   ✓ GraphicsDevice shutdown completed\n");
+	}
+
+    printf("\n>> CAMERA & VIEWPORT SYSTEM TESTS COMPLETED\n");
+    printf("============================================\n\n");
 
     GUObjectArray.PerformGarbageCollector();
 

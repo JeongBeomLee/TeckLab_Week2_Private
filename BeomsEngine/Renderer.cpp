@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Renderer.h"
 #include "D3D11GraphicsDevice.h"
-#include <iostream>
 
 IMPLEMENT_CLASS(URenderer, UObject)
 
@@ -28,7 +27,6 @@ void URenderer::InitializeRenderer(ID3D11DeviceContext* InDeviceContext, FD3D11G
     SetupDefaultRenderPasses();
 
     bInitialized = true;
-    printf("    URenderer initialized with %zu render passes\n", RenderPasses.size());
 }
 
 void URenderer::Shutdown()
@@ -43,25 +41,26 @@ void URenderer::Shutdown()
     GraphicsDevice = nullptr;
     bInitialized = false;
     MarkPendingKill();
-
-    printf("    URenderer shutdown completed\n");
 }
 
 void URenderer::RenderScene()
 {
+    RenderSceneWithView(nullptr);
+}
+
+void URenderer::RenderSceneWithView(FSceneView* SceneView)
+{
     if (!bInitialized || !DeviceContext || !GraphicsDevice)
     {
-        printf("    URenderer not properly initialized\n");
         return;
     }
-
-    printf("   >> Starting Scene Rendering (%zu passes)\n", RenderPasses.size());
 
     FRenderPassContext Context;
     Context.DeviceContext = DeviceContext;
     Context.RenderTarget = GraphicsDevice->GetBackBufferRTV();
     Context.DepthStencil = GraphicsDevice->GetDepthStencilView();
     Context.Viewport = &GraphicsDevice->GetMainViewport();
+    Context.SceneView = SceneView;
 
     for (IRenderPass* Pass : RenderPasses)
     {
@@ -71,8 +70,6 @@ void URenderer::RenderScene()
             ExecuteRenderPass(Pass, Context);
         }
     }
-
-    printf("   >> Scene Rendering Completed\n");
 }
 
 void URenderer::AddRenderPass(IRenderPass* Pass)
@@ -80,7 +77,6 @@ void URenderer::AddRenderPass(IRenderPass* Pass)
     if (Pass)
     {
         RenderPasses.push_back(Pass);
-        printf("   + Added render pass: %s\n", Pass->GetPassName());
     }
 }
 
@@ -90,7 +86,6 @@ void URenderer::RemoveRenderPass(ERenderPassType PassType)
     {
         if ((*it) && (*it)->GetPassType() == PassType)
         {
-            printf("   - Removed render pass: %s\n", (*it)->GetPassName());
             delete (*it);
             RenderPasses.erase(it);
             return;
@@ -108,7 +103,6 @@ void URenderer::ClearRenderPasses()
         }
     }
     RenderPasses.clear();
-    printf("   - All render passes cleared\n");
 }
 
 void URenderer::SetupDefaultRenderPasses()
@@ -126,6 +120,5 @@ void URenderer::ExecuteRenderPass(IRenderPass* Pass, const FRenderPassContext& C
         return;
     }
 
-    printf("   Executing: %s\n", Pass->GetPassName());
     Pass->Execute(Context);
 }

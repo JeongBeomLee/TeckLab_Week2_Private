@@ -27,6 +27,7 @@ public:
     void Shutdown();
 
     void RenderScene();
+    void RenderSceneWithView(FSceneView* SceneView);
 
     void AddRenderPass(IRenderPass* Pass);
     void RemoveRenderPass(ERenderPassType PassType);

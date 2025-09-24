@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "RenderPass.h"
-#include <iostream>
 
 void FDepthPrePass::Execute(const FRenderPassContext& Context)
 {
@@ -23,8 +22,6 @@ void FDepthPrePass::Execute(const FRenderPassContext& Context)
     {
         Context.DeviceContext->RSSetViewports(1, Context.Viewport);
     }
-
-    printf("   - DepthPrePass: Depth buffer cleared and set for Z-only rendering\n");
 }
 
 void FBasePass::Execute(const FRenderPassContext& Context)
@@ -42,7 +39,4 @@ void FBasePass::Execute(const FRenderPassContext& Context)
     {
         Context.DeviceContext->RSSetViewports(1, Context.Viewport);
     }
-
-    printf("   - BasePass: Render targets set and cleared (Color: %.2f, %.2f, %.2f, %.2f)\n",
-        Context.ClearColor[0], Context.ClearColor[1], Context.ClearColor[2], Context.ClearColor[3]);
 }

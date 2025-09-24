@@ -9,6 +9,8 @@ enum class ERenderPassType
     BasePass
 };
 
+struct FSceneView;
+
 struct FRenderPassContext
 {
     ERenderPassType PassType;
@@ -16,6 +18,7 @@ struct FRenderPassContext
     ID3D11RenderTargetView* RenderTarget = nullptr;
     ID3D11DepthStencilView* DepthStencil = nullptr;
     const D3D11_VIEWPORT* Viewport = nullptr;
+    FSceneView* SceneView = nullptr;
     float ClearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 };
 

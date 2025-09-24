@@ -380,7 +380,7 @@ public:
         );
     }
 
-    static FMatrix CreateOrthographic(float Width, float Height, float NearPlane, float FarPlane, float OrthographicScale)
+    static FMatrix CreateOrthographic(float Width, float Height, float NearPlane, float FarPlane)
     {
         float Range = FarPlane - NearPlane;
 

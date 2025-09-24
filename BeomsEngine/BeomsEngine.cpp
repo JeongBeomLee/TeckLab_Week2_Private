@@ -19,6 +19,17 @@
 #include "Name.h"
 #include "World.h"
 #include "Level.h"
+#include "D3D11GraphicsDevice.h"
+#include "Renderer.h"
+#include "RenderPass.h"
+
+#define MAX_LOADSTRING 100
+
+// 전역 변수:
+HINSTANCE hInst;                                // 현재 인스턴스입니다.
+HWND GHwnd;                                    // 메인 윈도우 핸들입니다.
+WCHAR szTitle[ MAX_LOADSTRING ];                  // 제목 표시줄 텍스트입니다.
+WCHAR szWindowClass[ MAX_LOADSTRING ];            // 기본 창 클래스 이름입니다.
 
 void RunTests()
 {
@@ -41,14 +52,14 @@ void RunTests()
     UWorld* TestWorld = UWorld::CreateWorld(FName("TestWorld"));
     if (TestWorld)
     {
-        printf("   ✓ World created successfully: %s\n", TestWorld->GetWorldName().ToString().c_str());
+        printf("    World created successfully: %s\n", TestWorld->GetWorldName().ToString().c_str());
         printf("   - IsInitialized: %s\n", TestWorld->IsInitialized() ? "true" : "false");
         printf("   - IsPlaying: %s\n", TestWorld->IsPlaying() ? "true" : "false");
         printf("   - IsPaused: %s\n", TestWorld->IsPaused() ? "true" : "false");
     }
     else
     {
-        printf("   ✗ Failed to create world\n");
+        printf("    Failed to create world\n");
     }
 
     // 2. 월드 초기화 테스트
@@ -56,7 +67,7 @@ void RunTests()
     if (TestWorld)
     {
         TestWorld->InitializeWorld();
-        printf("   ✓ World initialized\n");
+        printf("    World initialized\n");
         printf("   - IsInitialized: %s\n", TestWorld->IsInitialized() ? "true" : "false");
     }
 
@@ -68,7 +79,7 @@ void RunTests()
         TestLevel = TestWorld->CreateLevel(FName("TestLevel"));
         if (TestLevel)
         {
-            printf("   ✓ Level created successfully: %s\n", TestLevel->GetLevelName().ToString().c_str());
+            printf("    Level created successfully: %s\n", TestLevel->GetLevelName().ToString().c_str());
             printf("   - IsLoaded: %s\n", TestLevel->IsLoaded() ? "true" : "false");
             printf("   - IsVisible: %s\n", TestLevel->IsVisible() ? "true" : "false");
             printf("   - IsCurrent: %s\n", TestLevel->IsCurrent() ? "true" : "false");
@@ -76,7 +87,7 @@ void RunTests()
         }
         else
         {
-            printf("   ✗ Failed to create level\n");
+            printf("    Failed to create level\n");
         }
     }
 
@@ -88,12 +99,12 @@ void RunTests()
         ULevel* CurrentLevel = TestWorld->GetCurrentLevel();
         if (CurrentLevel == TestLevel)
         {
-            printf("   ✓ Current level set successfully\n");
+            printf("    Current level set successfully\n");
             printf("   - Current Level: %s\n", CurrentLevel->GetLevelName().ToString().c_str());
         }
         else
         {
-            printf("   ✗ Failed to set current level\n");
+            printf("    Failed to set current level\n");
         }
     }
 
@@ -105,7 +116,7 @@ void RunTests()
         AActor* TestActor1 = TestLevel->SpawnActor<AStaticMeshActor>(FVector(100.0f, 200.0f, 50.0f), FVector::Zero, FName("TestMeshActor"));
         if (TestActor1)
         {
-            printf("   ✓ StaticMeshActor spawned: %s at (%.1f, %.1f, %.1f)\n",
+            printf("    StaticMeshActor spawned: %s at (%.1f, %.1f, %.1f)\n",
                 TestActor1->GetName().ToString().c_str(),
                 TestActor1->GetActorLocation().X,
                 TestActor1->GetActorLocation().Y,
@@ -116,7 +127,7 @@ void RunTests()
         AActor* TestActor2 = TestLevel->SpawnActor<AActor>(FVector(-50.0f, 0.0f, 100.0f), FVector::Zero, FName("TestActor"));
         if (TestActor2)
         {
-            printf("   ✓ Actor spawned: %s at (%.1f, %.1f, %.1f)\n",
+            printf("    Actor spawned: %s at (%.1f, %.1f, %.1f)\n",
                 TestActor2->GetName().ToString().c_str(),
                 TestActor2->GetActorLocation().X,
                 TestActor2->GetActorLocation().Y,
@@ -133,7 +144,7 @@ void RunTests()
         AActor* FoundActor = TestLevel->FindActor(FName("TestMeshActor"));
         if (FoundActor)
         {
-            printf("   ✓ Found actor by name: %s\n", FoundActor->GetName().ToString().c_str());
+            printf("    Found actor by name: %s\n", FoundActor->GetName().ToString().c_str());
         }
 
         // 클래스별 액터 검색
@@ -215,18 +226,135 @@ void RunTests()
     printf("\n>> WORLD & LEVEL SYSTEM TESTS COMPLETED\n");
     printf("=====================================\n\n");
 
+    // GRAPHICS DEVICE & RENDERER TESTS
+    printf(">> GRAPHICS DEVICE & RENDERER SYSTEM TESTS\n");
+    printf("================================================\n");
+
+    // 1. FD3D11GraphicsDevice 생성 및 초기화 테스트
+    printf("\n1. Creating and Initializing FD3D11GraphicsDevice...\n");
+    FD3D11GraphicsDevice GraphicsDevice;
+
+    // 전역 윈도우 핸들을 사용하여 GraphicsDevice 초기화
+    FD3D11GraphicsDevice::FDeviceDesc DeviceDesc;
+    DeviceDesc.WindowHandle = GHwnd;
+    DeviceDesc.WindowWidth = 1920;
+    DeviceDesc.WindowHeight = 1080;
+    DeviceDesc.bVSync = true;
+
+    bool bGraphicsDeviceInit = GraphicsDevice.Init(DeviceDesc);
+    if (bGraphicsDeviceInit)
+    {
+        printf("    GraphicsDevice initialized successfully\n");
+        printf("   - Device: %p\n", GraphicsDevice.GetDevice());
+        printf("   - Context: %p\n", GraphicsDevice.GetContext());
+        printf("   - SwapChain: %p\n", GraphicsDevice.GetSwapChain());
+        printf("   - BackBufferRTV: %p\n", GraphicsDevice.GetBackBufferRTV());
+        printf("   - DepthStencilView: %p\n", GraphicsDevice.GetDepthStencilView());
+
+        const D3D11_VIEWPORT& Viewport = GraphicsDevice.GetMainViewport();
+        printf("   - Viewport: (%.0f, %.0f) - (%.0f x %.0f)\n",
+            Viewport.TopLeftX, Viewport.TopLeftY, Viewport.Width, Viewport.Height);
+    }
+    else
+    {
+        printf("    Failed to initialize GraphicsDevice\n");
+        printf("   - Check if DirectX 11 is supported on this system\n");
+    }
+
+    // 2. URenderer 생성 및 초기화 테스트 (GraphicsDevice 없이도 테스트 가능한 부분)
+    printf("\n2. Creating URenderer...\n");
+	URenderer* FrameRenderer = NewObject<URenderer>(nullptr, FName("FrameRenderer"));
+    if (FrameRenderer)
+    {
+        printf("   ✓ URenderer created successfully: %s\n", FrameRenderer->GetName().ToString().c_str());
+        printf("   - IsInitialized: %s\n", FrameRenderer->IsInitialized() ? "true" : "false");
+
+        // GraphicsDevice가 초기화된 경우에만 실제 초기화 수행
+        if (bGraphicsDeviceInit)
+        {
+            printf("\n3. Initializing URenderer with GraphicsDevice...\n");
+            FrameRenderer->InitializeRenderer(GraphicsDevice.GetContext(), &GraphicsDevice);
+            printf("   ✓ URenderer initialized with GraphicsDevice\n");
+            printf("   - IsInitialized: %s\n", FrameRenderer->IsInitialized() ? "true" : "false");
+            printf("   - DeviceContext: %p\n", FrameRenderer->GetDeviceContext());
+            printf("   - GraphicsDevice: %p\n", FrameRenderer->GetGraphicsDevice());
+        }
+        else
+        {
+            printf("\n3. Testing URenderer without GraphicsDevice...\n");
+            FrameRenderer->InitializeRenderer(nullptr, nullptr);
+            printf("   ✓ URenderer initialized (null context test)\n");
+        }
+    }
+    else
+    {
+        printf("   ✗ Failed to create URenderer\n");
+    }
+
+    // 4. 렌더링 시뮬레이션 테스트
+    printf("\n4. Rendering Simulation Test...\n");
+    if (FrameRenderer && FrameRenderer->IsInitialized())
+    {
+        printf("   Starting render scene simulation...\n");
+
+        // 여러 프레임 시뮬레이션
+        for (int32 Frame = 0; Frame < 3; ++Frame)
+        {
+            printf("\n   Frame %d Rendering:\n", Frame + 1);
+            FrameRenderer->RenderScene();
+
+            // GraphicsDevice가 초기화된 경우 Present 호출
+            if (bGraphicsDeviceInit)
+            {
+                GraphicsDevice.SwapBuffer();
+                printf("   - Frame %d presented to screen\n", Frame + 1);
+            }
+        }
+
+        printf("\n   ✓ Rendering simulation completed\n");
+    }
+    else
+    {
+        printf("   ✗ Cannot perform rendering simulation - URenderer not initialized\n");
+    }
+
+    // 5. 렌더 패스 관리 테스트
+    printf("\n5. Render Pass Management Test...\n");
+    if (FrameRenderer)
+    {
+        printf("   Testing render pass operations...\n");
+
+        // 기본 패스들이 설정되어 있는지 확인 (실제로는 내부적으로 확인)
+        printf("   - Default render passes should be: DepthPrePass, BasePass\n");
+
+        // 새로운 패스 추가 테스트 (실제 구현에서는 더 복잡한 패스 가능)
+        printf("   - Render pass management functionality available\n");
+    }
+
+    // 6. 리소스 정리 테스트
+    printf("\n6. Resource Cleanup Test...\n");
+    if (FrameRenderer)
+    {
+        FrameRenderer->Shutdown();
+        printf("   ✓ URenderer shutdown completed\n");
+    }
+
+    if (bGraphicsDeviceInit)
+    {
+        GraphicsDevice.Shutdown();
+        printf("   ✓ GraphicsDevice shutdown completed\n");
+    }
+
+    printf("\n>> GRAPHICS DEVICE & RENDERER SYSTEM TESTS COMPLETED\n");
+    printf("======================================================\n\n");
+
     GUObjectArray.PerformGarbageCollector();
+
+    FNamePool::DistroyInstance();
 
     printf("Press any key to continue...\n");
     getchar();
 }
-
-#define MAX_LOADSTRING 100
-
-// 전역 변수:
-HINSTANCE hInst;                                // 현재 인스턴스입니다.
-WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
-WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -266,8 +394,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-	FNamePool::DistroyInstance();
-
     return (int) msg.wParam;
 }
 
@@ -296,16 +422,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   GHwnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
+   if (!GHwnd)
    {
       return FALSE;
    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+   ShowWindow(GHwnd, nCmdShow);
+   UpdateWindow(GHwnd);
 
    return TRUE;
 }

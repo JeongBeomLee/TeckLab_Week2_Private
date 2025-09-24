@@ -50,7 +50,7 @@ PS_INPUT mainVS(VS_INPUT input)
 	output.Position = mul(viewPos, Projection);
 
 	// 색상 및 텍스처 좌표 전달
-	output.Color = input.Color;
+    output.Color = DiffuseColor;
 	output.TexCoord = input.TexCoord;
 
 	return output;

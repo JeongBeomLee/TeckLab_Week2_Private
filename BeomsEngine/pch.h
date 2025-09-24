@@ -29,6 +29,8 @@
 // D3D 사용에 필요한 헤더파일들을 포함
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <dxgi.h>
+#include <wrl.h>
 
 // ImGui
 #include "ImGui/imgui.h"
@@ -57,3 +59,4 @@
 // === Standard Library ===
 #include <memory>
 #include <unordered_map>
+#include <cassert>

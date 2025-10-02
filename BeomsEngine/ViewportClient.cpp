@@ -27,7 +27,6 @@ void FViewportClient::Initialize(uint32 Width, uint32 Height)
     }
 
     bIsActive = true;
-    printf("   ViewportClient initialized: %dx%d\n", Width, Height);
 }
 
 void FViewportClient::Shutdown()
@@ -39,7 +38,6 @@ void FViewportClient::Shutdown()
     }
 
     bIsActive = false;
-    printf("   ViewportClient shutdown completed\n");
 }
 
 void FViewportClient::Draw(FD3D11GraphicsDevice* GraphicsDevice, URenderer* Renderer)

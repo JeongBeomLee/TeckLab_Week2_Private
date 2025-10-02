@@ -162,6 +162,11 @@
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SceneView.h" />
+    <ClInclude Include="SEditorViewport.h" />
+    <ClInclude Include="SlateCore.h" />
+    <ClInclude Include="SLeafWidget.h" />
+    <ClInclude Include="SLevelViewport.h" />
+    <ClInclude Include="SPanel.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="StaticMeshActor.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -169,6 +174,7 @@
     </ClInclude>
     <ClInclude Include="StaticMeshComponent.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
+    <ClInclude Include="SWidget.h" />
     <ClInclude Include="UObjectIterator.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vertex.h" />
@@ -211,12 +217,17 @@
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="SceneView.cpp" />
+    <ClCompile Include="SEditorViewport.cpp" />
+    <ClCompile Include="SLeafWidget.cpp" />
+    <ClCompile Include="SLevelViewport.cpp" />
+    <ClCompile Include="SPanel.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="StaticMeshActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="StaticMeshComponent.cpp" />
+    <ClCompile Include="SWidget.cpp" />
     <ClCompile Include="UObjectArray.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vector4.cpp" />

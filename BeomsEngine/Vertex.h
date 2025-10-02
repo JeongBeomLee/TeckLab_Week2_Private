@@ -16,7 +16,7 @@ struct FVertex
         , Normal(FVector::Up)
         , Tangent(FVector::Right)
         , Binormal(FVector::Forward)
-        , UV(FVector2::Zero())
+        , UV(FVector2::Zero)
     {}
 
     FVertex(const FVector& InPosition, const FVector& InNormal, float InU, float InV)

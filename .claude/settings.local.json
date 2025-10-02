@@ -5,7 +5,8 @@
       "Read(//c/Users/Jungle/Desktop/JB/TechLab_Week02/TeckLab_Week2_Private/BeomsEngine/**)",
       "Bash(cat:*)",
       "Bash(\"x64\\Debug\\BeomsEngine.exe\")",
-      "WebFetch(domain:en.wikipedia.org)"
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

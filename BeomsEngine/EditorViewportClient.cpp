@@ -12,9 +12,6 @@ void FEditorViewportClient::Initialize(uint32 Width, uint32 Height)
     FViewportClient::Initialize(Width, Height);
 
     ResetCamera();
-    printf("   EditorViewportClient initialized with %s camera mode\n",
-        CameraMode == ECameraMode::Orbit ? "Orbit" :
-        CameraMode == ECameraMode::FirstPerson ? "FirstPerson" : "Free");
 }
 
 void FEditorViewportClient::Tick(float DeltaTime)
@@ -40,7 +37,6 @@ void FEditorViewportClient::OnMouseButtonDown(const FViewportInputEvent& Event)
     {
         bMouseCaptured = true;
         LastMousePosition = FVector(static_cast<float>(Event.MouseX), static_cast<float>(Event.MouseY), 0.0f);
-        printf("   Mouse captured for camera control\n");
     }
 }
 
@@ -49,7 +45,6 @@ void FEditorViewportClient::OnMouseButtonUp(const FViewportInputEvent& Event)
     if (Event.Button == EMouseButton::Right)
     {
         bMouseCaptured = false;
-        printf("   Mouse released\n");
     }
 }
 
@@ -73,10 +68,6 @@ void FEditorViewportClient::SetViewMode(EEditorViewMode NewMode)
     if (ViewMode != NewMode)
     {
         ViewMode = NewMode;
-        printf("   ViewMode changed to: %s\n",
-            ViewMode == EEditorViewMode::Wireframe ? "Wireframe" :
-            ViewMode == EEditorViewMode::Unlit ? "Unlit" :
-            ViewMode == EEditorViewMode::Lit ? "Lit" : "VertexColor");
     }
 }
 
@@ -85,9 +76,6 @@ void FEditorViewportClient::SetCameraMode(ECameraMode NewMode)
     if (CameraMode != NewMode)
     {
         CameraMode = NewMode;
-        printf("   CameraMode changed to: %s\n",
-            CameraMode == ECameraMode::Orbit ? "Orbit" :
-            CameraMode == ECameraMode::FirstPerson ? "FirstPerson" : "Free");
     }
 }
 
@@ -125,8 +113,6 @@ void FEditorViewportClient::ResetCamera()
 
     SetCameraMode(ECameraMode::Orbit);
     UpdateOrbitCamera();
-
-    printf("   Camera reset to default position\n");
 }
 
 void FEditorViewportClient::CreateSceneView()

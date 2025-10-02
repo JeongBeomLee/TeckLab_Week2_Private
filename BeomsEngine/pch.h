@@ -60,3 +60,6 @@
 #include <memory>
 #include <unordered_map>
 #include <cassert>
+
+template<typename T>  
+using TSharedPtr = std::shared_ptr<T>;

@@ -115,8 +115,13 @@ struct FVector2
         }
     }
 
-    static FVector2 Zero() { return FVector2(0.0f, 0.0f); }
-    static FVector2 One() { return FVector2(1.0f, 1.0f); }
-    static FVector2 UnitX() { return FVector2(1.0f, 0.0f); }
-    static FVector2 UnitY() { return FVector2(0.0f, 1.0f); }
+    static const FVector2 Zero;
+    static const FVector2 One;
+	static const FVector2 UnitX;
+	static const FVector2 UnitY;
 };
+
+const FVector2 FVector2::Zero = FVector2(0.0f, 0.0f);
+const FVector2 FVector2::One = FVector2(1.0f, 1.0f);
+const FVector2 FVector2::UnitX = FVector2(1.0f, 0.0f);
+const FVector2 FVector2::UnitY = FVector2(0.0f, 1.0f);

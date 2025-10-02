@@ -25,6 +25,12 @@
 #include "SceneView.h"
 #include "ViewportClient.h"
 #include "EditorViewportClient.h"
+#include "SlateCore.h"
+#include "SWidget.h"
+#include "SLeafWidget.h"
+#include "SPanel.h"
+#include "SEditorViewport.h"
+#include "SLevelViewport.h"
 
 #define MAX_LOADSTRING 100
 
@@ -513,6 +519,196 @@ void RunTests()
 
     printf("\n>> CAMERA & VIEWPORT SYSTEM TESTS COMPLETED\n");
     printf("============================================\n\n");
+
+    // SLATE UI WIDGET SYSTEM TESTS
+    printf(">> SLATE UI WIDGET SYSTEM TESTS\n");
+    printf("===============================\n");
+
+    // 1. 기본 위젯 생성 및 테스트
+    printf("\n1. Creating and Testing Basic Widgets...\n");
+
+    // STextBlock 테스트
+    TSharedPtr<STextBlock> TestTextBlock = std::make_shared<STextBlock>();
+    TestTextBlock->SetText("Hello Slate!");
+    TestTextBlock->SetFontSize(16.0f);
+
+    printf("   TextBlock created: '%s'\n", TestTextBlock->GetText().c_str());
+    printf("   - DesiredSize: (%.1f, %.1f)\n",
+        TestTextBlock->GetDesiredSize().X, TestTextBlock->GetDesiredSize().Y);
+    printf("   - Type: %s\n", TestTextBlock->GetType().c_str());
+
+    // SButton 테스트
+    TSharedPtr<SButton> TestButton = std::make_shared<SButton>();
+    TestButton->SetText("Click Me!");
+    TestButton->OnClicked.BindLambda([]() {
+        printf("   >>> Button Lambda Callback Executed! <<<\n");
+    });
+
+    printf("   Button created: '%s'\n", TestButton->GetText().c_str());
+    printf("   - DesiredSize: (%.1f, %.1f)\n",
+        TestButton->GetDesiredSize().X, TestButton->GetDesiredSize().Y);
+    printf("   - Type: %s\n", TestButton->GetType().c_str());
+
+    // 2. 레이아웃 위젯 테스트
+    printf("\n2. Creating and Testing Layout Widgets...\n");
+
+    // SHorizontalBox 테스트
+    TSharedPtr<SHorizontalBox> HorizontalLayout = std::make_shared<SHorizontalBox>();
+
+    auto& ButtonSlot = HorizontalLayout->AddSlot();
+    ButtonSlot.Widget = TestButton;
+    ButtonSlot.SetPadding(FVector2(5.0f, 5.0f));
+
+    auto& TextSlot = HorizontalLayout->AddSlot();
+	TextSlot.Widget = TestTextBlock;
+    TextSlot.SetPadding(FVector2(10.0f, 5.0f));
+
+    printf("   HorizontalBox created with %d slots\n", HorizontalLayout->GetSlotCount());
+    printf("   - DesiredSize: (%.1f, %.1f)\n",
+        HorizontalLayout->GetDesiredSize().X, HorizontalLayout->GetDesiredSize().Y);
+
+    // SVerticalBox 테스트
+    TSharedPtr<SVerticalBox> VerticalLayout = std::make_shared<SVerticalBox>();
+
+    TSharedPtr<STextBlock> TitleText = std::make_shared<STextBlock>();
+    TitleText->SetText("Slate Widget Test");
+    TitleText->SetFontSize(20.0f);
+
+    auto& TitleSlot = VerticalLayout->AddSlot();
+    TitleSlot.Widget = TitleText;
+    TitleSlot.SetPadding(FVector2(0.0f, 10.0f));
+
+    auto& ContentSlot = VerticalLayout->AddSlot();
+    ContentSlot.Widget = HorizontalLayout;
+    ContentSlot.SetPadding(FVector2(0.0f, 5.0f));
+
+    printf("   VerticalBox created with %d slots\n", VerticalLayout->GetSlotCount());
+    printf("   - DesiredSize: (%.1f, %.1f)\n",
+        VerticalLayout->GetDesiredSize().X, VerticalLayout->GetDesiredSize().Y);
+
+    // 3. SEditorViewport 테스트
+    printf("\n3. Creating and Testing SEditorViewport...\n");
+
+    TSharedPtr<SEditorViewport> TestEditorViewport = std::make_shared<SEditorViewport>();
+    if (bGraphicsDeviceInit && FrameRenderer)
+    {
+        TestEditorViewport->Initialize(&GraphicsDevice, FrameRenderer);
+        TestEditorViewport->SetRealtime(true);
+        TestEditorViewport->SetShowStats(true);
+
+        printf("   SEditorViewport created and initialized\n");
+        printf("   - DesiredSize: (%.1f, %.1f)\n",
+            TestEditorViewport->GetDesiredSize().X, TestEditorViewport->GetDesiredSize().Y);
+        printf("   - IsRealtime: %s\n", TestEditorViewport->IsRealtime() ? "true" : "false");
+        printf("   - ShowStats: %s\n", TestEditorViewport->ShouldShowStats() ? "true" : "false");
+        printf("   - Type: %s\n", TestEditorViewport->GetType().c_str());
+    }
+    else
+    {
+        printf("   SEditorViewport test skipped (missing GraphicsDevice or Renderer)\n");
+    }
+
+    // 4. SLevelViewport 테스트
+    printf("\n4. Creating and Testing SLevelViewport...\n");
+
+    TSharedPtr<SLevelViewport> TestLevelViewport = std::make_shared<SLevelViewport>();
+    if (bGraphicsDeviceInit && FrameRenderer)
+    {
+        TestLevelViewport->Initialize(&GraphicsDevice, FrameRenderer);
+        TestLevelViewport->SetViewportType(ELevelViewportType::Perspective);
+        TestLevelViewport->SetShowGrid(true);
+        TestLevelViewport->SetShowActorInfo(true);
+
+        if (TestWorld)
+        {
+            TestLevelViewport->SetWorld(TestWorld);
+        }
+
+        printf("   SLevelViewport created and initialized\n");
+        printf("   - DesiredSize: (%.1f, %.1f)\n",
+            TestLevelViewport->GetDesiredSize().X, TestLevelViewport->GetDesiredSize().Y);
+        printf("   - ViewportType: %s\n",
+            TestLevelViewport->GetViewportType() == ELevelViewportType::Perspective ? "Perspective" : "Orthographic");
+        printf("   - ShowGrid: %s\n", TestLevelViewport->ShouldShowGrid() ? "true" : "false");
+        printf("   - Type: %s\n", TestLevelViewport->GetType().c_str());
+
+        // 뷰포트 타입 변경 테스트
+        TestLevelViewport->SetViewportType(ELevelViewportType::Orthographic_Top);
+        TestLevelViewport->SetViewportType(ELevelViewportType::Perspective);
+    }
+    else
+    {
+        printf("   SLevelViewport test skipped (missing GraphicsDevice or Renderer)\n");
+    }
+
+    // 5. 위젯 이벤트 시뮬레이션
+    printf("\n5. Widget Event Simulation...\n");
+
+    // 마우스 이벤트 시뮬레이션
+    FGeometry TestGeometry(FVector2(100.0f, 100.0f), FVector2(200.0f, 50.0f));
+    FPointerEvent MouseDownEvent(FVector2(150.0f, 125.0f), true, false, false);
+    FPointerEvent MouseUpEvent(FVector2(150.0f, 125.0f), false, false, false);
+
+    printf("   Simulating mouse events on button...\n");
+    TestButton->OnMouseButtonDown(TestGeometry, MouseDownEvent);
+    TestButton->OnMouseButtonUp(TestGeometry, MouseUpEvent);
+
+    // 6. 위젯 페인팅 시뮬레이션
+    printf("\n6. Widget Painting Simulation...\n");
+
+    FPaintArgs PaintArgs(TestGeometry, 0.016f, true);
+    printf("   Simulating paint cycle:\n");
+
+    TestTextBlock->OnPaint(PaintArgs, TestGeometry, 0.016f);
+    TestButton->OnPaint(PaintArgs, TestGeometry, 0.016f);
+
+    if (TestEditorViewport)
+    {
+        FGeometry ViewportGeometry(FVector2(0.0f, 0.0f), FVector2(800.0f, 600.0f));
+        FPaintArgs ViewportPaintArgs(ViewportGeometry, 0.016f, true);
+        TestEditorViewport->OnPaint(ViewportPaintArgs, ViewportGeometry, 0.016f);
+    }
+
+    // 7. 위젯 레이아웃 테스트
+    printf("\n7. Widget Layout System Test...\n");
+
+    // 레이아웃 무효화 및 재계산
+    TestTextBlock->SetText("Updated Text Content!");
+    printf("   Text updated, desired size recalculated: (%.1f, %.1f)\n",
+        TestTextBlock->GetDesiredSize().X, TestTextBlock->GetDesiredSize().Y);
+
+    TestButton->SetText("New Button Text");
+    printf("   Button updated, desired size recalculated: (%.1f, %.1f)\n",
+        TestButton->GetDesiredSize().X, TestButton->GetDesiredSize().Y);
+
+    // 8. 리소스 정리
+    printf("\n8. Widget System Cleanup...\n");
+
+    if (TestEditorViewport)
+    {
+        TestEditorViewport->Shutdown();
+        printf("   - SEditorViewport shutdown\n");
+    }
+
+    if (TestLevelViewport)
+    {
+        TestLevelViewport->Shutdown();
+        printf("   - SLevelViewport shutdown\n");
+    }
+
+    // 위젯들 정리 (스마트 포인터이므로 자동 해제)
+    TestTextBlock.reset();
+    TestButton.reset();
+    TitleText.reset();
+    HorizontalLayout.reset();
+    VerticalLayout.reset();
+    TestEditorViewport.reset();
+    TestLevelViewport.reset();
+
+    printf("   - All widgets destroyed\n");
+
+    printf("\n>> SLATE UI WIDGET SYSTEM TESTS COMPLETED\n");
+    printf("==========================================\n\n");
 
     GUObjectArray.PerformGarbageCollector();
 

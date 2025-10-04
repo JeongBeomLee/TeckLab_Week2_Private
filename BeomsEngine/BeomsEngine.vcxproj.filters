@@ -163,6 +163,21 @@
     <ClInclude Include="StaticMeshActor.h">
       <Filter>Engine\Core\Actor</Filter>
     </ClInclude>
+    <ClInclude Include="D3D11GraphicsDevice.h" />
+    <ClInclude Include="EditorViewportClient.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderPass.h" />
+    <ClInclude Include="SceneView.h" />
+    <ClInclude Include="SEditorViewport.h" />
+    <ClInclude Include="SlateCore.h" />
+    <ClInclude Include="SLeafWidget.h" />
+    <ClInclude Include="SLevelViewport.h" />
+    <ClInclude Include="SPanel.h" />
+    <ClInclude Include="SWidget.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="ViewportClient.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="Delegate.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeomsEngine.rc">
@@ -240,6 +255,20 @@
     </ClCompile>
     <ClCompile Include="StaticMeshActor.cpp">
       <Filter>Engine\Core\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11GraphicsDevice.cpp" />
+    <ClCompile Include="EditorViewportClient.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderPass.cpp" />
+    <ClCompile Include="SceneView.cpp" />
+    <ClCompile Include="SEditorViewport.cpp" />
+    <ClCompile Include="SLeafWidget.cpp" />
+    <ClCompile Include="SLevelViewport.cpp" />
+    <ClCompile Include="SPanel.cpp" />
+    <ClCompile Include="SWidget.cpp" />
+    <ClCompile Include="ViewportClient.cpp" />
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Engine\Core\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -18,9 +18,9 @@ public:
     TArray<FSlot>& GetChildren() { return Children; }
     const TArray<FSlot>& GetChildren() const { return Children; }
 
-    virtual FSlot& AddSlot();
-    virtual bool RemoveSlot(TSharedPtr<SWidget> SlotWidget);
-    virtual void ClearChildren();
+    FSlot& AddSlot();
+    bool RemoveSlot(TSharedPtr<SWidget> SlotWidget);
+    void ClearChildren();
 
     static const FString& GetWidgetType() { static FString Type = "SPanel"; return Type; }
     virtual const FString& GetType() const override { return GetWidgetType(); }

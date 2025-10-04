@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SLevelViewport.h"
+#include "EditorViewportClient.h"
 #include "World.h"
 #include "Level.h"
 #include <iostream>
@@ -26,10 +27,22 @@ void SLevelViewportToolbar::Initialize()
     ViewportStatsText = std::make_shared<STextBlock>();
     ViewportStatsText->SetText("Stats: 0ms | 0 actors");
 
-    AddSlot().SetPadding(FVector2(5.0f, 2.0f))[ViewModeButton];
-    AddSlot().SetPadding(FVector2(5.0f, 2.0f))[CameraModeButton];
-    AddSlot().SetPadding(FVector2(5.0f, 2.0f))[RealTimeButton];
-    AddSlot().SetFillWidth(1.0f).SetPadding(FVector2(10.0f, 2.0f))[ViewportStatsText];
+    SHorizontalBox::FSlot& Slot1 = AddSlot();
+    Slot1.SetPadding(FVector2(5.0f, 2.0f));
+    Slot1.Widget = ViewModeButton;
+
+    SHorizontalBox::FSlot& Slot2 = AddSlot();
+    Slot2.SetPadding(FVector2(5.0f, 2.0f));
+    Slot2.Widget = CameraModeButton;
+
+    SHorizontalBox::FSlot& Slot3 = AddSlot();
+    Slot3.SetPadding(FVector2(5.0f, 2.0f));
+    Slot3.Widget = RealTimeButton;
+
+    SHorizontalBox::FSlot& Slot4 = AddSlot();
+    Slot4.SetFillWidth(1.0f);
+    Slot4.SetPadding(FVector2(10.0f, 2.0f));
+    Slot4.Widget = ViewportStatsText;
 
     printf("   SLevelViewportToolbar initialized with buttons and stats\n");
 }
@@ -190,10 +203,9 @@ void SLevelViewport::SetViewportType(ELevelViewportType InType)
         if (ViewportToolbar)
         {
             ViewportToolbar->SetViewportType(InType);
+            printf("   SLevelViewport type changed to: %s\n",
+                ViewportToolbar->GetViewModeText(InType).c_str());
         }
-
-        printf("   SLevelViewport type changed to: %s\n",
-            GetViewModeText(InType).c_str());
     }
 }
 
@@ -236,14 +248,20 @@ void SLevelViewport::CreateViewportToolbar()
     if (bShowToolbar)
     {
         ViewportToolbar = std::make_shared<SLevelViewportToolbar>();
-        AddSlot().SetAutoHeight(true).SetPadding(FVector2(0.0f, 0.0f))[ViewportToolbar];
+        SVerticalBox::FSlot& ToolbarSlot = AddSlot();
+        ToolbarSlot.SetAutoHeight(true);
+        ToolbarSlot.SetPadding(FVector2(0.0f, 0.0f));
+        ToolbarSlot.Widget = ViewportToolbar;
     }
 }
 
 void SLevelViewport::CreateEditorViewport()
 {
     EditorViewport = std::make_shared<SEditorViewport>();
-    AddSlot().SetFillHeight(1.0f).SetPadding(FVector2(0.0f, 0.0f))[EditorViewport];
+    SVerticalBox::FSlot& ViewportSlot = AddSlot();
+    ViewportSlot.SetFillHeight(1.0f);
+    ViewportSlot.SetPadding(FVector2(0.0f, 0.0f));
+    ViewportSlot.Widget = EditorViewport;
 }
 void SLevelViewport::UpdateViewportForLevel()
 {
@@ -276,7 +294,7 @@ void SLevelViewport::ConfigureViewportForType(ELevelViewportType Type)
 {
     if (EditorViewport && EditorViewport->GetViewportClient())
     {
-        auto ViewportClient = EditorViewport->GetViewportClient();
+        TSharedPtr<FEditorViewportClient> ViewportClient = EditorViewport->GetViewportClient();
 
         switch (Type)
         {
@@ -293,17 +311,5 @@ void SLevelViewport::ConfigureViewportForType(ELevelViewportType Type)
             ViewportClient->SetCameraMode(ECameraMode::Free);
             break;
         }
-    }
-}
-
-FString SLevelViewport::GetViewModeText(ELevelViewportType Type) const
-{
-    switch (Type)
-    {
-    case ELevelViewportType::Perspective: return "Perspective";
-    case ELevelViewportType::Orthographic_Top: return "Top";
-    case ELevelViewportType::Orthographic_Side: return "Side";
-    case ELevelViewportType::Orthographic_Front: return "Front";
-    default: return "Unknown";
     }
 }

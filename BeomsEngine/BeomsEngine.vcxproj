@@ -148,6 +148,7 @@
     <ClInclude Include="BoxSphereBounds.h" />
     <ClInclude Include="Containers.h" />
     <ClInclude Include="D3D11GraphicsDevice.h" />
+    <ClInclude Include="Delegate.h" />
     <ClInclude Include="EditorViewportClient.h" />
     <ClInclude Include="MaterialInterface.h" />
     <ClInclude Include="Math.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="SWidget.cpp" />
     <ClCompile Include="UObjectArray.cpp" />
     <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="ActorComponent.cpp" />
     <ClCompile Include="KismetProceduralMeshLibrary.cpp" />

@@ -40,6 +40,7 @@ private:
     void OnCameraModeClicked();
     void OnRealTimeClicked();
 
+public:
     FString GetViewModeText(ELevelViewportType Type) const;
 };
 

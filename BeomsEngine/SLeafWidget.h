@@ -10,7 +10,7 @@ public:
 
 public:
     virtual FVector2 ComputeDesiredSize(float LayoutScaleMultiplier = 1.0f) const override;
-    virtual void ArrangeChildren(const FGeometry& AllottedGeometry, TArray<FSlot>& ArrangedChildren) const final override {}
+    virtual void ArrangeChildren(const FGeometry& AllottedGeometry, TArray<FSlot>& ArrangedChildren) const final override {}    // final
 
     static const FString& GetWidgetType() { static FString Type = "SLeafWidget"; return Type; }
     virtual const FString& GetType() const override { return GetWidgetType(); }

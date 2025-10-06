@@ -201,6 +201,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ViewportClient.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="SharedPointer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />

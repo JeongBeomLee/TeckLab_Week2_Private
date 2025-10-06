@@ -1,6 +1,7 @@
 #pragma once
 #include "SWidget.h"
 
+// 자식 위젯들을 담는 컨테이너
 class SPanel : public SWidget
 {
 public:

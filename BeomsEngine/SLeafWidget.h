@@ -2,6 +2,7 @@
 #include "SWidget.h"
 #include "Delegate.h"
 
+// 자식이 없는 위젯 (SButton, STextBlock, ...)
 class SLeafWidget : public SWidget
 {
 public:

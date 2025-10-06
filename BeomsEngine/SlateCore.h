@@ -3,7 +3,7 @@
 #include "Math.h"
 #include "Vector2.h"
 #include "Containers.h"
-#include <memory>
+#include "SharedPointer.h"
 
 enum class EVisibility : uint8
 {
@@ -14,10 +14,10 @@ enum class EVisibility : uint8
 
 enum class EHorizontalAlignment : uint8
 {
-    HAlign_Fill,
-    HAlign_Left,
-    HAlign_Center,
-    HAlign_Right
+    HAlign_Fill,    // 전체 채우기
+    HAlign_Left,    // 왼쪽 정렬
+    HAlign_Center,  // 가운데 정렬
+    HAlign_Right    // 오른쪽 정렬
 };
 
 enum class EVerticalAlignment : uint8
@@ -30,9 +30,9 @@ enum class EVerticalAlignment : uint8
 
 struct FGeometry
 {
-    FVector2 AbsolutePosition;
-    FVector2 LocalSize;
-    FVector2 AccumulatedRenderTransform;
+    FVector2 AbsolutePosition; // 뷰포트/스크린 공간의 절대 위치
+    FVector2 LocalSize; // 위젯의 로컬 공간에서 계산된 크기
+    FVector2 AccumulatedRenderTransform; // 누적된 렌더 변환(이동/회전) 벡터
     float Scale;
 
     FGeometry()
@@ -66,6 +66,7 @@ struct FGeometry
 
 struct FSlotBase
 {
+    // 자식 위젯에 적용할 수평, 수직 정렬 규칙
     EHorizontalAlignment HAlignment = EHorizontalAlignment::HAlign_Fill;
     EVerticalAlignment VAlignment = EVerticalAlignment::VAlign_Fill;
     FVector2 Padding = FVector2::Zero;
@@ -75,19 +76,15 @@ struct FSlotBase
     FSlotBase& SetVAlign(EVerticalAlignment InVAlignment) { VAlignment = InVAlignment; return *this; }
 };
 
+// 특정 위젯 타입(WidgetType)의 자식을 담을 수 있는 템플릿 슬롯
 template<typename WidgetType>
 struct TSlot : public FSlotBase
 {
+    // 슬롯이 실제로 포함하는 자식 위젯 (스마트 포인터로 메모리 관리)
     TSharedPtr<WidgetType> Widget;
 
     TSlot() = default;
     TSlot(TSharedPtr<WidgetType> InWidget) : Widget(InWidget) {}
-
-    TSlot& operator[](TSharedPtr<WidgetType> InWidget)
-    {
-        Widget = InWidget;
-        return *this;
-    }
 
     TSharedPtr<WidgetType> GetWidget() const { return Widget; }
 };
@@ -95,6 +92,7 @@ struct TSlot : public FSlotBase
 class SWidget;
 using FSlot = TSlot<SWidget>;
 
+// 렌더링 인자 - 위젯 렌더링에 필요한 정보 전달
 struct FPaintArgs
 {
     FGeometry AllottedGeometry;
@@ -107,6 +105,7 @@ struct FPaintArgs
     }
 };
 
+// 마우스 입력 정보 전달
 struct FPointerEvent
 {
     FVector2 ScreenSpacePosition;

@@ -1,6 +1,7 @@
 #pragma once
 #include "SlateCore.h"
 
+// 모든 Slate 위젯의 최상위 베이스
 class SWidget
 {
 public:
@@ -15,10 +16,16 @@ protected:
     bool bNeedsDesiredSizeCompute = true;
 
 public:
+    // 레이아웃 시스템
     virtual FVector2 ComputeDesiredSize(float LayoutScaleMultiplier = 1.0f) const = 0;
     virtual void ArrangeChildren(const FGeometry& AllottedGeometry, TArray<FSlot>& ArrangedChildren) const {}
     virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, float InDeltaTime) const;
 
+    FVector2 GetDesiredSize() const;
+    void SlatePrepass(float LayoutScaleMultiplier = 1.0f);
+    void InvalidateLayout() { bNeedsDesiredSizeCompute = true; }
+
+    // 이벤트 처리
     virtual bool OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return false; }
     virtual bool OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return false; }
     virtual bool OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) { return false; }
@@ -26,6 +33,7 @@ public:
 
     virtual void Tick(const FGeometry& AllottedGeometry, float InCurrentTime, float InDeltaTime) {}
 
+    // 상태 관리
     void SetVisibility(EVisibility InVisibility) { Visibility = InVisibility; }
     EVisibility GetVisibility() const { return Visibility; }
 
@@ -34,10 +42,7 @@ public:
 
     bool CanHaveChildren() const { return bCanHaveChildren; }
 
-    FVector2 GetDesiredSize() const;
-    void SlatePrepass(float LayoutScaleMultiplier = 1.0f);
-    void InvalidateLayout() { bNeedsDesiredSizeCompute = true; }
-
+    // 레이아웃 무효화
     virtual void OnArrangeChildren(const FGeometry& AllottedGeometry) {}
 
     static const FString& GetWidgetType() { static FString Type = "SWidget"; return Type; }

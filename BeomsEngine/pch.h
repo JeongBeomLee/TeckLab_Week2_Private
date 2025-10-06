@@ -44,6 +44,9 @@
 #include "Containers.h"
 #include "Name.h"
 
+// === Templates ===
+#include "SharedPointer.h"
+
 // === Object System ===
 #include "Object.h"
 #include "ObjectMacros.h"
@@ -57,9 +60,5 @@
 #include "Matrix.h"
 
 // === Standard Library ===
-#include <memory>
 #include <unordered_map>
 #include <cassert>
-
-template<typename T>  
-using TSharedPtr = std::shared_ptr<T>;

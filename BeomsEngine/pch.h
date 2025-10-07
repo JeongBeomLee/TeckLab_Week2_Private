@@ -51,6 +51,7 @@
 
 // === Object System ===
 #include "Object.h"
+#include "ObjectInitializer.h"
 #include "ObjectMacros.h"
 #include "Class.h"
 #include "UObjectArray.h"

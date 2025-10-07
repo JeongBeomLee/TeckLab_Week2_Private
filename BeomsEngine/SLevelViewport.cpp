@@ -43,8 +43,6 @@ void SLevelViewportToolbar::Initialize()
     Slot4.SetFillWidth(1.0f);
     Slot4.SetPadding(FVector2(10.0f, 2.0f));
     Slot4.Widget = ViewportStatsText;
-
-    printf("   SLevelViewportToolbar initialized with buttons and stats\n");
 }
 
 void SLevelViewportToolbar::SetViewportType(ELevelViewportType InType)
@@ -75,17 +73,14 @@ void SLevelViewportToolbar::UpdateStats(float FrameTime, int32 ActorCount)
 
 void SLevelViewportToolbar::OnViewModeClicked()
 {
-    printf("   ViewMode button clicked\n");
 }
 
 void SLevelViewportToolbar::OnCameraModeClicked()
 {
-    printf("   CameraMode button clicked\n");
 }
 
 void SLevelViewportToolbar::OnRealTimeClicked()
 {
-    printf("   RealTime button clicked\n");
 }
 
 FString SLevelViewportToolbar::GetViewModeText(ELevelViewportType Type) const
@@ -104,8 +99,6 @@ SLevelViewport::SLevelViewport()
 {
     CreateViewportToolbar();
     CreateEditorViewport();
-
-    printf("   SLevelViewport created with toolbar and editor viewport\n");
 }
 
 SLevelViewport::~SLevelViewport()
@@ -144,8 +137,6 @@ void SLevelViewport::Initialize(FD3D11GraphicsDevice* GraphicsDevice, URenderer*
     {
         EditorViewport->Initialize(GraphicsDevice, Renderer);
     }
-
-    printf("   SLevelViewport initialized with GraphicsDevice and Renderer\n");
 }
 
 void SLevelViewport::Shutdown()
@@ -157,23 +148,12 @@ void SLevelViewport::Shutdown()
 
     CurrentLevel = nullptr;
     CurrentWorld = nullptr;
-
-    printf("   SLevelViewport shutdown completed\n");
 }
 
 void SLevelViewport::SetLevel(ULevel* InLevel)
 {
     CurrentLevel = InLevel;
     UpdateViewportForLevel();
-
-    if (CurrentLevel)
-    {
-        printf("   SLevelViewport set to level: %s\n", CurrentLevel->GetLevelName().ToString().c_str());
-    }
-    else
-    {
-        printf("   SLevelViewport level cleared\n");
-    }
 }
 
 void SLevelViewport::SetWorld(UWorld* InWorld)
@@ -182,12 +162,10 @@ void SLevelViewport::SetWorld(UWorld* InWorld)
 
     if (CurrentWorld)
     {
-        printf("   SLevelViewport set to world: %s\n", CurrentWorld->GetWorldName().ToString().c_str());
         SetLevel(CurrentWorld->GetCurrentLevel());
     }
     else
     {
-        printf("   SLevelViewport world cleared\n");
         SetLevel(nullptr);
     }
 }
@@ -203,8 +181,6 @@ void SLevelViewport::SetViewportType(ELevelViewportType InType)
         if (ViewportToolbar)
         {
             ViewportToolbar->SetViewportType(InType);
-            printf("   SLevelViewport type changed to: %s\n",
-                ViewportToolbar->GetViewModeText(InType).c_str());
         }
     }
 }
@@ -221,7 +197,6 @@ void SLevelViewport::SetShowToolbar(bool bShow)
         }
 
         InvalidateLayout();
-        printf("   SLevelViewport toolbar %s\n", bShow ? "shown" : "hidden");
     }
 }
 
@@ -230,7 +205,6 @@ void SLevelViewport::FocusOnSelection()
     if (EditorViewport && EditorViewport->GetViewportClient())
     {
         EditorViewport->GetViewportClient()->FocusOnPoint(FVector::Zero);
-        printf("   SLevelViewport focused on selection\n");
     }
 }
 
@@ -239,7 +213,6 @@ void SLevelViewport::ResetCamera()
     if (EditorViewport && EditorViewport->GetViewportClient())
     {
         EditorViewport->GetViewportClient()->ResetCamera();
-        printf("   SLevelViewport camera reset\n");
     }
 }
 

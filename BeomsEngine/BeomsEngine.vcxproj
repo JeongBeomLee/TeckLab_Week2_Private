@@ -149,7 +149,10 @@
     <ClInclude Include="Containers.h" />
     <ClInclude Include="D3D11GraphicsDevice.h" />
     <ClInclude Include="Delegate.h" />
+    <ClInclude Include="EditorEngine.h" />
     <ClInclude Include="EditorViewportClient.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="EngineLoop.h" />
     <ClInclude Include="MaterialInterface.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="StaticMeshComponent.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
     <ClInclude Include="SWidget.h" />
+    <ClInclude Include="TBuffer.h" />
     <ClInclude Include="UniquePointer.h" />
     <ClInclude Include="UObjectIterator.h" />
     <ClInclude Include="Vector2.h" />
@@ -209,7 +213,10 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="BeomsEngine.cpp" />
     <ClCompile Include="D3D11GraphicsDevice.cpp" />
+    <ClCompile Include="EditorEngine.cpp" />
     <ClCompile Include="EditorViewportClient.cpp" />
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="EngineLoop.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="Memory.cpp" />
@@ -249,6 +256,12 @@
   <ItemGroup>
     <Image Include="BeomsEngine.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="StaticMeshShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

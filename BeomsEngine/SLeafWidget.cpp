@@ -32,15 +32,6 @@ FVector2 SButton::ComputeDesiredSize(float LayoutScaleMultiplier) const
 
 int32 SButton::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, float InDeltaTime) const
 {
-    printf("   Painting Button '%s' at (%.1f, %.1f) size (%.1f, %.1f) - %s%s\n",
-        ButtonText.c_str(),
-        AllottedGeometry.GetAbsolutePosition().X,
-        AllottedGeometry.GetAbsolutePosition().Y,
-        AllottedGeometry.GetLocalSize().X,
-        AllottedGeometry.GetLocalSize().Y,
-        bIsPressed ? "Pressed" : "Normal",
-        bIsHovered ? " Hovered" : "");
-
     return SLeafWidget::OnPaint(Args, AllottedGeometry, InDeltaTime);
 }
 
@@ -49,7 +40,6 @@ bool SButton::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent
     if (MouseEvent.IsMouseButtonDown(0))
     {
         bIsPressed = true;
-        printf("   Button '%s' pressed down\n", ButtonText.c_str());
         return true;
     }
     return false;
@@ -62,7 +52,6 @@ bool SButton::OnMouseButtonUp(const FGeometry& MyGeometry, const FPointerEvent& 
         bIsPressed = false;
         if (MyGeometry.IsUnderLocation(MouseEvent.GetScreenSpacePosition()))
         {
-            printf("   Button '%s' clicked!\n", ButtonText.c_str());
             ExecuteOnClick();
         }
         return true;
@@ -74,11 +63,6 @@ bool SButton::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& Mous
 {
     bool bWasHovered = bIsHovered;
     bIsHovered = MyGeometry.IsUnderLocation(MouseEvent.GetScreenSpacePosition());
-
-    if (bIsHovered != bWasHovered)
-    {
-        printf("   Button '%s' %s\n", ButtonText.c_str(), bIsHovered ? "hovered" : "unhovered");
-    }
 
     return bIsHovered;
 }
@@ -103,14 +87,6 @@ FVector2 STextBlock::ComputeDesiredSize(float LayoutScaleMultiplier) const
 
 int32 STextBlock::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, float InDeltaTime) const
 {
-    printf("   Painting Text '%s' at (%.1f, %.1f) size (%.1f, %.1f) font %.1f\n",
-        Text.c_str(),
-        AllottedGeometry.GetAbsolutePosition().X,
-        AllottedGeometry.GetAbsolutePosition().Y,
-        AllottedGeometry.GetLocalSize().X,
-        AllottedGeometry.GetLocalSize().Y,
-        FontSize);
-
     return SLeafWidget::OnPaint(Args, AllottedGeometry, InDeltaTime);
 }
 

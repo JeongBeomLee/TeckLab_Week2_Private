@@ -1,13 +1,16 @@
 #include <iostream>
 #include "pch.h"
 #include "BeomsEngine.h"
+#include "EngineLoop.h"
 
 #define MAX_LOADSTRING 100
 
 HINSTANCE hInst;
 HWND GHwnd;
-WCHAR szTitle[ MAX_LOADSTRING ];
-WCHAR szWindowClass[ MAX_LOADSTRING ];
+WCHAR szTitle[MAX_LOADSTRING];
+WCHAR szWindowClass[MAX_LOADSTRING];
+
+FEngineLoop GEngineLoop;
 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -23,23 +26,39 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDC_BEOMSENGINE, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    if (!InitInstance (hInstance, nCmdShow))
+    if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
     }
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BEOMSENGINE));
 
-    MSG msg;
+    MSG msg = {};
 
-    while (GetMessage(&msg, nullptr, 0, 0))
+    // 메인 루프
+    while (true)
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+            if (msg.message == WM_QUIT)
+            {
+                break;
+            }
+
+            if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
+        }
+        else
+        {
+            GEngineLoop.Tick();
         }
     }
+
+    // 엔진 종료
+    GEngineLoop.Exit();
 
     return (int) msg.wParam;
 }
@@ -70,7 +89,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
    GHwnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      CW_USEDEFAULT, 0, 1600, 900, nullptr, nullptr, hInstance, nullptr);
 
    if (!GHwnd)
    {
@@ -79,6 +98,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    ShowWindow(GHwnd, nCmdShow);
    UpdateWindow(GHwnd);
+
+   // 엔진 초기화
+   if (!GEngineLoop.PreInit(hInstance, GHwnd, true))
+   {
+      MessageBox(nullptr, L"Failed to PreInit Engine!", L"Error", MB_OK);
+      return FALSE;
+   }
+
+   if (!GEngineLoop.Init())
+   {
+      MessageBox(nullptr, L"Failed to Init Engine!", L"Error", MB_OK);
+      return FALSE;
+   }
 
    return TRUE;
 }

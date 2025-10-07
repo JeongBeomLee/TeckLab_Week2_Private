@@ -30,18 +30,6 @@ int32 SEditorViewport::OnPaint(const FPaintArgs& Args, const FGeometry& Allotted
         const_cast<SEditorViewport*>(this)->RenderViewport(AllottedGeometry, InDeltaTime);
     }
 
-    printf("   Painting EditorViewport at (%.1f, %.1f) size (%.1f, %.1f) - %s\n",
-        AllottedGeometry.GetAbsolutePosition().X,
-        AllottedGeometry.GetAbsolutePosition().Y,
-        AllottedGeometry.GetLocalSize().X,
-        AllottedGeometry.GetLocalSize().Y,
-        bIsRealtime ? "Realtime" : "Static");
-
-    if (bShowStats)
-    {
-        printf("   - Last Render Time: %.3fms\n", LastRenderTime * 1000.0f);
-    }
-
     return SLeafWidget::OnPaint(Args, AllottedGeometry, InDeltaTime);
 }
 
@@ -137,8 +125,6 @@ void SEditorViewport::Initialize(FD3D11GraphicsDevice* InGraphicsDevice, URender
             (uint32)LeafDesiredSize.Y
         );
     }
-
-    printf("   SEditorViewport initialized with GraphicsDevice and Renderer\n");
 }
 
 void SEditorViewport::Shutdown()
@@ -151,8 +137,6 @@ void SEditorViewport::Shutdown()
 
     GraphicsDevice = nullptr;
     Renderer = nullptr;
-
-    printf("   SEditorViewport shutdown completed\n");
 }
 
 void SEditorViewport::SetViewportClient(TSharedPtr<FEditorViewportClient> InViewportClient)

@@ -45,7 +45,9 @@
 #include "Name.h"
 
 // === Templates ===
+#include "UniquePointer.h"
 #include "SharedPointer.h"
+#include "WeakPointer.h"
 
 // === Object System ===
 #include "Object.h"

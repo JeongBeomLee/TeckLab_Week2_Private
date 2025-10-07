@@ -2,4 +2,4 @@
 #include <memory>
 
 template<typename T>
-using TSharedPtr = std::shared_ptr<T>;
+using TUniquePtr = std::unique_ptr<T>;

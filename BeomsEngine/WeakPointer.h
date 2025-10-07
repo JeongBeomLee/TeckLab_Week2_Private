@@ -2,4 +2,4 @@
 #include <memory>
 
 template<typename T>
-using TSharedPtr = std::shared_ptr<T>;
+using TWeakPtr = std::weak_ptr<T>;

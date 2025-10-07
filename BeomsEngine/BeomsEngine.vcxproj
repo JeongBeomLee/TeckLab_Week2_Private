@@ -176,6 +176,7 @@
     <ClInclude Include="StaticMeshComponent.h" />
     <ClInclude Include="StaticMeshRenderData.h" />
     <ClInclude Include="SWidget.h" />
+    <ClInclude Include="UniquePointer.h" />
     <ClInclude Include="UObjectIterator.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vertex.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="UObjectArray.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ViewportClient.h" />
+    <ClInclude Include="WeakPointer.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="SharedPointer.h" />
   </ItemGroup>

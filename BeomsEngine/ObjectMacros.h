@@ -11,12 +11,20 @@
         virtual UClass* GetClass() const override;  \
     private:
 
-// GENERATED_BODY 매크로 - 클래스 내부에서 사용  
+// GENERATED_BODY 매크로 - 클래스 내부에서 사용
 #define GENERATED_BODY(ClassName, SuperClassName)                       \
     public:                                                             \
         typedef ClassName ThisClass;                                    \
         typedef SuperClassName Super;                                   \
         static UObject* CreateInstance() { return new ClassName(); }    \
+    private:
+
+// GENERATED_ABSTRACT_BODY 매크로 - 추상 클래스용 (CreateInstance 없음)
+#define GENERATED_ABSTRACT_BODY(ClassName, SuperClassName)              \
+    public:                                                             \
+        typedef ClassName ThisClass;                                    \
+        typedef SuperClassName Super;                                   \
+        static UObject* CreateInstance() { return nullptr; }            \
     private:
 
 // IMPLEMENT_CLASS 매크로 - cpp 파일에서 사용

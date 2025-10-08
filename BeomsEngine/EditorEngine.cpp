@@ -9,6 +9,7 @@
 #include "StaticMeshActor.h"
 #include "StaticMesh.h"
 #include "KismetProceduralMeshLibrary.h"
+#include "Material.h"
 
 IMPLEMENT_CLASS(UEditorEngine, UEngine)
 
@@ -42,6 +43,18 @@ bool UEditorEngine::Init(HWND WindowHandle, uint32 WindowWidth, uint32 WindowHei
 
 			UStaticMesh* CubeMesh = NewObject<UStaticMesh>();
 			CubeMesh->SetRenderData(CubeMeshData);
+
+			// Material 생성 및 컴파일
+			UMaterial* DefaultMaterial = NewObject<UMaterial>();
+			DefaultMaterial->SetMaterialName("DefaultCubeMaterial");
+			DefaultMaterial->SetShaderPath("BeomsEngine/StaticMeshShader.hlsl");
+			DefaultMaterial->CompileMaterial(GraphicsDevice->GetDevice());
+
+			// Mesh에 Material 설정
+			CubeMesh->SetMaterial(0, DefaultMaterial);
+
+			// GPU 리소스 초기화
+			CubeMesh->InitializeRenderResources(GraphicsDevice->GetDevice());
 
 			CubeActor->SetStaticMesh(CubeMesh);
 		}

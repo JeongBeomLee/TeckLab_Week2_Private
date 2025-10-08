@@ -1,6 +1,10 @@
 #pragma once
 #include "StaticMeshRenderData.h"
 
+// 전방 선언
+class UMaterialInterface;
+class FStaticMeshRenderResource;
+
 // UStaticMesh - 정적 메시 에셋 클래스
 class UStaticMesh : public UObject
 {
@@ -22,17 +26,18 @@ public:
     void SetRenderData(const FStaticMeshRenderData& InRenderData);
     void SetRenderData(const FString& InFilePath, const TArray<FVertex>& InVertices, const TArray<uint32>& InIndices);
 
-    // 머티리얼 슬롯 관리
-    void AddMaterialSlot(const FName& SlotName, class UMaterialInterface* Material = nullptr);
-    void SetMaterial(int32 MaterialIndex, class UMaterialInterface* Material);
-    void SetMaterialByName(const FName& SlotName, class UMaterialInterface* Material);
+    // 머티리얼 관리
+    void AddMaterialSlot(UMaterialInterface* Material);
+    void SetMaterial(int32 MaterialIndex, UMaterialInterface* Material);
 
-    class UMaterialInterface* GetMaterial(int32 MaterialIndex) const;
-    class UMaterialInterface* GetMaterialByName(const FName& SlotName) const;
-    int32 GetMaterialIndex(const FName& MaterialSlotName) const;
+    UMaterialInterface* GetMaterial(int32 MaterialIndex) const;
+    int32 GetNumMaterials() const { return static_cast<int32>(Materials.size()); }
 
-    const TArray<FStaticMaterial>& GetStaticMaterials() const { return StaticMaterials; }
-    int32 GetNumMaterials() const { return static_cast<int32>(StaticMaterials.size()); }
+    // GPU 렌더링 리소스 접근
+    FStaticMeshRenderResource* GetRenderResource() const { return RenderResource; }
+
+    // GPU 렌더링 리소스 초기화 (SetRenderData 후 호출 필요)
+    void InitializeRenderResources(ID3D11Device* Device);
 
     // 섹션 관리
     void AddSection(uint32 MaterialIndex, uint32 FirstIndex, uint32 NumTriangles, uint32 MinVertexIndex, uint32 MaxVertexIndex);
@@ -56,11 +61,14 @@ public:
     void BuildDefaultMaterialsAndSections();
 
 private:
-    // 렌더링 데이터 (순수 정점/인덱스 데이터)
+    // 렌더링 데이터 (CPU: 순수 정점/인덱스 데이터)
     FStaticMeshRenderData RenderData;
 
+    // GPU 렌더링 리소스
+    FStaticMeshRenderResource* RenderResource;
+
     // 머티리얼 슬롯들
-    TArray<FStaticMaterial> StaticMaterials;
+    TArray<UMaterialInterface*> Materials;
 
     // 렌더링 섹션들 (머티리얼별 그리기 단위)
     TArray<FStaticMeshSection> Sections;

@@ -3,6 +3,8 @@
 #include "D3D11GraphicsDevice.h"
 #include "Renderer.h"
 #include "World.h"
+#include "ShaderManager.h"
+#include "BufferManager.h"
 
 IMPLEMENT_CLASS(UEngine, UObject)
 
@@ -100,6 +102,10 @@ bool UEngine::InitializeGraphicsDevice(HWND WindowHandle, uint32 WindowWidth, ui
 		GraphicsDevice = nullptr;
 		return false;
 	}
+
+	// Manager 싱글톤 초기화
+	FShaderManager::Initialize(GraphicsDevice->GetDevice());
+	FBufferManager::Initialize(GraphicsDevice->GetDevice());
 
 	return true;
 }

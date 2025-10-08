@@ -46,23 +46,6 @@ struct FObjInfo
     }
 };
 
-struct FStaticMaterial
-{
-    FName MaterialSlotName;
-    class UMaterialInterface* Material;
-    FName ImportedMaterialSlotName;
-
-    FStaticMaterial()
-        : Material(nullptr)
-    {}
-
-    FStaticMaterial(const FName& InSlotName, class UMaterialInterface* InMaterial = nullptr)
-        : MaterialSlotName(InSlotName)
-        , Material(InMaterial)
-        , ImportedMaterialSlotName(InSlotName)
-    {}
-};
-
 struct FStaticMeshSection
 {
     uint32 MaterialIndex;

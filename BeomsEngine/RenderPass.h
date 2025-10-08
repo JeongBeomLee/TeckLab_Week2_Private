@@ -1,5 +1,6 @@
 #pragma once
 #include "Types.h"
+#include "ShaderStructures.h"
 
 #include <d3d11.h>
 
